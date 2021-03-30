@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOI</title>
+    <link href="style-reset.css" rel="stylesheet" />
+    <link href="style.css" rel="stylesheet" />
+    <script src="doi.js"></script> 
+</head>
+<body>
+<header class="header">   
+    <div class="width-adjuster">
+        <a href="https://artsdatabanken.no" class="header-logo">
+            <img  alt="Artsdatabanken" src="https://artsdatabanken.no/Files/20973">
+        </a>
+    </div>
+</header>
+    <div class="main">
+        <div class="main-content width-adjuster">
+            <div class="content-placer">
+                <div class="page-header">
+                    <h1>DOI landingsside</h1>
+                    <span>
+                        Opprettet <span id="Time.Created">Henter ned data</span>
+                         | Modifisert <span id="Time.Updated">Henter ned data...</span>
+                         | Gyldiggjort <span id="Time.Valid">Henter ned data</span>
+                    </span>
+                </div>
+
+                
+
+                <div class="mid">
+                    <div class="ingress">
+                        <p>Dattasettet er en <span id="Titles.type">Henter ned data</span> fra kildesystemet <span id="Creators.sourcename">kildenavn</span> hos dataleverandøren <span id="publisher">dataleverandør</span>, i <span id="Time.year">Henter ned data</span>. 
+                            
+                            
+                    </div>
+                
+                    
+
+                    <div class="section">
+                        <h2>Kartinformasjon</h2>                    
+                        <p>
+                            <span id="img.appender"></span>
+                            <h3>Koordinater</h3>
+                            <b>pointLongitude:</b>  <span id="GeoLocations.pointLongitude">Henter ned data</span><br/>
+                            <b>pointLatitude:</b>  <span id="GeoLocations.pointLatitude">Henter ned data</span><br/>
+                            
+                            <h3>Bounding Box</h3>
+                            <h4>Min values</h4>
+                            <b>westBoundLongitude:</b>  <span id="geoLocationBox.westBoundLongitude">Henter ned data</span>
+                            <b>southBoundLatitude:</b>  <span id="geoLocationBox.southBoundLatitude">Henter ned data</span>
+                            <br/>
+                            <h4>Max values</h4>
+                            <b>eastBoundLongitude:</b>  <span id="geoLocationBox.eastBoundLongitude">Henter ned data</span>
+                            <b>northBoundLatitude:</b>  <span id="geoLocationBox.northBoundLatitude">Henter ned data</span>
+                            <br/>                    
+                            
+                            
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Samme utvalg med dagens data</h2>                    
+                        <p> 
+                            Datasettet du er inne på nå vil ikke endres, og er således et øyeblikksbilde på hvordan ditt utvalg 
+                            av data så ut på et gitt tidspunkt. 
+
+                            Datagrunnlaget i seg selv er i konstant forandring når nye funndata kommer til,
+                            korrigeres, eller fjernes om feil oppdages. For å se en oppdatert variant av samme datautsnitt,
+                            ta en titt i Artskart med samme filtre og innstillinger her.
+                            <br/>
+
+                            <span id="a.appender"></span>   
+               
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Datagrunnlag</h2>                    
+                        <p> 
+                            Datasettet er satt sammen fra flere dataleverandører. Disse datautvalgene kan finnes i listen nedenfor.
+                            Der det finnes en DOI er den oppgitt med lenke til datasettet.
+                            <span id="doi.appender"></span>      
+                        </p>
+                    </div>
+
+                    
+                </div>
+
+
+                <div class="sidebar">
+
+                    <div class="section">
+                        <h2>Dattasettet </h2>
+                    
+                        <p>
+                            <span id="data.Id">Henter ned data</span> av typen <span id="data.Type">Henter ned data</span></br>
+                            <b>DOI:</b>  <span id="Attributes.doi">Henter ned data</span><br/>
+                            <b>prefix:</b>  <span id="Attributes.prefix">Henter ned data</span> <br/>
+                            <b>suffix:</b>  <span id="Attributes.suffix">Henter ned data</span> <br/>
+                            <b>identifiers:</b>  <span id="Attributes.identifiers">Henter ned data</span><br/>
+                            <b>Kildetype:</b>  <span id="Creators.sourcetype">Henter ned data</span><br/>
+                            <b>språk:</b>  <span id="Titles.lang">Henter ned data</span><br/>
+                        </p>
+                    </div>
+
+
+                    <div class="section">
+                        <h2>Rask info</h2>                    
+                        <p>
+                            <b>isActive:</b>  <span id="Attributes.isActive">Henter ned data</span><br/>
+                            <b>state:</b>  <span id="Attributes.state">Henter ned data</span><br/>
+                            <b>viewCount:</b>  <span id="Attributes.viewCount">Henter ned data</span><br/>
+                            <b>downloadCount:</b>  <span id="Attributes.downloadCount">Henter ned data</span><br/>
+                            <b>referenceCount:</b>  <span id="Attributes.referenceCount">Henter ned data</span><br/>
+                            <b>citationCount:</b>  <span id="Attributes.citationCount">Henter ned data</span><br/>
+                            <b>partCount:</b>  <span id="Attributes.partCount">Henter ned data</span><br/>
+                            <b>partOfCount:</b>  <span id="Attributes.partOfCount">Henter ned data</span><br/>
+                            <b>versionCount:</b>  <span id="Attributes.versionCount">Henter ned data</span><br/>
+                            <b>versionOfCount:</b>  <span id="Attributes.versionOfCount">Henter ned data</span><br/>
+                            
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>Datoer</h2>                    
+                        <p>
+                            <b>created:</b>  <span id="Attributes.created">Henter ned data</span><br/>
+                            <b>registered:</b>  <span id="Attributes.registered">Henter ned data</span><br/>
+                            <b>published:</b>  <span id="Attributes.published">Henter ned data</span><br/>
+                            <b>updated:</b>  <span id="Attributes.updated">Henter ned data</span><br/>
+    
+                            
+                        </p>
+                    </div>
+                </div>
+
+                
+            
+   
+                </div>
+            </div>
+        </div>
+            
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container text-muted">
+            Footer here
+        </div>
+    </footer>
+</body>
+</html>
