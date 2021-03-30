@@ -1,7 +1,4 @@
-sudo: true
-deploy:
-  skip_cleanup: true
-  provider: script
-  script: bash ./deploy.sh
-  on:
-    branch: main
+language: html
+branches:
+  - master
+script: bash ./deploy.sh
