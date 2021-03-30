@@ -1,11 +1,32 @@
-console.log("obtain data")
-getDoiData = () => {        
+function getGuid(){    
+    let guid = window.location.hash;
+    return guid.replace("#","");
+}
+
+function detectTest(){    
+    // Detect if we're running on test or not
+    let url = window.location.href;
+    if(url.includes("test") || url.includes("index")){
+        return "test."
+    }
+    return "";
+}
+
+function convertBytes(x){
+    const units = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    let l = 0, n = parseInt(x, 10) || 0;
+    while(n >= 1024 && ++l){
+        n = n/1024;
+    }
+    //include a decimal point and a tenths-place digit if presenting 
+    //less than ten of KB or greater units
+    return(n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
+}
+
+function getDoiData(){        
 
     // Obtaining the relevant doi to look up.
-    let doi = window.location.hash;
-    doi = doi.replace("#","");
-    let url = 'https://doi.test.artsdatabanken.no/api/Doi/getDoiByGuid/'+doi;
-
+    let url = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
 
     fetch(url)
     .then((response) => {
@@ -14,7 +35,7 @@ getDoiData = () => {
     .then((data) => {
 
         function addData(id,content){
-            if(content!= undefined && content != null){
+            if(content!= undefined && id!= undefined){
                 document.getElementById(id).innerHTML = content;
             }else{
                 // To avoid entire page breaking down if one error occurs
@@ -23,13 +44,38 @@ getDoiData = () => {
         }
 
         function appendData(id,content){
-            if(content!= undefined && content != null){
+            if(content!= undefined && id!= undefined ){
                 document.getElementById(id).appendChild(content);
             }else{
                 // To avoid entire page breaking down if one error occurs
                 console.error("no such content ", id,content);
             }            
         }
+        
+        function unWrap(wrapped,criteria,content){
+            if(wrapped == undefined || criteria == undefined || content == undefined) {
+                console.error("error in unwrap",criteria,content)
+                return null;
+            }
+            let unwrapped = {};
+            for(let i in wrapped){
+                let item = wrapped[i];                
+                let iwrap = item[criteria];
+                let exists = unwrapped[iwrap] || null;    
+                let newitem = item;
+                if(content !== false){
+                    newitem = item[content];
+                }           
+    
+                if(exists){
+                    unwrapped[item[criteria]].push(newitem);                    
+                }else{
+                    unwrapped[item[criteria]] = [newitem];
+                }                
+            }    
+            return unwrapped;   
+        }
+
 
         // Work with JSON data here
         addData("data.Id",data.data.id);
@@ -39,6 +85,7 @@ getDoiData = () => {
 
         // DOI URL 
         addData("Attributes.doi",attributes.doi);
+        addData("Guid",getGuid());
         addData("Attributes.prefix",attributes.prefix);
         addData("Attributes.suffix",attributes.suffix);
         addData("Attributes.identifiers",attributes.identifiers);
@@ -48,6 +95,7 @@ getDoiData = () => {
         // Data Creators
         addData("Titles.type",attributes.titles[0].title);
         addData("Titles.lang",attributes.titles[0].lang);
+        addData("Attributes.formats",attributes.formats);
         addData("publisher",attributes.publisher);
 
         // TIME
@@ -85,14 +133,25 @@ getDoiData = () => {
         // But we instead fetch them from descriptions, as they there contain more data.
 
         let relatedIdentifiers = attributes.relatedIdentifiers;
-        for (let i in relatedIdentifiers){
-            let item = relatedIdentifiers[i];
-            //console.log(item)
+        let unwrappedRelatedIdentifiers = unWrap(relatedIdentifiers,"relatedIdentifierType",false);
+
+        // A bit unnecessary grouping, but ensures that anything relevant is found, 
+        // and anything doi is excluded
+        let relatedurls = unwrappedRelatedIdentifiers["URL"];
+        let size = convertBytes(attributes.sizes);
+
+        for (let i in relatedurls){
+            let item = relatedurls[i];
             if(item.resourceTypeGeneral=="Image"){
-                //console.log("add image time")
                 const image = document.createElement('img');
                 image.src  = item.relatedIdentifier;
                 appendData('img.appender',image);
+            }else if(item.resourceTypeGeneral=="Dataset"){
+                let zipurl = item.relatedIdentifier;
+                let zip = document.createElement('div');
+                zip.className = "listitem";
+                zip.innerHTML = "<a href="+zipurl+" >"+"<span>Last ned datasett </span><span>"+size+"</span></a>";
+                appendData('zip.appender',zip);
             }
         }
 
@@ -100,21 +159,7 @@ getDoiData = () => {
         // Contains an abundance of descriptive data. 
         // Looping and bundling by type to easier use relevant data only
 
-        let desc = {};
-        for(let i in attributes.descriptions){
-            let item = attributes.descriptions[i];
-            let exists = desc[item.descriptionType] || null;
-
-            if(exists){
-                desc[item.descriptionType].push(item.description);
-                
-            }else{
-                desc[item.descriptionType] = [item.description];
-            }
-            
-        }        
-
-        
+        let desc = unWrap(attributes.descriptions,"descriptionType","description");     
 
         // Descriptions.doi
         // Contains all source datasets. Also those without a doi, but of doi-type data.
