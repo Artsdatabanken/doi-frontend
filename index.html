@@ -40,24 +40,32 @@
                     
 
                     <div class="section">
+
                         <h2>Kartinformasjon</h2>                    
+                            
+                        <h3>Kartutsnitt</h3>
+
+                        
+
                         <p>
-                            <span id="img.appender"></span>
-                            <h3>Bounding Box</h3>
-                            <h4>Min values</h4>
-                            <h3>westBoundLongitude:</h3>  <span id="geoLocationBox.westBoundLongitude">Henter ned data</span>
-                            <h3>southBoundLatitude:</h3>  <span id="geoLocationBox.southBoundLatitude">Henter ned data</span>
-                            <br/>
-                            <h4>Max values</h4>
-                            <h3>eastBoundLongitude:</h3>  <span id="geoLocationBox.eastBoundLongitude">Henter ned data</span>
-                            <h3>northBoundLatitude:</h3>  <span id="geoLocationBox.northBoundLatitude">Henter ned data</span>
-                            <br/>            
-                            
-                            <span id="area.appender"></span>  
-                            
-                            
+                        <span id="img.appender"></span>
+                        Bildet viser kartutsnittet som en rød firkant på norgeskartet, (kilde?) og dataelementene som punkter.
                         </p>
+
+                        <p>
+                            Selve datasettet er generert ut i fra et kartutsnitt. Dette utsnittet er bestemt av en omkransningsboks, 
+                            eller "bounding box" basert på lengde- og breddegrad som strekker seg fra minimumsverdiene til maksimumsverdiene for 
+                            utsnittet.
+                        </p><p>
+    
+                            Minimumsverdiene for dette datasettet er vestlig lengdegrad <span id="geoLocationBox.westBoundLongitude">Henter ned data</span>,
+                            sørlig breddegrad <span id="geoLocationBox.southBoundLatitude">Henter ned data</span>, og maksimumsverdiene er østlig lengdegrad 
+                            <span id="geoLocationBox.eastBoundLongitude">Henter ned data</span> og vestlig breddegrad <span id="geoLocationBox.northBoundLatitude">Henter ned data</span>.
+                            </p>
+
+                        <span id="area.appender"></span>  
                     </div>
+                    <br clear="all" />
 
                     <div class="section">
                         <h2>Last ned datasettet!</h2>                    
@@ -90,6 +98,8 @@
                     <div class="section">
                         <h2>Beskrivelse av datainnholdet</h2>                    
                         <p>
+                            Denne bolken har midlertidig blitt fjernet fra API'et men vil komme sterkere tilbake senere.
+                            <!--
                             <h3>Beskrivelse</h3>  <span id="Descriptions.desc">Henter ned data</span><br/>
                             
                             <h3>Aktive filtre</h3>  <span id="Descriptions.Filter">Henter ned data</span><br/>
@@ -99,7 +109,7 @@
 
                             <span id="Descriptions.OtherParameters">Henter ned data</span><br/>
                             Inneholder data i tidsperioden <span id="Descriptions.Years">Henter ned data</span><br/>
-                           
+                           -->
                         </p>
                     </div>
 
@@ -107,13 +117,10 @@
                         <h2>Datagrunnlag</h2>                    
                         <p> 
 
-                            Datasettet er satt sammen fra flere dataleverandører. Disse datautvalgene kan finnes i listen nedenfor.
-                            Der det finnes en DOI er den oppgitt med lenke til datasettet.
+                            Datasettet er satt sammen av <span id="Descriptions.count">henter antall</span> element fra 
+                            <span id="Nr.Sources">henter antall dataleverandører </span>, som finnes i oversikten nedenfor.
+                            Der det finnes en DOI er den oppgitt med lenke til datasettet.                          
 
-                            <h3>Antall elementer</h3>  
-                            <span id="Descriptions.count">Henter ned data</span><br/>
-
-                            <h3>Datakilder</h3>  
                             <span id="doi.appender"></span>      
                         </p>
                     </div>
@@ -142,8 +149,9 @@
                             
                             <p><h3>DOI</h3>  <span id="Attributes.doi">Henter ned data</span>
                             <h3>GUID</h3>  <span id="Guid">Henter ned data</span> 
-                            <h3>Jobb-id:</h3>  <span id="Descriptions.JobId">Henter ned data</span><br/>
                             <!--
+                            <h3>Jobb-id:</h3>  <span id="Descriptions.JobId">Henter ned data</span><br/>
+
                             <h3>Progress:</h3>  <span id="Descriptions.Progress">Henter ned data</span><br/>
                             <h3>Status:</h3>  <span id="Descriptions.Status">Henter ned data</span><br/>
                             <h3>isActive:</h3>  <span id="Attributes.isActive">Henter ned data</span><br/>
@@ -156,12 +164,23 @@
 
                     <div class="section">
                         <h2>Filinformasjon </h2>                                               
-                            <h3>Eksporttype</h3>  <span id="Descriptions.ExportType">Henter ned data</span> 
+                            <h3>Eksporttype</h3>  <span id="Descriptions.ExportType">Henter ned data</span>                            
+                            <h3>Filstørrelse</h3>  <span id="Size">Henter ned data</span> 
                             <h3>Format</h3>  <span id="Attributes.formats">Henter ned data</span> 
-                            <h3>Kilde</h3>  <span id="Attributes.source">Henter ned data</span> 
+                            <h3>Kilde</h3>  <span id="Attributes.source">Henter ned data</span> <span id="Api.link"></span><br/>
                             <h3>språk</h3>  <span id="Titles.lang">Henter ned data</span>
                             <h3>Kildetype:</h3>  <span id="Creators.sourcetype">Henter ned data</span><br/>
-                        </p>                        
+                                                   <!--
+                                <h3>version:</h3>  <span id="Attributes.version">Henter ned data</span><br/>
+
+                            -->
+                            <h3>url:</h3>  <span id="Attributes.url">Henter ned data</span><br/>
+                            <h3>metadataVersion:</h3>  <span id="Attributes.metadataVersion">Henter ned data</span><br/>
+                            <h3>schemaVersion:</h3>  <span id="Attributes.schemaVersion">Henter ned data</span><br/>
+
+                           
+                    
+                    </p>                        
                     </div>
 
                     <div class="section">
@@ -193,21 +212,7 @@
                         </p>
                     </div>
 
-                    <div class="section">
-                        <h2>Ymse</h2>                    
-                        <p>
-                            <!--
-                                <h3>version:</h3>  <span id="Attributes.version">Henter ned data</span><br/>
-                                <h3>rightsList:</h3>  <span id="Attributes.rightsList">Henter ned data</span><br/>
-
-                            -->
-                            <h3>url:</h3>  <span id="Attributes.url">Henter ned data</span><br/>
-                            <h3>metadataVersion:</h3>  <span id="Attributes.metadataVersion">Henter ned data</span><br/>
-                            <h3>schemaVersion:</h3>  <span id="Attributes.schemaVersion">Henter ned data</span><br/>
-                            
-                           
-                        </p>
-                    </div>
+ 
 
                     
 

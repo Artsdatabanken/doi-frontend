@@ -57,7 +57,7 @@ function addData(id,content){
     }else{
         // To avoid entire page breaking down if one error occurs
         try{
-            document.getElementById(id).innerHTML = "Mangler";}
+            document.getElementById(id).innerHTML = "Ikke oppgitt";}
         catch{
             console.error("failed for id: ",id,"and content:" ,content)
         }
@@ -153,6 +153,8 @@ function getDoiData(){
         // and anything doi is excluded
         let relatedurls = unwrappedRelatedIdentifiers["URL"];
         let size = convertBytes(attributes.sizes);
+        addData("Size",size);
+    console.log("size:",size)
 
         for (let i in relatedurls){
             let item = relatedurls[i];
@@ -181,6 +183,14 @@ function getDoiData(){
 
 
         let doi = desc['DOI'];
+        
+        let datacontributors = doi.length+" dataleverandør";
+        if(doi.length>1){
+            datacontributors +="er";
+        }
+
+        addData("Nr.Sources",datacontributors);
+
        
         for (let i in doi){
             let items = doi[i].split("|");
@@ -200,7 +210,6 @@ function getDoiData(){
             div.innerHTML = nameline+numberline+linkline;
             appendData('doi.appender',div);
         }
-        console.log("is happy")
 
         // Artskart url:
 
@@ -223,18 +232,27 @@ function getDoiData(){
                 }
             appendData('area.appender',ar);
         }
-    
+
+        // Add apiurl
+        let apiurl = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+        let api = document.createElement('div');
+        api.innerHTML = "<a href="+apiurl+" >"+"Apiurl"+"</a>";
+        
+        appendData('Api.link',api);
+        
+
+       
 
         // Misc data from descriptions
         addData("Descriptions.count",desc['Count']);
-        addData("Descriptions.desc",desc['Desc']);
+       // addData("Descriptions.desc",desc['Desc']);
         addData("Descriptions.ExportType",desc['ExportType']);
-        addData("Descriptions.Filter",desc['Filter']);
-        addData("Descriptions.JobId",desc['JobId']);
-        addData("Descriptions.Progress",desc['Progress']);
-        addData("Descriptions.TaxonGroups",desc['TaxonGroups']);
-        addData("Descriptions.OtherParameters",desc['OtherParameters']);
-        addData("Descriptions.Years",desc['Years']);
+      //  addData("Descriptions.Filter",desc['Filter']);
+      //  addData("Descriptions.JobId",desc['JobId']);
+      //  addData("Descriptions.Progress",desc['Progress']);
+       // addData("Descriptions.TaxonGroups",desc['TaxonGroups']);
+       // addData("Descriptions.OtherParameters",desc['OtherParameters']);
+       // addData("Descriptions.Years",desc['Years']);
 
 
         // Types
@@ -246,13 +264,12 @@ function getDoiData(){
 
         // Ymse attributes
         //addData("Attributes.version",attributes.version);
-        addData("Attributes.rightsList",attributes.rightsList);
         addData("Attributes.url",attributes.url);
         addData("Attributes.metadataVersion",attributes.metadataVersion);
         addData("Attributes.schemaVersion",attributes.schemaVersion);
         addData("Attributes.source",attributes.source);
       
-
+        console.log("all data loaded")
         // End of all :)
         
     })
@@ -260,6 +277,8 @@ function getDoiData(){
         // Do something for an error here
     })
 }
+
+/* Run on startup */
 
 getDoiData();
 
