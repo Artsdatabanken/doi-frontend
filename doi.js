@@ -186,11 +186,51 @@ function getDoiData(){
             appendData('doi.appender',div);
         }
 
+        // Artskart url:
+
         let artskartelement = desc['ArtskartUrl'][0];
         let a = document.createElement('div');
         a.className = "listitem";
         a.innerHTML = "<a href="+artskartelement+" >"+"Artskartlenke"+"</a>";
         appendData('a.appender',a);
+
+        // Add areas if exists
+        
+        let areas = desc['Areas'];    
+        if(areas.length >0)   { 
+        let ar = document.createElement('div');
+        ar.innerHTML = "<h3> Områder </h3>";
+        for (let i in areas){
+            ar.innerHTML += "<span>"+areas[i]+"</span>";
+        }
+         appendData('area.appender',ar);}
+
+        // Misc data from descriptions
+        addData("Descriptions.count",desc['Count']);
+        addData("Descriptions.desc",desc['Desc']);
+        addData("Descriptions.ExportType",desc['ExportType']);
+        addData("Descriptions.Filter",desc['Filter']);
+        addData("Descriptions.JobId",desc['JobId']);
+        addData("Descriptions.Progress",desc['Progress']);
+        addData("Descriptions.TaxonGroups",desc['TaxonGroups']);
+        addData("Descriptions.OtherParameters",desc['OtherParameters']);
+        addData("Descriptions.Years",desc['Years']);
+
+
+        // Types
+        addData("Attributes.types.resourceTypeGeneral",attributes.types.resourceTypeGeneral);
+        addData("Attributes.types.schemaOrg",attributes.types.schemaOrg);
+        addData("Attributes.types.bibtex",attributes.types.bibtex);
+        addData("Attributes.types.citeproc",attributes.types.citeproc);
+        addData("Attributes.types.ris",attributes.types.ris);
+
+        // Ymse attributes
+        addData("Attributes.version",attributes.version);
+        addData("Attributes.rightsList",attributes.rightsList);
+        addData("Attributes.url",attributes.url);
+        addData("Attributes.metadataVersion",attributes.metadataVersion);
+        addData("Attributes.schemaVersion",attributes.schemaVersion);
+        addData("Attributes.source",attributes.source);
       
 
         // End of all :)
