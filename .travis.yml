@@ -1,0 +1,4 @@
+language: html
+branches:
+  - master
+script: bash ./deploy.sh
