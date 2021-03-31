@@ -165,8 +165,8 @@ function getDoiData(){
             }else if(item.resourceTypeGeneral=="Dataset"){
                 let zipurl = item.relatedIdentifier;
                 let zip = document.createElement('div');
-                zip.className = "listitem";
-                zip.innerHTML = "<a href="+zipurl+" >"+"<span>Last ned datasett </span><span>"+size+"</span></a>";
+                let material = "<span class='material-icons'>download</span>";
+                zip.innerHTML = "<a href="+zipurl+" class='biglink downloadlink'>"+material+"<span>Last ned datasett </span><span>"+size+"</span></a>";
                 appendData('zip.appender',zip);
             }
         }
@@ -215,8 +215,9 @@ function getDoiData(){
 
         let artskartelement = desc['ArtskartUrl'][0];
         let a = document.createElement('div');
-        a.className = "listitem";
-        a.innerHTML = "<a href="+artskartelement+" >"+"Artskartlenke"+"</a>";
+        let launch = "<span class='material-icons'>launch</span>";
+        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg i Arskart </span></a>";       
+
         appendData('a.appender',a);
 
         
