@@ -45,12 +45,12 @@
                             <span id="img.appender"></span>
                             <h3>Bounding Box</h3>
                             <h4>Min values</h4>
-                            <b>westBoundLongitude:</b>  <span id="geoLocationBox.westBoundLongitude">Henter ned data</span>
-                            <b>southBoundLatitude:</b>  <span id="geoLocationBox.southBoundLatitude">Henter ned data</span>
+                            <h3>westBoundLongitude:</h3>  <span id="geoLocationBox.westBoundLongitude">Henter ned data</span>
+                            <h3>southBoundLatitude:</h3>  <span id="geoLocationBox.southBoundLatitude">Henter ned data</span>
                             <br/>
                             <h4>Max values</h4>
-                            <b>eastBoundLongitude:</b>  <span id="geoLocationBox.eastBoundLongitude">Henter ned data</span>
-                            <b>northBoundLatitude:</b>  <span id="geoLocationBox.northBoundLatitude">Henter ned data</span>
+                            <h3>eastBoundLongitude:</h3>  <span id="geoLocationBox.eastBoundLongitude">Henter ned data</span>
+                            <h3>northBoundLatitude:</h3>  <span id="geoLocationBox.northBoundLatitude">Henter ned data</span>
                             <br/>            
                             
                             <span id="area.appender"></span>  
@@ -88,13 +88,37 @@
                     </div>
 
                     <div class="section">
+                        <h2>Beskrivelse av datainnholdet</h2>                    
+                        <p>
+                            <h3>Beskrivelse</h3>  <span id="Descriptions.desc">Henter ned data</span><br/>
+                            
+                            <h3>Aktive filtre</h3>  <span id="Descriptions.Filter">Henter ned data</span><br/>
+                            
+                            <h4>Andre parametere</h4>  
+                            Taxon-grupper: <span id="Descriptions.TaxonGroups">Henter ned data</span><br/>
+
+                            <span id="Descriptions.OtherParameters">Henter ned data</span><br/>
+                            Inneholder data i tidsperioden <span id="Descriptions.Years">Henter ned data</span><br/>
+                           
+                        </p>
+                    </div>
+
+                    <div class="section">
                         <h2>Datagrunnlag</h2>                    
                         <p> 
+
                             Datasettet er satt sammen fra flere dataleverandører. Disse datautvalgene kan finnes i listen nedenfor.
                             Der det finnes en DOI er den oppgitt med lenke til datasettet.
+
+                            <h3>Antall elementer</h3>  
+                            <span id="Descriptions.count">Henter ned data</span><br/>
+
+                            <h3>Datakilder</h3>  
                             <span id="doi.appender"></span>      
                         </p>
                     </div>
+
+
 
                     
                 </div>
@@ -105,45 +129,66 @@
                     <div class="section">
                         <h2>Dattasettet </h2>
                     
-                        <p>
+                        
+                            <!--
+
                             <span id="data.Id">Henter ned data</span> av typen <span id="data.Type">Henter ned data</span></br>
-                            <b>DOI:</b>  <span id="Attributes.doi">Henter ned data</span><br/>
-                            <b>GUID:</b>  <span id="Guid">Henter ned data</span><br/>
-                            <b>prefix:</b>  <span id="Attributes.prefix">Henter ned data</span> <br/>
-                            <b>suffix:</b>  <span id="Attributes.suffix">Henter ned data</span> <br/>
-                            <b>identifiers:</b>  <span id="Attributes.identifiers">Henter ned data</span><br/>
-                            <b>Kildetype:</b>  <span id="Creators.sourcetype">Henter ned data</span><br/>
-                            <b>språk:</b>  <span id="Titles.lang">Henter ned data</span><br/>
-                            <b>Format:</b>  <span id="Attributes.formats">Henter ned data</span><br/>
-                        </p>
-                    </div>
+                            <h3>prefix:</h3>  <span id="Attributes.prefix">Henter ned data</span> <br/>
+                            <h3>suffix:</h3>  <span id="Attributes.suffix">Henter ned data</span> <br/>
+                            <h3>identifiers:</h3>  <span id="Attributes.identifiers">Henter ned data</span><br/>
 
-
-                    <div class="section">
-                        <h2>Rask info</h2>                    
-                        <p>
-                            <b>isActive:</b>  <span id="Attributes.isActive">Henter ned data</span><br/>
-                            <b>state:</b>  <span id="Attributes.state">Henter ned data</span><br/>
-                            <b>viewCount:</b>  <span id="Attributes.viewCount">Henter ned data</span><br/>
-                            <b>downloadCount:</b>  <span id="Attributes.downloadCount">Henter ned data</span><br/>
-                            <b>referenceCount:</b>  <span id="Attributes.referenceCount">Henter ned data</span><br/>
-                            <b>citationCount:</b>  <span id="Attributes.citationCount">Henter ned data</span><br/>
-                            <b>partCount:</b>  <span id="Attributes.partCount">Henter ned data</span><br/>
-                            <b>partOfCount:</b>  <span id="Attributes.partOfCount">Henter ned data</span><br/>
-                            <b>versionCount:</b>  <span id="Attributes.versionCount">Henter ned data</span><br/>
-                            <b>versionOfCount:</b>  <span id="Attributes.versionOfCount">Henter ned data</span><br/>
+                            -->
                             
+                            
+                            <p><h3>DOI</h3>  <span id="Attributes.doi">Henter ned data</span>
+                            <h3>GUID</h3>  <span id="Guid">Henter ned data</span> 
+                            <h3>Jobb-id:</h3>  <span id="Descriptions.JobId">Henter ned data</span><br/>
+                            <!--
+                            <h3>Progress:</h3>  <span id="Descriptions.Progress">Henter ned data</span><br/>
+                            <h3>Status:</h3>  <span id="Descriptions.Status">Henter ned data</span><br/>
+                            <h3>isActive:</h3>  <span id="Attributes.isActive">Henter ned data</span><br/>
+                            -->
+                            <h3>Status</h3>  <span id="Attributes.state">Henter ned data</span><br/>
+
+                        </p>
+                        
+                    </div>
+
+                    <div class="section">
+                        <h2>Filinformasjon </h2>                                               
+                            <h3>Eksporttype</h3>  <span id="Descriptions.ExportType">Henter ned data</span> 
+                            <h3>Format</h3>  <span id="Attributes.formats">Henter ned data</span> 
+                            <h3>Kilde</h3>  <span id="Attributes.source">Henter ned data</span> 
+                            <h3>språk</h3>  <span id="Titles.lang">Henter ned data</span>
+                            <h3>Kildetype:</h3>  <span id="Creators.sourcetype">Henter ned data</span><br/>
+                        </p>                        
+                    </div>
+
+                    <div class="section">
+                        <h2>Statistikk</h2>   
+                        Ettersom vi ikke detekterer dette og oppdaterer det, er jeg litt usikker på hvor disse datane kommer fra?<br/>
+                 
+                        <p>
+                            <h3>Antall views </h3> <span id="Attributes.viewCount">Henter ned data</span><br/>
+                            <h3>Antall nedlastinger</h3>  <span id="Attributes.downloadCount">Henter ned data</span><br/>
+                            <h3>Antall referanser</h3>  <span id="Attributes.referenceCount">Henter ned data</span><br/>
+                            <h3>Antall siteringer</h3>  <span id="Attributes.citationCount">Henter ned data</span><br/>
+                            <h3>Part Count:</h3>  <span id="Attributes.partCount">Henter ned data</span><br/>
+                            <h3>partOfCount:</h3>  <span id="Attributes.partOfCount">Henter ned data</span><br/>
+                            <h3>versionCount:</h3>  <span id="Attributes.versionCount">Henter ned data</span><br/>
+                            <h3>versionOfCount:</h3>  <span id="Attributes.versionOfCount">Henter ned data</span><br/>
                         </p>
                     </div>
 
                     <div class="section">
-                        <h2>Types</h2>                    
+                        <h2>Siter datasettet</h2>                    
                         <p>
-                            <b>resourceTypeGeneral:</b>  <span id="Attributes.types.resourceTypeGeneral">Henter ned data</span><br/>
-                            <b>schemaOrg:</b>  <span id="Attributes.types.schemaOrg">Henter ned data</span><br/>
-                            <b>bibtex:</b>  <span id="Attributes.types.bibtex">Henter ned data</span><br/>
-                            <b>citeproc:</b>  <span id="Attributes.types.citeproc">Henter ned data</span><br/>
-                            <b>ris:</b>  <span id="Attributes.types.ris">Henter ned data</span><br/>
+                            Her må nok ting gjøres for at boksen skal bli nyttig.
+                            <h3>resourceTypeGeneral:</h3>  <span id="Attributes.types.resourceTypeGeneral">Henter ned data</span><br/>
+                            <h3>schemaOrg:</h3>  <span id="Attributes.types.schemaOrg">Henter ned data</span><br/>
+                            <h3>bibtex:</h3>  <span id="Attributes.types.bibtex">Henter ned data</span><br/>
+                            <h3>citeproc:</h3>  <span id="Attributes.types.citeproc">Henter ned data</span><br/>
+                            <h3>ris:</h3>  <span id="Attributes.types.ris">Henter ned data</span><br/>
                            
                         </p>
                     </div>
@@ -151,33 +196,21 @@
                     <div class="section">
                         <h2>Ymse</h2>                    
                         <p>
-                            <b>version:</b>  <span id="Attributes.version">Henter ned data</span><br/>
-                            <b>rightsList:</b>  <span id="Attributes.rightsList">Henter ned data</span><br/>
-                            <b>url:</b>  <span id="Attributes.url">Henter ned data</span><br/>
-                            <b>metadataVersion:</b>  <span id="Attributes.metadataVersion">Henter ned data</span><br/>
-                            <b>schemaVersion:</b>  <span id="Attributes.schemaVersion">Henter ned data</span><br/>
-                            <b>source:</b>  <span id="Attributes.source">Henter ned data</span><br/>
+                            <!--
+                                <h3>version:</h3>  <span id="Attributes.version">Henter ned data</span><br/>
+                                <h3>rightsList:</h3>  <span id="Attributes.rightsList">Henter ned data</span><br/>
+
+                            -->
+                            <h3>url:</h3>  <span id="Attributes.url">Henter ned data</span><br/>
+                            <h3>metadataVersion:</h3>  <span id="Attributes.metadataVersion">Henter ned data</span><br/>
+                            <h3>schemaVersion:</h3>  <span id="Attributes.schemaVersion">Henter ned data</span><br/>
+                            
                            
                         </p>
                     </div>
 
                     
-                    <div class="section">
-                        <h2>Misc data fra descriptions</h2>                    
-                        <p>
-                            <b>count:</b>  <span id="Descriptions.count">Henter ned data</span><br/>
-                            <b>desc:</b>  <span id="Descriptions.desc">Henter ned data</span><br/>
-                            <b>ExportType:</b>  <span id="Descriptions.ExportType">Henter ned data</span><br/>
-                            <b>Filter:</b>  <span id="Descriptions.Filter">Henter ned data</span><br/>
-                            <b>JobId:</b>  <span id="Descriptions.JobId">Henter ned data</span><br/>
-                            <b>Progress:</b>  <span id="Descriptions.Progress">Henter ned data</span><br/>
-                            <b>Status:</b>  <span id="Descriptions.Status">Henter ned data</span><br/>
-                            <b>TaxonGroups:</b>  <span id="Descriptions.TaxonGroups">Henter ned data</span><br/>
-                            <b>OtherParameters:</b>  <span id="Descriptions.OtherParameters">Henter ned data</span><br/>
-                            <b>Years:</b>  <span id="Descriptions.Years">Henter ned data</span><br/>
-                           
-                        </p>
-                    </div>
+
 
 
                 </div>
