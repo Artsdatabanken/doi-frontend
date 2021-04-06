@@ -1,12 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Condensed&display=swap');
 
-
 body{
     font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
-
 /* HEADER */
+.footer,
 .header {
     width: 100%;
     background: #4c4a48;
@@ -98,6 +97,8 @@ p{
     margin-bottom: 15px;
 }
 
+/* HEADER */
+
 .page-header{
     margin-top: .5em;
     border-bottom: 1px solid #eee;
@@ -115,6 +116,8 @@ p{
     font-size: 10pt;
 }
 
+/* PAGE SECTIONS */
+
 .ingress {
     font-size: 22.5px;
     font-weight: 300;
@@ -128,11 +131,19 @@ p{
 }
 
 .section{
-    padding-top:20px;
+    /*padding-top:10px;
+     // There's so much pad on other objects, skip it?*/
     padding-bottom:10px;
     font-size: 12pt;
     display:block;
     padding-right: 20px;
+}
+
+
+@media only screen and (max-width: 740px) {
+    .section{
+        padding-right: 0px;
+    }
 }
 
 .mid{
@@ -148,53 +159,30 @@ p{
     }
 }
 
-.biglink{
-    font-size: 14pt;
-    padding: 20px;
-    display: inline-block;
-    margin-top: 10px;
-    text-decoration: none;
-    width:365px;
-}
-
-.downloadlink{
-    color: white;
-    background: #4c4a48;
-}
-
-.artskartlink{
-    color: black;
-    background: lightgrey;
-}
-
-.biglink:hover{
-    opacity:0.7;
-}
-
-.biglink span {
-    padding: 10px;
-    vertical-align: middle;
-    border-bottom:2px solid white;
-    padding-bottom: 2px;
-}
-
-.biglink span:first-child {
-    border-bottom: 2px solid transparent;
-    font-size: 44px;
-    background: white;
-    margin-right: 5px;
-    border-radius: 50%;
-    color: #4c4a48;
-}
-
+/* SECTION IMAGE (Map) */
 
 .section img{
-    max-width: 300px;  
+    max-width: 365px;  
     float:left;
-    margin-right: 20px; 
-    margin-bottom: 20px; 
-
+    display:block;
+    padding:20px;
+    
+    padding-top:0px;
+    padding-left: 0px;
 }
+
+@media only screen and (max-width: 600px),
+    only screen and (min-width: 740px) and (max-width:1124px ){
+    .section img{
+        max-width: 100%;  
+        float:none;
+        display:block;
+        padding:0px;
+        padding-bottom:20px;
+    }
+}
+
+/* SIDEBAR */
 
 .sidebar{
     max-width: 260px;
@@ -240,6 +228,13 @@ p{
     margin-right: 20px;
 }
 
+/* LIST ITEMS */
+
+@media only screen and (max-width: 740px) {
+    .listitem{
+        margin-right: 0px;
+    }
+}
 
 .listitem:first-child{
     margin-top: 10px;
@@ -254,3 +249,77 @@ p{
     color:black;
 }
 
+
+/* FLASHY LINKS */
+
+.biglink{
+    font-size: 14pt;
+    padding: 20px;
+    display: inline-block;
+    margin-top: 10px;
+    text-decoration: none;
+    width:365px;
+}
+
+@media only screen and (max-width: 740px) {
+    .biglink{
+        width: 100%;
+        box-sizing: border-box;    
+        text-align: center;  
+    }
+}
+
+.biglink:hover{
+    opacity:0.7;
+}
+
+.biglink span {
+    padding: 10px;
+    vertical-align: middle;
+    border-bottom:2px solid white;
+    padding-bottom: 2px;
+}
+
+.biglink span:first-child {
+    border-bottom: 2px solid transparent;
+    font-size: 44px;
+    background: white;
+    margin-right: 5px;
+    border-radius: 50%;
+    color: #4c4a48;
+}
+
+@media only screen and (max-width: 740px) {
+    .biglink span:nth-child(3)::before ,
+    .biglink span:nth-child(2)::before {
+        content:"\a";
+        white-space: pre;
+        height:10px;
+        display:block;
+    }
+
+    .biglink span:nth-child(3),
+    .biglink span:nth-child(2) {
+        padding:0px;
+        
+    }
+    .biglink span:nth-child(3) {
+        color: #bdbdbd;
+        border: 0px;
+    }
+
+}
+
+.downloadlink{
+    color: white;
+    background: #4c4a48;
+}
+
+.artskartlink{
+    color: black;
+    background: lightgrey;
+}
+
+.artskartlink span{
+    border-color:black;
+}
