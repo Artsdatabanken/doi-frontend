@@ -7,3 +7,6 @@ Denne er omtrent så enkel som det er mulig å få en nettside. Den har en html,
 ## deployment
 I utgangspunktet overføres alle filer og kataloger, i prosjektet, til webserveren. Ekskuderinger gjøres i filen deploy.sh og med følgende kommando:
 rsync -avr --exclude='*.sh' --exclude='*.yml' --exclude='/dump' --exclude='node_modules' --exclude='README.md' . dump
+
+Merk at du kan sjekke inn, uten å rulle ut kode til webserveren, f.eks. om du bare oppdaterer dokumentasjonen, ved å legge til [ci skip] inne i commit-meldingen eks:
+git commit -m "Oppdaterer readme [ci skip]"
