@@ -65,11 +65,12 @@ function addData(id,content){
 }
 
 function appendData(id,content){
+    
     if(content!= undefined && id!= undefined ){
         try{
             document.getElementById(id).appendChild(content);
         } catch{
-            console.error("failed for id: ",id,"and content:" ,content)
+            console.error("failed for id: ",id,"and content:" ,content);
         }
         
     }else{
@@ -92,11 +93,21 @@ function hideAndShowActions(param,otherparam){
 
 }
 
+function emptyAppenders(){
+    // Empty appenders:
+    document.getElementById("img.appender").innerHTML = "";
+    document.getElementById("zip.appender").innerHTML = "";
+    document.getElementById("a.appender").innerHTML = "";
+    document.getElementById("doi.appender").innerHTML = "";
+    document.getElementById("area.appender").innerHTML = "";
+}
+
 function hideAndShow(which){
     if(which == "show"){
         hideAndShowActions("inline-block","none");
     }else{
         hideAndShowActions("none","inline-block");
+
     }
 }
 
@@ -110,13 +121,16 @@ function getDoiData(){
         return response.json()
     })
     .then((data) => {
-
-        hideAndShow("show")
+        
+        console.log("starting")
+        emptyAppenders();
+        hideAndShow("show");
         // Work with JSON data here
         //addData("data.Id",data.data.id);
         //addData("data.Type",data.data.type);
 
         let attributes = data.data.attributes;
+        let id = attributes.doi;
 
         // DOI URL 
         addData("Attributes.doi",attributes.doi);
@@ -176,7 +190,7 @@ function getDoiData(){
         let relatedurls = unwrappedRelatedIdentifiers["URL"];
         let size = convertBytes(attributes.sizes);
         addData("Size",size);
-    console.log("size:",size)
+        console.log("doi:")
 
         for (let i in relatedurls){
             let item = relatedurls[i];
@@ -193,6 +207,7 @@ function getDoiData(){
             }
         }
 
+        console.log("loading desc")
         // Descriptions
         // Contains an abundance of descriptive data. 
         // Looping and bundling by type to easier use relevant data only
@@ -212,7 +227,7 @@ function getDoiData(){
         }
 
         addData("Nr.Sources",datacontributors);
-
+        console.log("loading doi")
        
         for (let i in doi){
             let items = doi[i].split("|");
@@ -242,7 +257,7 @@ function getDoiData(){
 
         appendData('a.appender',a);
 
-        
+        console.log("loading areas")
 
         // Add areas if exists
         
@@ -276,7 +291,7 @@ function getDoiData(){
        // addData("Descriptions.TaxonGroups",desc['TaxonGroups']);
        // addData("Descriptions.OtherParameters",desc['OtherParameters']);
        // addData("Descriptions.Years",desc['Years']);
-
+        console.log("loading types")
 
         // Types
         addData("Attributes.types.resourceTypeGeneral",attributes.types.resourceTypeGeneral);
@@ -308,6 +323,6 @@ getDoiData();
 
 window.onhashchange = function() { 
     //code  
-    console.log("haha i changed")
+    console.log("Updated doi-parameter, re-fetch")
     getDoiData();
 }

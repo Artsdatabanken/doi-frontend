@@ -10,3 +10,10 @@ rsync -avr --exclude='*.sh' --exclude='*.yml' --exclude='/dump' --exclude='node_
 
 Merk at du kan sjekke inn, uten å rulle ut kode til webserveren, f.eks. om du bare oppdaterer dokumentasjonen, ved å legge til [ci skip] inne i commit-meldingen eks:
 git commit -m "Oppdaterer readme [ci skip]"
+
+## Følg med på Traivs
+Travis bygger hver gang noe legges i main. 
+Ønsker du å se om bygget er ferdig? 
+Ta en titt her da vel:
+https://travis-ci.com/github/Artsdatabanken/doi-frontend/builds/
+Du må logge inn med din github-bruker.
