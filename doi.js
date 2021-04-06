@@ -78,6 +78,28 @@ function appendData(id,content){
     }            
 }
 
+function hideAndShowActions(param,otherparam){
+    document.getElementById("ingress").style.display = otherparam;
+    document.getElementById("timedetails").style.display = param;
+
+    for (let el of document.getElementsByClassName("section")){
+        el.style.display=param;
+    }
+
+    for (let el of document.getElementsByClassName("ingress")){
+        el.style.display=param;
+    }
+
+}
+
+function hideAndShow(which){
+    if(which == "show"){
+        hideAndShowActions("inline-block","none");
+    }else{
+        hideAndShowActions("none","inline-block");
+    }
+}
+
 function getDoiData(){        
 
     // Obtaining the relevant doi to look up.
@@ -89,7 +111,7 @@ function getDoiData(){
     })
     .then((data) => {
 
-        
+        hideAndShow("show")
         // Work with JSON data here
         //addData("data.Id",data.data.id);
         //addData("data.Type",data.data.type);
@@ -275,11 +297,17 @@ function getDoiData(){
         
     })
     .catch((err) => {
-        // Do something for an error here
+        hideAndShow("none")
     })
+
 }
 
 /* Run on startup */
 
 getDoiData();
 
+window.onhashchange = function() { 
+    //code  
+    console.log("haha i changed")
+    getDoiData();
+}

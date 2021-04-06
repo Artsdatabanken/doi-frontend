@@ -118,6 +118,7 @@ p{
 
 /* PAGE SECTIONS */
 
+#ingress,
 .ingress {
     font-size: 22.5px;
     font-weight: 300;
@@ -126,6 +127,7 @@ p{
     padding-right: 20px;
 }
 
+#ingress span,
 .ingress span{
     color:black;
 }
