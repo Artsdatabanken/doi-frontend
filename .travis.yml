@@ -1,4 +1,4 @@
-language: html
+language: node_js
 branches:
-  - master
+  - main
 script: bash ./deploy.sh
