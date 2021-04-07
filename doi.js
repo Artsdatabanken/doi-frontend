@@ -35,7 +35,7 @@ function getDoiData(){
         addDoi(desc);
         addArtskartUrl(desc);
         addAreas(desc);
-        addApiUrl();
+        
         addDescriptions(desc);
 
         // Sidebar
@@ -180,16 +180,7 @@ function addAreas(desc){
     }
 }
 
-function addApiUrl(){
-    try{
-        let apiurl = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
-        let api = document.createElement('div');
-        api.innerHTML = "<a href="+apiurl+" >"+"Apiurl"+"</a>";        
-        appendData('Api.link',api);
-    }catch{
-        console.log("failed at apiurl")
-    }
-}
+
 
 function addDescriptions(desc){
     try{
@@ -202,11 +193,12 @@ function addDescriptions(desc){
 function addGeneralData(attributes){
     try{
         // DOI URL 
-        addData("Attributes.doi",attributes.doi);
+        // URL is always the non-test version as it's from api.
+        let doilink = "<a href="+attributes.url+" >"+attributes.doi+"</a>";        
+        addData('Attributes.doi',doilink);
         addData("Guid",getGuid());        
-        
         addData("Attributes.state",attributes.state);
-        addData("Attributes.url",attributes.url);
+        //addData("Attributes.url",attributes.url);
         //addData("data.Id",data.data.id);
         //addData("data.Type",data.data.type);
         //addData("Attributes.prefix",attributes.prefix);
@@ -222,7 +214,9 @@ function addFileInfo(attributes,desc){
         addData("Descriptions.ExportType",desc['ExportType']);
         addData("Size",convertBytes(attributes.sizes));
         addData("Attributes.formats",attributes.formats);
-        addData("Attributes.source",attributes.source);
+        let apiurl = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+        let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";        
+        addData('Api.link',apilink);
         addData("Titles.lang",attributes.titles[0].lang);
         //addData("Creators.sourcetype",attributes.creators[0].nameType);  
         //addData("Attributes.version",attributes.version);
@@ -261,13 +255,6 @@ function addStats(attributes){
         console.error("Satistics failed")
     }
     
-}
-
-function add(attributes){
-    try{
-    }catch{
-        console.error("xx failed")
-    }
 }
 
 function addGeoLocation(attributes){
@@ -389,6 +376,8 @@ function emptyAppenders(){
     document.getElementById("a.appender").innerHTML = "";
     document.getElementById("doi.appender").innerHTML = "";
     document.getElementById("area.appender").innerHTML = "";
+    document.getElementById("Api.link").innerHTML = "";
+    
 }
 
 function hideAndShow(which){
