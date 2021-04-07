@@ -41,6 +41,7 @@ function getDoiData(){
         // Sidebar
         addGeneralData(attributes);
         addFileInfo(attributes,desc);
+        addCitation(attributes);
         // addStats(attributes);
         // addTypes(attributes); 
 
@@ -232,6 +233,27 @@ function addTypes(attributes){
         addData("Attributes.types.ris",attributes.types.ris); 
     }catch{
         console.error("Types failed")
+    }
+   
+}
+
+function addCitation(attributes){
+
+
+    
+    try{
+        let year = "("+attributes.publicationYear+")";
+        let accesseddate = "yyyy-mm-dd";
+        let citation = attributes.publisher+" "+year+". "
+        +attributes.creators[0].name+". " 
+        + attributes.types.resourceTypeGeneral
+        +" https://doi.org/"+attributes.doi
+        +" accessed via artsdatabanken.no"
+        +" on "+accesseddate+".";
+
+        addData("citation",citation);
+    }catch{
+        console.error("citation failed")
     }
    
 }
