@@ -1,3 +1,291 @@
+/* Fetches data from api, presents by adding it to the html either by appending in blank divs, 
+or replacing the existing text. */
+
+// Startup
+getDoiData();
+
+// Listeners for when to re-run 
+window.onhashchange = function() { 
+    console.info("Updated doi-parameter, re-fetch")
+    getDoiData();
+}
+
+// Data Obtainers
+function getDoiData(){   
+    // Obtaining the relevant doi to look up.
+    let url = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+
+    fetch(url)
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {        
+        console.info("Starting data fetch")
+        // Prep the page
+        emptyAppenders();
+        hideAndShow("show");
+        let attributes = data.data.attributes;   
+        let desc = unWrap(attributes.descriptions,"descriptionType","description");          
+
+        // Main Content
+        addTimeDetails(attributes);
+        addIngressData(attributes);
+        addGeoLocation(attributes);
+        addFiles(attributes);
+        addDoi(desc);
+        addArtskartUrl(desc);
+        addAreas(desc);
+        addApiUrl();
+        addDescriptions(desc);
+
+        // Sidebar
+        addGeneralData(attributes);
+        addFileInfo(attributes,desc);
+        // addStats(attributes);
+        // addTypes(attributes); 
+
+        // DEPRECATED
+        // addData("Attributes.isActive",attributes.isActive);    
+        // addData("Descriptions.desc",desc['Desc']);
+        // addData("Descriptions.Filter",desc['Filter']);
+        // addData("Descriptions.JobId",desc['JobId']);
+        // addData("Descriptions.Progress",desc['Progress']);
+        // addData("Descriptions.TaxonGroups",desc['TaxonGroups']);
+        // addData("Descriptions.OtherParameters",desc['OtherParameters']);
+        // addData("Descriptions.Years",desc['Years']);
+      
+        console.info("All data loaded")
+        // End of all :)
+        
+    })
+    .catch((err) => {
+        hideAndShow("none")
+    })
+
+}
+
+// Data formatters
+
+function addTimeDetails(attributes){
+    try{
+        let dates = attributes.dates;
+        for(let i in dates){
+            addData("Time."+dates[i].dateType,dates[i].date);
+        }
+    }catch{
+        console.error("Failed at times")
+    }
+}
+
+function addIngressData(attributes){
+    try{
+        addData("Titles.type",attributes.titles[0].title);   
+        addData("Creators.sourcename",attributes.creators[0].name);
+        addData("publisher",attributes.publisher);
+        addData("Time.year",attributes.publicationYear);
+    }catch{
+        console.error("Failed at Ingress")
+    }
+}
+
+
+function addFiles(attributes){
+    // Also contains doi-sources which are duplicated in descriptions.doi
+    // They are placed here due to the doi-system tracking the use through this parameter
+    // But we instead fetch them from descriptions, as they there contain more data.
+    // A bit unnecessary grouping, but ensures that anything relevant is found, 
+    // and anything doi is excluded
+    try{
+        let unwrappedRelatedIdentifiers = unWrap(attributes.relatedIdentifiers,"relatedIdentifierType",false);
+        let relatedurls = unwrappedRelatedIdentifiers["URL"];        
+    
+        for (let i in relatedurls){
+            let item = relatedurls[i];
+            if(item.resourceTypeGeneral=="Image"){
+                const image = document.createElement('img');
+                image.src  = item.relatedIdentifier;
+                appendData('img.appender',image);
+            }else if(item.resourceTypeGeneral=="Dataset"){
+                let zipurl = item.relatedIdentifier;
+                let zip = document.createElement('div');
+                let material = "<span class='material-icons'>download</span>";
+                zip.innerHTML = "<a href="+zipurl+" class='biglink downloadlink'>"+material+"<span>Last ned datasett </span><span>"+convertBytes(attributes.sizes)+"</span></a>";
+                appendData('zip.appender',zip);
+            }
+        }
+    }catch{
+        console.error("Failed in addFiles")
+    }    
+}
+
+function addDoi(desc){
+    // Contains all source datasets. Also those without a doi, but of doi-type data.
+    // If a doi is missing, it will instead contain an id.
+    try{
+        let doi = desc['DOI'];           
+        // Text formatting:
+        let datacontributors = doi.length+" dataleverandør";
+        if(doi.length>1){
+            datacontributors +="er";
+        }
+        addData("Nr.Sources",datacontributors);       
+        for (let i in doi){
+            let items = doi[i].split("|");
+            let div = document.createElement('div');
+            div.className = "listitem";
+            let link = items[0];
+            let linkline = ""; // There is an id here, but what type? what it do?
+            
+            if(link.includes("https")){
+                let doitext = link.replace("https://doi.org/","");
+                linkline = "<a href="+link+">"+doitext+"</a>";                
+            }           
+
+            let numberline = "<span> ("+ items[1]+" element)</span></br>";
+            let nameline = "<span>"+ items[2]+"</span>";            
+            div.innerHTML = nameline+numberline+linkline;
+            appendData('doi.appender',div);
+        }
+    }catch{
+        console.error("Failed in doi")
+    }
+}
+
+function addArtskartUrl(desc){
+    try{
+        let artskartelement = desc['ArtskartUrl'][0];
+        let a = document.createElement('div');
+        let launch = "<span class='material-icons'>launch</span>";
+        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg i Arskart </span></a>";       
+        appendData('a.appender',a);
+    }catch{
+        console.error("Failed at artskarturl;")
+    }
+}
+
+function addAreas(desc){
+    try{
+        // Add areas if exists
+        let areas = desc['Areas'];   
+        if(areas && areas.length >0)   { 
+            let ar = document.createElement('div');
+            ar.innerHTML = "<h3> Områder </h3>";
+                for (let i in areas){
+                    ar.innerHTML += "<span>"+areas[i]+"</span>";
+                }
+            appendData('area.appender',ar);
+        }
+    }catch{
+        console.log("failed at areas")
+    }
+}
+
+function addApiUrl(){
+    try{
+        let apiurl = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+        let api = document.createElement('div');
+        api.innerHTML = "<a href="+apiurl+" >"+"Apiurl"+"</a>";        
+        appendData('Api.link',api);
+    }catch{
+        console.log("failed at apiurl")
+    }
+}
+
+function addDescriptions(desc){
+    try{
+        addData("Descriptions.count",desc['Count']);
+    }catch{
+        console.error("failed at descriptions")
+    }
+}
+
+function addGeneralData(attributes){
+    try{
+        // DOI URL 
+        addData("Attributes.doi",attributes.doi);
+        addData("Guid",getGuid());        
+        
+        addData("Attributes.state",attributes.state);
+        addData("Attributes.url",attributes.url);
+        //addData("data.Id",data.data.id);
+        //addData("data.Type",data.data.type);
+        //addData("Attributes.prefix",attributes.prefix);
+        //addData("Attributes.suffix",attributes.suffix);
+        //addData("Attributes.identifiers",attributes.identifiers);
+    }catch{
+        console.error("General data failed")
+    }
+}
+
+function addFileInfo(attributes,desc){
+    try{
+        addData("Descriptions.ExportType",desc['ExportType']);
+        addData("Size",convertBytes(attributes.sizes));
+        addData("Attributes.formats",attributes.formats);
+        addData("Attributes.source",attributes.source);
+        addData("Titles.lang",attributes.titles[0].lang);
+        //addData("Creators.sourcetype",attributes.creators[0].nameType);  
+        //addData("Attributes.version",attributes.version);
+        //addData("Attributes.metadataVersion",attributes.metadataVersion);
+        //addData("Attributes.schemaVersion",attributes.schemaVersion);
+    }catch{
+        console.error("File info failed")
+    }
+    
+}
+
+function addTypes(attributes){
+    try{
+        addData("Attributes.types.resourceTypeGeneral",attributes.types.resourceTypeGeneral);
+        addData("Attributes.types.schemaOrg",attributes.types.schemaOrg);
+        addData("Attributes.types.bibtex",attributes.types.bibtex);
+        addData("Attributes.types.citeproc",attributes.types.citeproc);
+        addData("Attributes.types.ris",attributes.types.ris); 
+    }catch{
+        console.error("Types failed")
+    }
+   
+}
+
+function addStats(attributes){
+    try{
+        addData("Attributes.viewCount",attributes.viewCount);
+        addData("Attributes.downloadCount",attributes.downloadCount);
+        addData("Attributes.referenceCount",attributes.referenceCount);
+        addData("Attributes.citationCount",attributes.citationCount);
+        addData("Attributes.partCount",attributes.partCount);
+        addData("Attributes.partOfCount",attributes.partOfCount);
+        addData("Attributes.versionCount",attributes.versionCount);
+        addData("Attributes.versionOfCount",attributes.versionOfCount);
+    }catch{
+        console.error("Satistics failed")
+    }
+    
+}
+
+function add(attributes){
+    try{
+    }catch{
+        console.error("xx failed")
+    }
+}
+
+function addGeoLocation(attributes){
+    try{
+        let geoLocations = attributes.geoLocations[0];
+        addData("geoLocationBox.eastBoundLongitude",geoLocations.geoLocationBox.eastBoundLongitude);
+        addData("geoLocationBox.northBoundLatitude",geoLocations.geoLocationBox.northBoundLatitude);
+        addData("geoLocationBox.southBoundLatitude",geoLocations.geoLocationBox.southBoundLatitude);
+        addData("geoLocationBox.westBoundLongitude",geoLocations.geoLocationBox.westBoundLongitude);
+    }catch{
+        console.error("geolocations failed")
+    }
+}
+
+
+// Help Functions
+
+
 function getGuid(){    
     let guid = window.location.hash;
     return guid.replace("#","");
@@ -24,6 +312,7 @@ function convertBytes(x){
 }
 
 function unWrap(wrapped,criteria,content){
+    // Looping and bundling by type to easier use relevant data only
     if(wrapped == undefined || criteria == undefined || content == undefined) {
         console.error("error in unwrap",criteria,content)
         return null;
@@ -109,220 +398,4 @@ function hideAndShow(which){
         hideAndShowActions("none","inline-block");
 
     }
-}
-
-function getDoiData(){        
-
-    // Obtaining the relevant doi to look up.
-    let url = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
-
-    fetch(url)
-    .then((response) => {
-        return response.json()
-    })
-    .then((data) => {
-        
-        console.log("starting")
-        emptyAppenders();
-        hideAndShow("show");
-        // Work with JSON data here
-        //addData("data.Id",data.data.id);
-        //addData("data.Type",data.data.type);
-
-        let attributes = data.data.attributes;
-        let id = attributes.doi;
-
-        // DOI URL 
-        addData("Attributes.doi",attributes.doi);
-        addData("Guid",getGuid());
-        //addData("Attributes.prefix",attributes.prefix);
-        //addData("Attributes.suffix",attributes.suffix);
-        //addData("Attributes.identifiers",attributes.identifiers);
-        addData("Creators.sourcename",attributes.creators[0].name);
-        addData("Creators.sourcetype",attributes.creators[0].nameType);
-
-        // Data Creators
-        addData("Titles.type",attributes.titles[0].title);
-        addData("Titles.lang",attributes.titles[0].lang);
-        addData("Attributes.formats",attributes.formats);
-        addData("publisher",attributes.publisher);
-
-        // TIME
-        addData("Time.year",attributes.publicationYear);
-        let dates = attributes.dates;
-        for(let i in dates){
-            addData("Time."+dates[i].dateType,dates[i].date);
-        }
-        
-        // GEOLOCATION
-        let geoLocations = attributes.geoLocations[0];
-        addData("geoLocationBox.eastBoundLongitude",geoLocations.geoLocationBox.eastBoundLongitude);
-        addData("geoLocationBox.northBoundLatitude",geoLocations.geoLocationBox.northBoundLatitude);
-        addData("geoLocationBox.southBoundLatitude",geoLocations.geoLocationBox.southBoundLatitude);
-        addData("geoLocationBox.westBoundLongitude",geoLocations.geoLocationBox.westBoundLongitude);
-
-        // ATTRIBUTES
-        // Data explaining the dataset
-
-        // Misc
-        //addData("Attributes.isActive",attributes.isActive);
-        addData("Attributes.state",attributes.state);
-        addData("Attributes.viewCount",attributes.viewCount);
-        addData("Attributes.downloadCount",attributes.downloadCount);
-        addData("Attributes.referenceCount",attributes.referenceCount);
-        addData("Attributes.citationCount",attributes.citationCount);
-        addData("Attributes.partCount",attributes.partCount);
-        addData("Attributes.partOfCount",attributes.partOfCount);
-        addData("Attributes.versionCount",attributes.versionCount);
-        addData("Attributes.versionOfCount",attributes.versionOfCount);
-
-        
-        // Related Identifiers
-        // Also contains doi-sources which are duplicated in descriptions.doi
-        // They are placed here due to the doi-system tracking the use through this parameter
-        // But we instead fetch them from descriptions, as they there contain more data.
-
-        let relatedIdentifiers = attributes.relatedIdentifiers;
-        let unwrappedRelatedIdentifiers = unWrap(relatedIdentifiers,"relatedIdentifierType",false);
-
-        // A bit unnecessary grouping, but ensures that anything relevant is found, 
-        // and anything doi is excluded
-        let relatedurls = unwrappedRelatedIdentifiers["URL"];
-        let size = convertBytes(attributes.sizes);
-        addData("Size",size);
-        console.log("doi:")
-
-        for (let i in relatedurls){
-            let item = relatedurls[i];
-            if(item.resourceTypeGeneral=="Image"){
-                const image = document.createElement('img');
-                image.src  = item.relatedIdentifier;
-                appendData('img.appender',image);
-            }else if(item.resourceTypeGeneral=="Dataset"){
-                let zipurl = item.relatedIdentifier;
-                let zip = document.createElement('div');
-                let material = "<span class='material-icons'>download</span>";
-                zip.innerHTML = "<a href="+zipurl+" class='biglink downloadlink'>"+material+"<span>Last ned datasett </span><span>"+size+"</span></a>";
-                appendData('zip.appender',zip);
-            }
-        }
-
-        console.log("loading desc")
-        // Descriptions
-        // Contains an abundance of descriptive data. 
-        // Looping and bundling by type to easier use relevant data only
-
-        let desc = unWrap(attributes.descriptions,"descriptionType","description");     
-
-        // Descriptions.doi
-        // Contains all source datasets. Also those without a doi, but of doi-type data.
-        // If a doi is missing, it will instead contain an id.
-
-
-        let doi = desc['DOI'];
-        
-        let datacontributors = doi.length+" dataleverandør";
-        if(doi.length>1){
-            datacontributors +="er";
-        }
-
-        addData("Nr.Sources",datacontributors);
-        console.log("loading doi")
-       
-        for (let i in doi){
-            let items = doi[i].split("|");
-            let div = document.createElement('div');
-            div.className = "listitem";
-
-            let link = items[0];
-            let linkline = ""; // There is an id here, but what type? what it do?
-            
-            if(link.includes("https")){
-                let doitext = link.replace("https://doi.org/","");
-                linkline = "<a href="+link+"/>"+doitext+"</a>";                
-            }           
-
-            let numberline = "<span> ("+ items[1]+" element)</span></br>";
-            let nameline = "<span>"+ items[2]+"</span>";            
-            div.innerHTML = nameline+numberline+linkline;
-            appendData('doi.appender',div);
-        }
-
-        // Artskart url:
-
-        let artskartelement = desc['ArtskartUrl'][0];
-        let a = document.createElement('div');
-        let launch = "<span class='material-icons'>launch</span>";
-        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg i Arskart </span></a>";       
-
-        appendData('a.appender',a);
-
-        console.log("loading areas")
-
-        // Add areas if exists
-        
-        let areas = desc['Areas'];   
-        if(areas && areas.length >0)   { 
-            let ar = document.createElement('div');
-            ar.innerHTML = "<h3> Områder </h3>";
-                for (let i in areas){
-                    ar.innerHTML += "<span>"+areas[i]+"</span>";
-                }
-            appendData('area.appender',ar);
-        }
-
-        // Add apiurl
-        let apiurl = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
-        let api = document.createElement('div');
-        api.innerHTML = "<a href="+apiurl+" >"+"Apiurl"+"</a>";
-        
-        appendData('Api.link',api);
-        
-
-       
-
-        // Misc data from descriptions
-        addData("Descriptions.count",desc['Count']);
-       // addData("Descriptions.desc",desc['Desc']);
-        addData("Descriptions.ExportType",desc['ExportType']);
-      //  addData("Descriptions.Filter",desc['Filter']);
-      //  addData("Descriptions.JobId",desc['JobId']);
-      //  addData("Descriptions.Progress",desc['Progress']);
-       // addData("Descriptions.TaxonGroups",desc['TaxonGroups']);
-       // addData("Descriptions.OtherParameters",desc['OtherParameters']);
-       // addData("Descriptions.Years",desc['Years']);
-        console.log("loading types")
-
-        // Types
-        addData("Attributes.types.resourceTypeGeneral",attributes.types.resourceTypeGeneral);
-        addData("Attributes.types.schemaOrg",attributes.types.schemaOrg);
-        addData("Attributes.types.bibtex",attributes.types.bibtex);
-        addData("Attributes.types.citeproc",attributes.types.citeproc);
-        addData("Attributes.types.ris",attributes.types.ris);
-
-        // Ymse attributes
-        //addData("Attributes.version",attributes.version);
-        addData("Attributes.url",attributes.url);
-        addData("Attributes.metadataVersion",attributes.metadataVersion);
-        addData("Attributes.schemaVersion",attributes.schemaVersion);
-        addData("Attributes.source",attributes.source);
-      
-        console.log("all data loaded")
-        // End of all :)
-        
-    })
-    .catch((err) => {
-        hideAndShow("none")
-    })
-
-}
-
-/* Run on startup */
-
-getDoiData();
-
-window.onhashchange = function() { 
-    //code  
-    console.log("Updated doi-parameter, re-fetch")
-    getDoiData();
 }
