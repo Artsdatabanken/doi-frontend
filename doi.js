@@ -46,13 +46,7 @@ function getDoiData(){
 
         // DEPRECATED
         // addData("Attributes.isActive",attributes.isActive);    
-        // addData("Descriptions.desc",desc['Desc']);
-        // addData("Descriptions.Filter",desc['Filter']);
         // addData("Descriptions.JobId",desc['JobId']);
-        // addData("Descriptions.Progress",desc['Progress']);
-        // addData("Descriptions.TaxonGroups",desc['TaxonGroups']);
-        // addData("Descriptions.OtherParameters",desc['OtherParameters']);
-        // addData("Descriptions.Years",desc['Years']);
       
         console.info("All data loaded")
         // End of all :)
@@ -185,6 +179,7 @@ function addAreas(desc){
 function addDescriptions(desc){
     try{
         addData("Descriptions.count",desc['Count']);
+        addData("Descriptions.Description",desc['Description']);
     }catch{
         console.error("failed at descriptions")
     }
