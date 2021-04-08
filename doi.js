@@ -13,7 +13,7 @@ window.onhashchange = function() {
 // Data Obtainers
 function getDoiData(){   
     // Obtaining the relevant doi to look up.
-    let url = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+    let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
 
     fetch(url)
     .then((response) => {
