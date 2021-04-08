@@ -24,9 +24,9 @@
                 <div class="page-header">
                     <h1>DOI landingsside</h1>
                     <span id="timedetails">
-                        Opprettet <span id="Time.Created">Henter ned data</span>
-                         | Oppdatert <span id="Time.Updated">Henter ned data...</span>
-                         | Publisert <span id="Time.Valid">Henter ned data</span>
+                        Opprettet <span id="Time.Created">-</span>
+                         | Oppdatert <span id="Time.Updated">-</span>
+                         | Publisert <span id="Time.Valid">-</span>
                     </span>
                 </div>
 
@@ -39,7 +39,26 @@
                     <div class="ingress">
 
                         <p>Datasettet er en <span id="Titles.type">Henter ned data</span> fra kildesystemet <span id="Creators.sourcename">kildenavn</span> hos dataleverandøren <span id="publisher">dataleverandør</span>, i <span id="Time.year">Henter ned data</span>. 
-                    </div>                    
+                    </div>              
+                    
+                    <div class="section"  id="notyetvalid">
+
+                        <h2>Laster inn</h2>                            
+                        <p>
+                            Dette datasettet er ikke helt ferdig ennå, så det kan mangle data nedenfor. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.
+                        </p>
+                        <div class="progressbar">
+                            <hr/>
+                            <ul>
+                                <li class="done"><div>1</div><br/><span>Opprettet </span><br/><b id="Time.Created2">-</b></li>
+                                <li class="active"><div>2</div><br/><span>Eksporterer </span><br/><b id="Time.Updated2">-</b></li>
+                                <li class="next"><div>3</div><br/><span>Publisert </span><br/><b id="Time.Valid2">-</b></li>
+                            </ul>
+                        </div>
+                        
+
+                        
+                    </div>
 
                     <div class="section">
 

@@ -23,8 +23,12 @@ function getDoiData(){
         console.info("Starting data fetch")
         // Prep the page
         emptyAppenders();
+        
+        let attributes = data.data.attributes;  
+        
+
         hideAndShow("show");
-        let attributes = data.data.attributes;   
+        isValid(attributes);
         let desc = unWrap(attributes.descriptions,"descriptionType","description");          
 
         // Main Content
@@ -34,8 +38,7 @@ function getDoiData(){
         addFiles(attributes);
         addDoi(desc);
         addArtskartUrl(desc);
-        addAreas(desc);
-        
+        addAreas(desc);        
         addDescriptions(desc);
 
         // Sidebar
@@ -44,11 +47,6 @@ function getDoiData(){
         addCitation(attributes);
         // addStats(attributes);
         // addTypes(attributes); 
-
-        // DEPRECATED
-        // addData("Attributes.isActive",attributes.isActive);    
-        // addData("Descriptions.JobId",desc['JobId']);
-      
         console.info("All data loaded")
         // End of all :)
         
@@ -61,13 +59,27 @@ function getDoiData(){
 
 // Data formatters
 
+function isValid(attributes){
+    console.log("?")
+    try{
+        let dates = attributes.dates;
+        for(let i in dates){
+            if(dates[i].dateType == "Valid"){
+                document.getElementById("notyetvalid").style.display = "none";
+            }
+        }
+    }catch{
+        console.error("Failed at isValid")
+    }
+}
+
 function addTimeDetails(attributes){
     try{
         let dates = attributes.dates;
         for(let i in dates){
-
             let date = new Date(dates[i].date).toLocaleDateString("nb-no", {hour: '2-digit', minute: '2-digit'});
             addData("Time."+dates[i].dateType,date);
+            addData("Time."+dates[i].dateType+"2",date);
         }
     }catch{
         console.error("Failed at times")
