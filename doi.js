@@ -65,7 +65,9 @@ function addTimeDetails(attributes){
     try{
         let dates = attributes.dates;
         for(let i in dates){
-            addData("Time."+dates[i].dateType,dates[i].date);
+
+            let date = new Date(dates[i].date).toLocaleDateString("nb-no", {hour: '2-digit', minute: '2-digit'});
+            addData("Time."+dates[i].dateType,date);
         }
     }catch{
         console.error("Failed at times")
@@ -239,11 +241,19 @@ function addTypes(attributes){
 
 function addCitation(attributes){
 
-
-    
     try{
-        let year = "("+attributes.publicationYear+")";
         let accesseddate = "yyyy-mm-dd";
+        let dates = attributes.dates;
+        for(let i in dates){
+            if(dates[i].dateType == "Updated"){
+                accesseddate = dates[i].date.split("T")[0];
+            }
+            
+        }
+
+        attributes.dates
+        let year = "("+attributes.publicationYear+")";
+        
         let citation = attributes.publisher+" "+year+". "
         +attributes.creators[0].name+". " 
         + attributes.types.resourceTypeGeneral
