@@ -243,7 +243,7 @@ function addFileInfo(attributes,desc){
         addData("Descriptions.ExportType",desc['ExportType']);
         addData("Size",convertBytes(attributes.sizes));
         addData("Attributes.formats",attributes.formats);
-        let apiurl = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+        let apiurl = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
         let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";        
         addData('Api.link',apilink);
         addData("Titles.lang",attributes.titles[0].lang);
