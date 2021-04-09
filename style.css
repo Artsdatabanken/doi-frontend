@@ -340,11 +340,11 @@ p{
     font-size: 0;
 }
 
-.progressbar hr{
+#progressindicator{
     height:10px;
     top:0;
     left:0;
-    width:50%;
+    width:0;
     background:#777368;
     position:absolute;
     margin:0;
@@ -425,8 +425,17 @@ p{
 }
 
 #notyetvalid{
+    width:100%;
+}
+
+#submittedtext,
+#createdtext,
+#publiserttext,
+#notyetvalid{
     display:none;
 }
+
+
 
 .doilink{
     display: block;

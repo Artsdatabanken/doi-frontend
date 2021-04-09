@@ -84,7 +84,8 @@ function isValid(attributes){
         let dates = attributes.dates;
         for(let i in dates){
             if(dates[i].dateType == "Valid"){
-                document.getElementById("notyetvalid").style.display = "none";
+                // return null; // TODO TEST AV PROGRESSBAREN
+                updateStyle(document.getElementById("notyetvalid"),"display","none");
             }
         }
     }catch{
@@ -92,14 +93,61 @@ function isValid(attributes){
     }
 }
 
+function formatDate(date){
+    return new Date(date).toLocaleDateString("nb-no", {hour: '2-digit', minute: '2-digit'});
+}
+
+function updateStyle(selector,styleselector,style){
+    try{
+        //console.log("styleselector",selector,styleselector,style)
+        selector.style[styleselector] = style;
+    }catch{
+        console.error("error in changing style for", selector, styleselector,style);
+    }
+}
+
+function changeClass(selector,className){
+    try{
+        selector.className = className;
+    }catch{
+        console.error("error in adding class for", selector, className);
+    }
+}
+
 function addTimeDetails(attributes){
     try{
-        let dates = attributes.dates;
-        for(let i in dates){
-            let date = new Date(dates[i].date).toLocaleDateString("nb-no", {hour: '2-digit', minute: '2-digit'});
-            addData("Time."+dates[i].dateType,date);
-            addData("Time."+dates[i].dateType+"2",date);
+
+        let dates = unWrap(attributes.dates,"dateType","date");
+
+        // HEADER TEXT
+        addData("Time.Created",formatDate(dates.Created));
+        addData("Time.Updated",formatDate(dates.Created));
+        addData("Time.Valid",formatDate(dates.Created));
+
+        let text = "huh";
+        // PROGRESS BAR
+        if(dates.Submitted){
+            addData("Progress.Submitted",formatDate(dates.Submitted));
+            changeClass($("Progress.Submitted").parentElement,"done");
+            updateStyle($("#progressindicator"),"width","20%");
+            text = "Dette datasettet har blitt bestilt. Det vil si at eksporten står i kø for å opprettes. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
         }
+
+        if(dates.Created){
+            addData("Progress.Created",formatDate(dates.Created));
+            changeClass($("Progress.Created").parentElement,"done");
+            updateStyle($("#progressindicator"),"width","50%");
+            text = "Dette datasettet er ikke helt ferdig generert ennå, så det kan mangle data nedenfor. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
+        }
+
+        if(dates.Valid){
+            addData("Progress.Valid",formatDate(dates.Valid));
+            changeClass($("Progress.Valid").parentElement,"done");
+            updateStyle($("#progressindicator"),"width","100%");
+            text = "Dette datasettet er ferdigeksportert.";
+        }
+        addData("progresstext",text);  
+
     }catch{
         console.error("Failed at times")
     }
@@ -330,6 +378,15 @@ function addGeoLocation(attributes){
 
 // Help Functions
 
+function $(id){
+    if(id[0]=="."){
+        id
+        return document.getElementsByClassName(id.substring(1));
+    }else if(id[0]=="#"){
+        return document.getElementById(id.substring(1));
+    }
+    return document.getElementById(id);
+}
 
 function getGuid(){    
     let guid = window.location.hash;
@@ -415,24 +472,18 @@ function appendData(id,content){
 
 function hideAndShowActions(param,otherparam){
     try{
-
         for (let el of document.getElementsByClassName("section")){
-            el.style.display=param;
+            updateStyle(el,"display",param)
         }
 
         for (let el of document.getElementsByClassName("ingress")){
-            el.style.display=param;
+            updateStyle(el,"display",param)
         }
-
-            document.getElementById("nodata").style.display = otherparam;
-            document.getElementById("timedetails").style.display = param;
-
-
+        updateStyle(document.getElementById("nodata"),"display",otherparam);
+        updateStyle(document.getElementById("timedetails"),"display",param);
     }catch{
         console.error("failed at hideandshowactions")
-    }
-    
-    
+    }   
 }
 
 function emptyAppenders(){
