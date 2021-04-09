@@ -2,18 +2,37 @@
 or replacing the existing text. */
 
 // Startup
-getDoiData();
+window.addEventListener('load', function() {
+    runApiCall();
+})
 
 // Listeners for when to re-run 
 window.onhashchange = function() { 
     console.info("Updated doi-parameter, re-fetch")
-    getDoiData();
+    runApiCall()
 }
+
+function runApiCall(){
+    let guid = getGuid();
+    if(guid == "" || guid == "#" || guid == "undefined"){
+        console.log("NO GUID - show default page");
+        try{           
+            hideAndShow("none");
+            showFrontPage();
+        }catch{
+            console.error("Show frontpage failed")
+        }
+       
+    }else{
+        getDoiData();
+    }
+}
+
 
 // Data Obtainers
 function getDoiData(){   
     // Obtaining the relevant doi to look up.
-    let url = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+    let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
 
     fetch(url)
     .then((response) => {
@@ -52,7 +71,8 @@ function getDoiData(){
         
     })
     .catch((err) => {
-        hideAndShow("none")
+        hideAndShow("none");
+        showFrontPage();
     })
 
 }
@@ -60,7 +80,6 @@ function getDoiData(){
 // Data formatters
 
 function isValid(attributes){
-    console.log("?")
     try{
         let dates = attributes.dates;
         for(let i in dates){
@@ -185,7 +204,7 @@ function addAreas(desc){
             appendData('area.appender',ar);
         }
     }catch{
-        console.log("failed at areas")
+        console.error("failed at areas")
     }
 }
 
@@ -395,28 +414,39 @@ function appendData(id,content){
 }
 
 function hideAndShowActions(param,otherparam){
-    document.getElementById("ingress").style.display = otherparam;
-    document.getElementById("timedetails").style.display = param;
+    try{
 
-    for (let el of document.getElementsByClassName("section")){
-        el.style.display=param;
+        for (let el of document.getElementsByClassName("section")){
+            el.style.display=param;
+        }
+
+        for (let el of document.getElementsByClassName("ingress")){
+            el.style.display=param;
+        }
+
+            document.getElementById("nodata").style.display = otherparam;
+            document.getElementById("timedetails").style.display = param;
+
+
+    }catch{
+        console.error("failed at hideandshowactions")
     }
-
-    for (let el of document.getElementsByClassName("ingress")){
-        el.style.display=param;
-    }
-
+    
+    
 }
 
 function emptyAppenders(){
-    // Empty appenders:
-    document.getElementById("img.appender").innerHTML = "";
-    document.getElementById("zip.appender").innerHTML = "";
-    document.getElementById("a.appender").innerHTML = "";
-    document.getElementById("doi.appender").innerHTML = "";
-    document.getElementById("area.appender").innerHTML = "";
-    document.getElementById("Api.link").innerHTML = "";
-    
+    try{
+        // Empty appenders:
+        document.getElementById("img.appender").innerHTML = "";
+        document.getElementById("zip.appender").innerHTML = "";
+        document.getElementById("a.appender").innerHTML = "";
+        document.getElementById("doi.appender").innerHTML = "";
+        document.getElementById("area.appender").innerHTML = "";
+        document.getElementById("Api.link").innerHTML = "";
+    }catch{
+        console.error("failed at emptying appenders")
+    }
 }
 
 function hideAndShow(which){
