@@ -427,3 +427,17 @@ p{
 #notyetvalid{
     display:none;
 }
+
+.doilink{
+    display: block;
+    border-bottom: 1px solid #e3e0e0;
+    padding: 4px;
+    text-decoration: none;
+    margin-bottom: 10px;
+    padding-left: 0px;
+}
+
+.doilink span{
+    display:block;
+    font-size:10pt;
+}
