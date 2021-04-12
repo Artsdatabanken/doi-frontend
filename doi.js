@@ -48,7 +48,7 @@ function getDoiData(isRerun){
 }
 
 function handleDoiData(data,isRerun){
-    console.info("Starting data fetch")
+    console.log("Starting data fetch")
     // Prep the page
     emptyAppenders();
     
@@ -80,16 +80,17 @@ function handleDoiData(data,isRerun){
     addCitation(attributes);
     // addStats(attributes);
     // addTypes(attributes); 
-    console.info("All data loaded")
+    
+    //console.log("All data loaded")
     // End of all :)
 }
 
 // Data Obtainers
-function getTimeUpdate(submitted,created,valid){       
+function getTimeUpdate(submitted,created,updated,valid){       
     let timeout = 30000;
     try{
         //console.log(submitted,created,valid)
-        console.log("RUN GETTIMEUPDATE")
+        //console.log("RUN GETTIMEUPDATE")
         setTimeout(function(){ 
             
             // Obtaining the relevant doi to look up.
@@ -101,34 +102,48 @@ function getTimeUpdate(submitted,created,valid){
                 return response.json()
             })
             .then((data) => {     
-                console.log(data)
                 // UPDATE THESE WHEN NEW API
                 let newsubmitted = data.Submitted || false; 
                 let newcreated = data.Created || false; 
+                let newupdated = data.Updated || false; 
                 let newvalid = data.Valid || false; 
                
                 // TRIGGER BIG UPDATE?
                 let trigger_page_update = false;
 
-                if(newvalid && !valid){                    
+                if(newsubmitted && !submitted){  
+                    // Should never trigger, 
+                    // we should always have a submitted                 
                     trigger_page_update = true;
-                    console.log("Rerun change at 2?")
+                    //console.log("Rerun change at SUBMITTED")
                 }else if(newcreated && !created){
+                    // Received a new created date where we used to have none
                     trigger_page_update = true;
-                    console.log("Rerun change at 2?")                    
-                }else if(newsubmitted && !submitted){                   
+                    //console.log("Rerun change at CREATED?")                    
+                }else if(newvalid){ // && !valid){      
+                    // Received a new valid date where we used to have none    
+                    // There should be no case where we previously had a valid date     
                     trigger_page_update = true;
-                    console.log("Rerun change at 2")
-                }  
-                
+                    //console.log("Rerun change at VALID?");
+                }else if(created && !newvalid){
+                    // We have not received new valid date, but we do have a created date
+                    // Time to check if we should update based on previous update date
+                    if(newupdated!=updated.toString()){
+                        // If the date is different, the newest will always be the newest,
+                        // So no need to check more advanced than that.
+                        trigger_page_update = true;
+                        //console.log(">> Rerun change at UPDATED?")
+                    }
+                }
+
                 // IF VALID ITS OUR LAST RUN
                 // The logic here is that all fields must be updated, which means
                 // That all page must reload each rerun. But on last rerun, keep progressbar
                 if(trigger_page_update){
-                    console.log("rerun: update page")
+                    //console.info(">>rerun: update page")
                     getDoiData(true);
                 }else{
-                    console.log("rerun: check again in timeout")
+                    //console.info(">>rerun: check again in timeout")
                     getTimeUpdate(submitted,created,valid) 
                 }               
                 console.info("Time data loaded")
@@ -142,8 +157,6 @@ function getTimeUpdate(submitted,created,valid){
     }catch{
         console.log("error in timechecker")
     }
-    
-
 }
 
 // Data formatters
@@ -222,7 +235,7 @@ function addTimeDetails(attributes){
         }else{
             changeClass($("Progress.Valid").parentElement,"next");
             addData("Progress.Valid","-");
-            getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Valid||false);
+            getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Updated||false,dates.Valid||false);
         }
         addData("progresstext",text);  
 
