@@ -174,6 +174,7 @@ function addTimeDetails(attributes){
             text = "Dette datasettet har blitt bestilt. Det vil si at eksporten står i kø for å opprettes. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
         }else{
             changeClass($("Progress.Submitted").parentElement,"next");
+            addData("Progress.Submitted","-");
         }
 
         if(dates.Created){
@@ -183,6 +184,7 @@ function addTimeDetails(attributes){
             text = "Dette datasettet er ikke helt ferdig generert ennå, så det kan mangle data nedenfor. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
         }else{
             changeClass($("Progress.Created").parentElement,"next");
+            addData("Progress.Created","-");
         }
 
         if(dates.Valid){
@@ -192,6 +194,7 @@ function addTimeDetails(attributes){
             text = "Dette datasettet er ferdigeksportert.";
         }else{
             changeClass($("Progress.Valid").parentElement,"next");
+            addData("Progress.Valid","-");
             checkTime();
         }
         addData("progresstext",text);  
