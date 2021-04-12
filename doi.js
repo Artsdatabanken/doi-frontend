@@ -33,46 +33,78 @@ function runApiCall(){
 function getDoiData(){   
     // Obtaining the relevant doi to look up.
     let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
-
     fetch(url)
     .then((response) => {
         return response.json()
     })
     .then((data) => {        
-        console.info("Starting data fetch")
-        // Prep the page
-        emptyAppenders();
-        
-        let attributes = data.data.attributes;  
-        
-
-        hideAndShow("show");
-        isValid(attributes);
-        let desc = unWrap(attributes.descriptions,"descriptionType","description");          
-
-        // Main Content
-        addTimeDetails(attributes);
-        addIngressData(attributes);
-        addGeoLocation(attributes);
-        addFiles(attributes);
-        addDoi(desc);
-        addArtskartUrl(desc);
-        addAreas(desc);        
-        addDescriptions(desc);
-
-        // Sidebar
-        addGeneralData(attributes);
-        addFileInfo(attributes,desc);
-        addCitation(attributes);
-        // addStats(attributes);
-        // addTypes(attributes); 
-        console.info("All data loaded")
-        // End of all :)
-        
+        handleDoiData(data);        
     })
     .catch((err) => {
         hideAndShow("none");
         showFrontPage();
+    })
+
+}
+
+function handleDoiData(data){
+    console.info("Starting data fetch")
+    // Prep the page
+    emptyAppenders();
+    
+    let attributes = data.data.attributes;  
+    
+
+    hideAndShow("show");
+    isValid(attributes);
+    let desc = unWrap(attributes.descriptions,"descriptionType","description");          
+
+    // Main Content
+    addTimeDetails(attributes);
+    addIngressData(attributes);
+    addGeoLocation(attributes);
+    addFiles(attributes);
+    addDoi(desc);
+    addArtskartUrl(desc);
+    addAreas(desc);        
+    addDescriptions(desc);
+
+    // Sidebar
+    addGeneralData(attributes);
+    addFileInfo(attributes,desc);
+    addCitation(attributes);
+    // addStats(attributes);
+    // addTypes(attributes); 
+    console.info("All data loaded")
+    // End of all :)
+}
+
+// Data Obtainers
+function getValidTime(){   
+    // Obtaining the relevant doi to look up.
+    let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+
+    fetch(url)
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {     
+        
+        // TODO: CHECK IF VALID, IF VALID - re-add all data
+        // IF NOT VALID - JUST DO THE TIME PART OVER 
+
+        //let attributes = data.data.attributes;  
+        //isValid(attributes,true);           
+        handleDoiData(data);      
+        
+        
+
+        console.info("Time data loaded")
+        // End of all :)
+        
+    })
+    .catch((err) => {
+        console.error("failed at fetch valid")
     })
 
 }
@@ -83,9 +115,9 @@ function isValid(attributes){
     try{
         let dates = attributes.dates;
         for(let i in dates){
-            if(dates[i].dateType == "Valid"){
-                // return null; // TODO TEST AV PROGRESSBAREN
-                updateStyle(document.getElementById("notyetvalid"),"display","none");
+            if(dates[i].dateType == "Valid"){        
+                // PROGRESSBAR HIDE
+                updateStyle(document.getElementById("notyetvalid"),"display","none");                    
             }
         }
     }catch{
@@ -114,23 +146,34 @@ function changeClass(selector,className){
     }
 }
 
+async function checkTime(){
+    try{
+        setTimeout(function(){ 
+            getValidTime();
+        }, 3000);
+    }catch{
+        console.log("error in timechecker")
+    }
+}
+
 function addTimeDetails(attributes){
     try{
-
         let dates = unWrap(attributes.dates,"dateType","date");
 
         // HEADER TEXT
         addData("Time.Created",formatDate(dates.Created));
-        addData("Time.Updated",formatDate(dates.Created));
-        addData("Time.Valid",formatDate(dates.Created));
+        addData("Time.Updated",formatDate(dates.Updated));
+        addData("Time.Valid",formatDate(dates.Valid));
 
-        let text = "huh";
+        let text = "loading";
         // PROGRESS BAR
         if(dates.Submitted){
             addData("Progress.Submitted",formatDate(dates.Submitted));
             changeClass($("Progress.Submitted").parentElement,"done");
             updateStyle($("#progressindicator"),"width","20%");
             text = "Dette datasettet har blitt bestilt. Det vil si at eksporten står i kø for å opprettes. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
+        }else{
+            changeClass($("Progress.Submitted").parentElement,"next");
         }
 
         if(dates.Created){
@@ -138,6 +181,8 @@ function addTimeDetails(attributes){
             changeClass($("Progress.Created").parentElement,"done");
             updateStyle($("#progressindicator"),"width","50%");
             text = "Dette datasettet er ikke helt ferdig generert ennå, så det kan mangle data nedenfor. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
+        }else{
+            changeClass($("Progress.Created").parentElement,"next");
         }
 
         if(dates.Valid){
@@ -145,8 +190,13 @@ function addTimeDetails(attributes){
             changeClass($("Progress.Valid").parentElement,"done");
             updateStyle($("#progressindicator"),"width","100%");
             text = "Dette datasettet er ferdigeksportert.";
+        }else{
+            changeClass($("Progress.Valid").parentElement,"next");
+            checkTime();
         }
         addData("progresstext",text);  
+
+        
 
     }catch{
         console.error("Failed at times")
