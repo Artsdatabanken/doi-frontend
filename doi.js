@@ -30,7 +30,7 @@ function runApiCall(){
 
 
 // Data Obtainers
-function getDoiData(){   
+function getDoiData(isRerun){   
     // Obtaining the relevant doi to look up.
     let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
     fetch(url)
@@ -38,7 +38,7 @@ function getDoiData(){
         return response.json()
     })
     .then((data) => {        
-        handleDoiData(data);        
+        handleDoiData(data,isRerun);        
     })
     .catch((err) => {
         hideAndShow("none");
@@ -47,7 +47,7 @@ function getDoiData(){
 
 }
 
-function handleDoiData(data){
+function handleDoiData(data,isRerun){
     console.info("Starting data fetch")
     // Prep the page
     emptyAppenders();
@@ -56,7 +56,12 @@ function handleDoiData(data){
     
 
     hideAndShow("show");
-    isValid(attributes);
+    if(!isRerun){
+        // If the function is a rerun (update), dont hide the progressbar
+        // Users will then be interested to know it reached finished state.
+        isValid(attributes);
+    }
+    
     let desc = unWrap(attributes.descriptions,"descriptionType","description");          
 
     // Main Content
@@ -80,32 +85,64 @@ function handleDoiData(data){
 }
 
 // Data Obtainers
-function getValidTime(){   
-    // Obtaining the relevant doi to look up.
-    let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+function getTimeUpdate(submitted,created,valid){       
+    let timeout = 30000;
+    try{
+        //console.log(submitted,created,valid)
+        console.log("RUN GETTIMEUPDATE")
+        setTimeout(function(){ 
+            
+            // Obtaining the relevant doi to look up.
+            let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDatesByGuid/'+getGuid();
 
-    fetch(url)
-    .then((response) => {
-        return response.json()
-    })
-    .then((data) => {     
-        
-        // TODO: CHECK IF VALID, IF VALID - re-add all data
-        // IF NOT VALID - JUST DO THE TIME PART OVER 
 
-        //let attributes = data.data.attributes;  
-        //isValid(attributes,true);           
-        handleDoiData(data);      
-        
-        
+            fetch(url)
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {     
+                console.log(data)
+                // UPDATE THESE WHEN NEW API
+                let newsubmitted = data.Submitted || false; 
+                let newcreated = data.Created || false; 
+                let newvalid = data.Valid || false; 
+               
+                // TRIGGER BIG UPDATE?
+                let trigger_page_update = false;
 
-        console.info("Time data loaded")
-        // End of all :)
-        
-    })
-    .catch((err) => {
-        console.error("failed at fetch valid")
-    })
+                if(newvalid && !valid){                    
+                    trigger_page_update = true;
+                    console.log("Rerun change at 2?")
+                }else if(newcreated && !created){
+                    trigger_page_update = true;
+                    console.log("Rerun change at 2?")                    
+                }else if(newsubmitted && !submitted){                   
+                    trigger_page_update = true;
+                    console.log("Rerun change at 2")
+                }  
+                
+                // IF VALID ITS OUR LAST RUN
+                // The logic here is that all fields must be updated, which means
+                // That all page must reload each rerun. But on last rerun, keep progressbar
+                if(trigger_page_update){
+                    console.log("rerun: update page")
+                    getDoiData(true);
+                }else{
+                    console.log("rerun: check again in timeout")
+                    getTimeUpdate(submitted,created,valid) 
+                }               
+                console.info("Time data loaded")
+                // End of all :)
+                
+            })
+            .catch((err) => {
+                console.error("failed at fetch valid")
+            })
+        }, timeout);
+    }catch{
+        console.log("error in timechecker")
+    }
+    
 
 }
 
@@ -143,16 +180,6 @@ function changeClass(selector,className){
         selector.className = className;
     }catch{
         console.error("error in adding class for", selector, className);
-    }
-}
-
-async function checkTime(){
-    try{
-        setTimeout(function(){ 
-            getValidTime();
-        }, 3000);
-    }catch{
-        console.log("error in timechecker")
     }
 }
 
@@ -195,11 +222,9 @@ function addTimeDetails(attributes){
         }else{
             changeClass($("Progress.Valid").parentElement,"next");
             addData("Progress.Valid","-");
-            checkTime();
+            getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Valid||false);
         }
         addData("progresstext",text);  
-
-        
 
     }catch{
         console.error("Failed at times")
