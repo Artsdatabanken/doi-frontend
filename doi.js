@@ -205,9 +205,7 @@ function getHeaderMenu(){
                     // Add to page
                     appendData('headermenu',menubutton);
                 }
-                addData('headermenu',finalmenu);
-            }
-            catch{
+            }catch(err){
                 console.error("failed at headermenu")
             }        
         })
@@ -422,8 +420,8 @@ function addGeneralData(attributes){
         // URL is always the non-test version as it's from api.
         let doilink = "<a href="+attributes.url+" >"+attributes.doi+"</a>";        
         addData('Attributes.doi',doilink);
+        addData('header-doi',attributes.doi);
         addData("Guid",getGuid());        
-        addData("Attributes.state",attributes.state);
         //addData("Attributes.url",attributes.url);
         //addData("data.Id",data.data.id);
         //addData("data.Type",data.data.type);
@@ -443,7 +441,8 @@ function addFileInfo(attributes,desc){
         let apiurl = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
         let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";        
         addData('Api.link',apilink);
-        addData("Titles.lang",attributes.titles[0].lang);
+        addData("Titles.lang",attributes.titles[0].lang);        
+        addData("Attributes.state",attributes.state);
         //addData("Creators.sourcetype",attributes.creators[0].nameType);  
         //addData("Attributes.version",attributes.version);
         //addData("Attributes.metadataVersion",attributes.metadataVersion);

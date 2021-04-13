@@ -111,10 +111,31 @@ p{
     font-size: 40px;
 }
 
+@media only screen and (max-width: 740px) {
+    .page-header h1 {
+        font-size: 30px;
+        padding-bottom:0px;
+    }
+}
+
+.page-header h2{
+    font-size: 26px;
+    font-weight: normal;
+    margin-top:0px;
+}
+
+@media only screen and (max-width: 740px) {
+    .page-header h2 {
+        font-size: 19.5px;
+    }
+}
+
+
 .page-header span {
     text-align: left;
     font-size: 10pt;
 }
+
 
 /* PAGE SECTIONS */
 
