@@ -26,7 +26,7 @@ function runApiCall(){
         try{           
             hideAndShow("none");
             showFrontPage();
-        }catch{
+        }catch(err){
             console.error("Show frontpage failed")
         }
        
@@ -149,7 +149,7 @@ function getTimeUpdate(submitted,created,updated,valid){
                 console.error("failed at fetch valid")
             })
         }, timeout);
-    }catch{
+    }catch(err){
         console.log("error in timechecker")
     }
 }
@@ -229,7 +229,7 @@ function hideProgressbar(attributes){
                 updateStyle(document.getElementById("notyetvalid"),"display","none");                    
             }
         }
-    }catch{
+    }catch(err){
         console.error("Failed at hideProgressbar")
     }
 }
@@ -242,7 +242,7 @@ function updateStyle(selector,styleselector,style){
     try{
         //console.log("styleselector",selector,styleselector,style)
         selector.style[styleselector] = style;
-    }catch{
+    }catch(err){
         console.error("error in changing style for", selector, styleselector,style);
     }
 }
@@ -250,7 +250,7 @@ function updateStyle(selector,styleselector,style){
 function changeClass(selector,className){
     try{
         selector.className = className;
-    }catch{
+    }catch(err){
         console.error("error in adding class for", selector, className);
     }
 }
@@ -298,7 +298,7 @@ function addTimeDetails(attributes){
         }
         addData("progresstext",text);  
 
-    }catch{
+    }catch(err){
         console.error("Failed at times")
     }
 }
@@ -309,7 +309,7 @@ function addIngressData(attributes){
         addData("Creators.sourcename",attributes.creators[0].name);
         addData("publisher",attributes.publisher);
         addData("Time.year",attributes.publicationYear);
-    }catch{
+    }catch(err){
         console.error("Failed at Ingress")
     }
 }
@@ -339,7 +339,7 @@ function addFiles(attributes){
                 appendData('zip.appender',zip);
             }
         }
-    }catch{
+    }catch(err){
         console.error("Failed in addFiles")
     }    
 }
@@ -372,7 +372,7 @@ function addDoi(desc){
             div.innerHTML = nameline+numberline+linkline;
             appendData('doi.appender',div);
         }
-    }catch{
+    }catch(err){
         console.error("Failed in doi")
     }
 }
@@ -384,7 +384,7 @@ function addArtskartUrl(desc){
         let launch = "<span class='material-icons'>launch</span>";
         a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg i Arskart </span></a>";       
         appendData('a.appender',a);
-    }catch{
+    }catch(err){
         console.error("Failed at artskarturl;")
     }
 }
@@ -401,7 +401,7 @@ function addAreas(desc){
                 }
             appendData('area.appender',ar);
         }
-    }catch{
+    }catch(err){
         console.error("failed at areas")
     }
 }
@@ -412,7 +412,7 @@ function addDescriptions(desc){
     try{
         addData("Descriptions.count",desc['Count']);
         addData("Descriptions.Description",desc['Description']);
-    }catch{
+    }catch(err){
         console.error("failed at descriptions")
     }
 }
@@ -431,7 +431,7 @@ function addGeneralData(attributes){
         //addData("Attributes.prefix",attributes.prefix);
         //addData("Attributes.suffix",attributes.suffix);
         //addData("Attributes.identifiers",attributes.identifiers);
-    }catch{
+    }catch(err){
         console.error("General data failed")
     }
 }
@@ -449,7 +449,7 @@ function addFileInfo(attributes,desc){
         //addData("Attributes.version",attributes.version);
         //addData("Attributes.metadataVersion",attributes.metadataVersion);
         //addData("Attributes.schemaVersion",attributes.schemaVersion);
-    }catch{
+    }catch(err){
         console.error("File info failed")
     }
     
@@ -462,10 +462,9 @@ function addTypes(attributes){
         addData("Attributes.types.bibtex",attributes.types.bibtex);
         addData("Attributes.types.citeproc",attributes.types.citeproc);
         addData("Attributes.types.ris",attributes.types.ris); 
-    }catch{
+    }catch(err){
         console.error("Types failed")
     }
-   
 }
 
 function addCitation(attributes){
@@ -476,8 +475,7 @@ function addCitation(attributes){
         for(let i in dates){
             if(dates[i].dateType == "Updated"){
                 accesseddate = dates[i].date.split("T")[0];
-            }
-            
+            }            
         }
 
         attributes.dates
@@ -491,7 +489,7 @@ function addCitation(attributes){
         +" on "+accesseddate+".";
 
         addData("citation",citation);
-    }catch{
+    }catch(err){
         console.error("citation failed")
     }
    
@@ -507,7 +505,7 @@ function addStats(attributes){
         addData("Attributes.partOfCount",attributes.partOfCount);
         addData("Attributes.versionCount",attributes.versionCount);
         addData("Attributes.versionOfCount",attributes.versionOfCount);
-    }catch{
+    }catch(err){
         console.error("Satistics failed")
     }
     
@@ -520,7 +518,7 @@ function addGeoLocation(attributes){
         addData("geoLocationBox.northBoundLatitude",geoLocations.geoLocationBox.northBoundLatitude);
         addData("geoLocationBox.southBoundLatitude",geoLocations.geoLocationBox.southBoundLatitude);
         addData("geoLocationBox.westBoundLongitude",geoLocations.geoLocationBox.westBoundLongitude);
-    }catch{
+    }catch(err){
         console.error("geolocations failed")
     }
 }
@@ -592,14 +590,14 @@ function addData(id,content){
     if(content!= undefined && id!= undefined){
         try{
             document.getElementById(id).innerHTML = content;}
-        catch{
+        catch(err){
             console.error("failed for id: ",id,"and content:" ,content)
         }
     }else{
         // To avoid entire page breaking down if one error occurs
         try{
             document.getElementById(id).innerHTML = "Ikke oppgitt";}
-        catch{
+        catch(err){
             console.error("failed for id: ",id,"and content:" ,content)
         }
     }            
@@ -610,7 +608,7 @@ function appendData(id,content){
     if(content!= undefined && id!= undefined ){
         try{
             document.getElementById(id).appendChild(content);
-        } catch{
+        } catch(err){
             console.error("failed for id: ",id,"and content:" ,content);
         }
         
@@ -631,7 +629,7 @@ function hideAndShowActions(param,otherparam){
         }
         updateStyle(document.getElementById("nodata"),"display",otherparam);
         updateStyle(document.getElementById("timedetails"),"display",param);
-    }catch{
+    }catch(err){
         console.error("failed at hideandshowactions")
     }   
 }
@@ -645,7 +643,7 @@ function emptyAppenders(){
         document.getElementById("doi.appender").innerHTML = "";
         document.getElementById("area.appender").innerHTML = "";
         document.getElementById("Api.link").innerHTML = "";
-    }catch{
+    }catch(err){
         console.error("failed at emptying appenders")
     }
 }

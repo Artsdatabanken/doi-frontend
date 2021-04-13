@@ -21,14 +21,14 @@ function addListData(){
                 items += "<a href="+doiurl+" class='doilink'>"+key+"<span> "+data[key]+"</span></a>";
              }
              addData("find.doi",items);
-           }catch{
+           }catch(err){
                console.error("Failed at presenting data from doi")
            }            
         })
         .catch((err) => {
             addData("find.doi","Fikk ikke til å slå opp data");   
         })
-    }catch{
+    }catch(err){
         console.error("Failed at Ingress")
     }
 }
