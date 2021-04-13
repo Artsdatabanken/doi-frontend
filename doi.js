@@ -169,50 +169,48 @@ function getHeaderMenu(){
         })
         .then((data) => {     
             try{
-                console.log(data.Records)
-            let apimenus = data.Records;
-           
-            
-            for (let i in apimenus){
-                let item = apimenus[i];
-                let id = item.Values.toString().replace(" ","");
-                let testmeny = document.createElement('button');
-                testmeny.className = "menuitems";
-                
+                let apimenus = data.Records;            
+                for (let i in apimenus){
+                    let item = apimenus[i];
+                    let id = item.Values.toString().replace(" ","");
 
+                    // Using createelement to enable attachment of eventlistener
+                    let menubutton = document.createElement('button');
+                    menubutton.className = "menuitems";
 
-                
-                let newdropdown ="<ul class='dropdown' id='"+id+"' style='display:none'>";                
-                let subitems = item.References;
-                for(let j in subitems){
-                    subitem = subitems[j];
-                    newdropdown += "<li><a href='https://artsdatabanken.no"+subitem.Url+"'>"+subitem.Heading+"</a></li>";
+                    // Generate the dropdowncontent 
+                    let newdropdown ="<ul class='dropdown' id='"+id+"' style='display:none'>";                
+                    let subitems = item.References;
+                    for(let j in subitems){
+                        subitem = subitems[j];
+                        let name = subitem.Heading;
+                        if(!subitem.Heading){
+                            name= subitem.Header.Content;
+                        }
+                        newdropdown += "<li><a href='https://artsdatabanken.no"+subitem.Url+"'>"+name+"</a></li>";
 
-                }                
-                newdropdown +="</ul>";
+                    }                
+                    newdropdown +="</ul>";
+                    menubutton.innerHTML = item.Values+newdropdown; // attach it
 
-                testmeny.innerHTML = item.Values+newdropdown;
+                    // Toggle the relevant dropdownmenu
+                    menubutton.addEventListener('click',function(e){
+                        let target = e.target.querySelector('.dropdown');
+                        if(target.style.display == "none"){
+                            target.style.display = "block";
+                        }else{
+                            target.style.display = "none";
+                        }
+                    });
 
-                testmeny.addEventListener('click',function(e){
-                    let target = e.target.querySelector('.dropdown');
-                    if(target.style.display == "none"){
-                        target.style.display = "block";
-                    }else{
-                        target.style.display = "none";
-                    }
-                 });
-
-                appendData('headermenu',testmeny);
-            }
-            
-
-            addData('headermenu',finalmenu);
+                    // Add to page
+                    appendData('headermenu',menubutton);
+                }
+                addData('headermenu',finalmenu);
             }
             catch{
                 console.error("failed at headermenu")
-            }
-            
-                            
+            }        
         })
         .catch((err) => {
             console.error("failed obtaining headermenu")
