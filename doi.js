@@ -183,10 +183,22 @@ function getHeaderMenu(){
                     for(let j in subitems){
                         subitem = subitems[j];
                         let name = subitem.Heading;
+                        let url = "https://artsdatabanken.no"+subitem.Url;
                         if(!subitem.Heading){
                             name= subitem.Header.Content;
+                            url = "https://"+name+".artsdatabanken.no/";
+                            if(name =="Artsnavnebasen"){
+                                url = "http://www2.artsdatabanken.no/artsnavn/Contentpages/Sok.aspx";
+                            }else if(name=="Artsobservasjoner"){
+                                url = "https://www.artsobservasjoner.no/"
+                            }else if(name=="NiN-kart"){
+                                url = "https://nin.artsdatabanken.no/";
+                            }else if(name=="Portal for økologiske grunnkart"){
+                                url = "https://okologiskegrunnkart.artsdatabanken.no/";
+                            }
+                            
                         }
-                        newdropdown += "<li><a href='https://artsdatabanken.no"+subitem.Url+"'>"+name+"</a></li>";
+                        newdropdown += "<li><a href='"+url+"'>"+name+"</a></li>";
 
                     }                
                     newdropdown +="</ul>";
