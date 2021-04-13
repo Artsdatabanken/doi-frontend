@@ -1,17 +1,24 @@
-/* Fetches data from api, presents by adding it to the html either by appending in blank divs, 
-or replacing the existing text. */
+/* 
+
+If there is DOI-data: Doi presentation
+Fetches data from api, presents by adding it to the html either by appending in blank divs, 
+or replacing the existing text. 
+
+*/
 
 // Startup
 window.addEventListener('load', function() {
     runApiCall();
+    getHeaderMenu();
 })
 
-// Listeners for when to re-run 
+// Change parameter/navigate between pages 
 window.onhashchange = function() { 
     console.info("Updated doi-parameter, re-fetch")
     runApiCall()
 }
 
+// If no parameter - show frontpage, otherwise run the doi page
 function runApiCall(){
     let guid = getGuid();
     if(guid == "" || guid == "#" || guid == "undefined"){
@@ -29,9 +36,10 @@ function runApiCall(){
 }
 
 
-// Data Obtainers
+// Fetch DOI data from api.
 function getDoiData(isRerun){   
     // Obtaining the relevant doi to look up.
+    // Is its own function as it was called from several places. No longer is tho.
     let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
     fetch(url)
     .then((response) => {
@@ -47,19 +55,17 @@ function getDoiData(isRerun){
 
 }
 
+// Start presenting the DOI-page
 function handleDoiData(data,isRerun){
-    console.log("Starting data fetch")
     // Prep the page
-    emptyAppenders();
-    
-    let attributes = data.data.attributes;  
-    
+    emptyAppenders();    
+    let attributes = data.data.attributes;      
 
     hideAndShow("show");
     if(!isRerun){
         // If the function is a rerun (update), dont hide the progressbar
         // Users will then be interested to know it reached finished state.
-        isValid(attributes);
+        hideProgressbar(attributes);
     }
     
     let desc = unWrap(attributes.descriptions,"descriptionType","description");          
@@ -82,21 +88,15 @@ function handleDoiData(data,isRerun){
     // addTypes(attributes); 
     
     //console.log("All data loaded")
-    // End of all :)
 }
 
-// Data Obtainers
+// During dataset generation this checks for more data and updated progress
 function getTimeUpdate(submitted,created,updated,valid){       
     let timeout = 30000;
     try{
-        //console.log(submitted,created,valid)
-        //console.log("RUN GETTIMEUPDATE")
         setTimeout(function(){ 
-            
             // Obtaining the relevant doi to look up.
             let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDatesByGuid/'+getGuid();
-
-
             fetch(url)
             .then((response) => {
                 return response.json()
@@ -107,8 +107,6 @@ function getTimeUpdate(submitted,created,updated,valid){
                 let newcreated = data.Created || false; 
                 let newupdated = data.Updated || false; 
                 let newvalid = data.Valid || false; 
-               
-                // TRIGGER BIG UPDATE?
                 let trigger_page_update = false;
 
                 if(newsubmitted && !submitted){  
@@ -146,9 +144,6 @@ function getTimeUpdate(submitted,created,updated,valid){
                     //console.info(">>rerun: check again in timeout")
                     getTimeUpdate(submitted,created,valid) 
                 }               
-                console.info("Time data loaded")
-                // End of all :)
-                
             })
             .catch((err) => {
                 console.error("failed at fetch valid")
@@ -161,7 +156,73 @@ function getTimeUpdate(submitted,created,updated,valid){
 
 // Data formatters
 
-function isValid(attributes){
+
+
+// Lets pretend this is a part of the main site
+function getHeaderMenu(){       
+    try{
+        // Obtaining the relevant doi to look up.
+        let url = "https://www.artsdatabanken.no/api/Content/224883";
+        fetch(url)
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {     
+            try{
+                console.log(data.Records)
+            let apimenus = data.Records;
+           
+            
+            for (let i in apimenus){
+                let item = apimenus[i];
+                let id = item.Values.toString().replace(" ","");
+                let testmeny = document.createElement('button');
+                testmeny.className = "menuitems";
+                
+
+
+                
+                let newdropdown ="<ul class='dropdown' id='"+id+"' style='display:none'>";                
+                let subitems = item.References;
+                for(let j in subitems){
+                    subitem = subitems[j];
+                    newdropdown += "<li><a href='https://artsdatabanken.no"+subitem.Url+"'>"+subitem.Heading+"</a></li>";
+
+                }                
+                newdropdown +="</ul>";
+
+                testmeny.innerHTML = item.Values+newdropdown;
+
+                testmeny.addEventListener('click',function(e){
+                    let target = e.target.querySelector('.dropdown');
+                    if(target.style.display == "none"){
+                        target.style.display = "block";
+                    }else{
+                        target.style.display = "none";
+                    }
+                 });
+
+                appendData('headermenu',testmeny);
+            }
+            
+
+            addData('headermenu',finalmenu);
+            }
+            catch{
+                console.error("failed at headermenu")
+            }
+            
+                            
+        })
+        .catch((err) => {
+            console.error("failed obtaining headermenu")
+        })
+    }catch{
+        console.log("error in headermenu")
+    }
+}
+
+function hideProgressbar(attributes){
     try{
         let dates = attributes.dates;
         for(let i in dates){
@@ -171,7 +232,7 @@ function isValid(attributes){
             }
         }
     }catch{
-        console.error("Failed at isValid")
+        console.error("Failed at hideProgressbar")
     }
 }
 
