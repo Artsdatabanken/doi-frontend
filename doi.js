@@ -67,9 +67,8 @@ function handleDoiData(data,isRerun){
         // Users will then be interested to know it reached finished state.
         hideProgressbar(attributes);
     }
-    
-    let desc = unWrap(attributes.descriptions,"descriptionType","description");          
 
+    let desc = unWrap(attributes.descriptions,"descriptionTypeDeprecated","description");   
     // Main Content
     addTimeDetails(attributes);
     addIngressData(attributes);
