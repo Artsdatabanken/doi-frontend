@@ -576,23 +576,26 @@ function unWrap(wrapped,criteria,content){
         // Looping and bundling by type to easier use relevant data only
         if(wrapped == undefined || criteria == undefined || content == undefined) {
             console.error("error in unwrap",criteria,content)
-            // content MISSING FOR UNWRAP DESCRIPTIONS. STILL CONTINUE
             return null;
         }
         let unwrapped = {};
         for(let i in wrapped){
             let item = wrapped[i];        
-            let iwrap = item[criteria];
-            let exists = unwrapped[iwrap] || null;    
-            let newitem = item;
-            if(content !== false){
-                newitem = item[content];
-            }     
+            let key = item[criteria] || null;   
+            if (content == "TechnicalInfo"){
+                item = item.split("#");
+                key = item[0];
+                item = item[1]
+            }
+            else if(content !== false){
+                item = item[content];
+            } 
 
+            let exists = unwrapped[key] || null;  
             if(exists){
-                unwrapped[item[criteria]].push(newitem);                    
+                unwrapped[key].push(item);                    
             }else{
-                unwrapped[item[criteria]] = [newitem];
+                unwrapped[key] = [item];
             }                
         }    
         return unwrapped;   
@@ -603,18 +606,8 @@ function unWrap(wrapped,criteria,content){
 }
 
 function unWrapDescriptions(wrapped,criteria,content){
-    let unwrapped = unWrap(wrapped,criteria,content)["TechnicalInfo"];
-    let finalwrap = {}
-    for(let i in unwrapped){
-        let item = unwrapped[i].split("#");
-        let exists = finalwrap[item[0]] || null; 
-        if(exists){
-            finalwrap[item[0]].push(item[1]);                    
-        }else{
-            finalwrap[item[0]] = [item[1]];
-        } 
-    }
-    return finalwrap;   
+    wrapped = unWrap(wrapped,criteria,content)["TechnicalInfo"];
+    return unWrap(wrapped,criteria,"TechnicalInfo");
 }
 
 
