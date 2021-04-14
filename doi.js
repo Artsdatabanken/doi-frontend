@@ -68,7 +68,7 @@ function handleDoiData(data,isRerun){
         hideProgressbar(attributes);
     }
 
-    let desc = unWrapDescriptions(attributes.descriptions,"TechnicalInfo");   
+    let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");   
     // Main Content
     addTimeDetails(attributes);
     addIngressData(attributes);
@@ -572,55 +572,51 @@ function convertBytes(x){
 }
 
 function unWrap(wrapped,criteria,content){
-    // Looping and bundling by type to easier use relevant data only
-    if(wrapped == undefined || criteria == undefined || content == undefined) {
-        console.error("error in unwrap",criteria,content)
-        return null;
-    }
-    let unwrapped = {};
-    for(let i in wrapped){
-        let item = wrapped[i];                
-        let iwrap = item[criteria];
-        let exists = unwrapped[iwrap] || null;    
-        let newitem = item;
-        if(content !== false){
-            newitem = item[content];
-        }           
-
-        if(exists){
-            unwrapped[item[criteria]].push(newitem);                    
-        }else{
-            unwrapped[item[criteria]] = [newitem];
-        }                
-    }    
-    return unwrapped;   
-}
-
-function unWrapDescriptions(wrapped,descriptionType){
-    // Looping and bundling by type to easier use relevant data only
-    if(wrapped == undefined || descriptionType == undefined) {
-        console.error("error in unwrap",descriptionType)
-        return null;
-    }
-    let unwrapped = {};
-    for(let i in wrapped){
-        let item = wrapped[i];
-        if(item["descriptionType"] != descriptionType){
-            continue;
+    try{
+        // Looping and bundling by type to easier use relevant data only
+        if(wrapped == undefined || criteria == undefined || content == undefined) {
+            console.error("error in unwrap",criteria,content)
+            // content MISSING FOR UNWRAP DESCRIPTIONS. STILL CONTINUE
+            return null;
         }
-        let iwrap = item["description"].split("#");
-        let criteria = iwrap[0];
-        let newitem = iwrap.slice(1).join("#");
-        let exists = unwrapped[criteria] || null;    
+        let unwrapped = {};
+        for(let i in wrapped){
+            let item = wrapped[i];        
+            let iwrap = item[criteria];
+            let exists = unwrapped[iwrap] || null;    
+            let newitem = item;
+            if(content !== false){
+                newitem = item[content];
+            }     
 
-        if(exists){
-            unwrapped[criteria].push(newitem);                    
-        }else{
-            unwrapped[criteria] = [newitem];
-        }                
-    }    
-    return unwrapped;   
+            if(exists){
+                unwrapped[item[criteria]].push(newitem);                    
+            }else{
+                unwrapped[item[criteria]] = [newitem];
+            }                
+        }    
+        return unwrapped;   
+    }catch(err){
+        console.error("unwrap failed")
+    }
+    
 }
+
+function unWrapDescriptions(wrapped,criteria,content){
+    let unwrapped = unWrap(wrapped,criteria,content)["TechnicalInfo"];
+    let finalwrap = {}
+    for(let i in unwrapped){
+        let item = unwrapped[i].split("#");
+        let exists = finalwrap[item[0]] || null; 
+        if(exists){
+            finalwrap[item[0]].push(item[1]);                    
+        }else{
+            finalwrap[item[0]] = [item[1]];
+        } 
+    }
+    return finalwrap;   
+}
+
 
 function addData(id,content){
     if(content!= undefined && id!= undefined){
