@@ -68,7 +68,7 @@ function handleDoiData(data,isRerun){
         hideProgressbar(attributes);
     }
 
-    let desc = unWrap(attributes.descriptions,"descriptionTypeDeprecated","description");   
+    let desc = unWrapDescriptions(attributes.descriptions,"TechnicalInfo");   
     // Main Content
     addTimeDetails(attributes);
     addIngressData(attributes);
@@ -591,6 +591,32 @@ function unWrap(wrapped,criteria,content){
             unwrapped[item[criteria]].push(newitem);                    
         }else{
             unwrapped[item[criteria]] = [newitem];
+        }                
+    }    
+    return unwrapped;   
+}
+
+function unWrapDescriptions(wrapped,descriptionType){
+    // Looping and bundling by type to easier use relevant data only
+    if(wrapped == undefined || descriptionType == undefined) {
+        console.error("error in unwrap",descriptionType)
+        return null;
+    }
+    let unwrapped = {};
+    for(let i in wrapped){
+        let item = wrapped[i];
+        if(item["descriptionType"] != descriptionType){
+            continue;
+        }
+        let iwrap = item["description"].split("#");
+        let criteria = iwrap[0];
+        let newitem = iwrap.slice(1).join("#");
+        let exists = unwrapped[criteria] || null;    
+
+        if(exists){
+            unwrapped[criteria].push(newitem);                    
+        }else{
+            unwrapped[criteria] = [newitem];
         }                
     }    
     return unwrapped;   
