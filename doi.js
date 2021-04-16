@@ -585,6 +585,7 @@ function detectTest(){
 }
 
 function getDoiUrl(attributes){
+    // Create doi-url if state != draft
     if(attributes.state === "draft") {
         return attributes.url;
     }
