@@ -1,8 +1,8 @@
-/* 
+/*
 
 If there is DOI-data: Doi presentation
-Fetches data from api, presents by adding it to the html either by appending in blank divs, 
-or replacing the existing text. 
+Fetches data from api, presents by adding it to the html either by appending in blank divs,
+or replacing the existing text.
 
 */
 
@@ -12,8 +12,8 @@ window.addEventListener('load', function() {
     getHeaderMenu();
 })
 
-// Change parameter/navigate between pages 
-window.onhashchange = function() { 
+// Change parameter/navigate between pages
+window.onhashchange = function() {
     console.info("Updated doi-parameter, re-fetch")
     runApiCall()
 }
@@ -25,13 +25,13 @@ function runApiCall(){
     let guid = getGuid();
     if(guid == "" || guid == "#" || guid == "undefined"){
         console.log("NO GUID - show default page");
-        try{           
+        try{
             hideAndShow("none");
             showFrontPage();
         }catch(err){
             console.error("Show frontpage failed")
         }
-       
+
     }else{
         getDoiData();
     }
@@ -39,7 +39,7 @@ function runApiCall(){
 
 
 // Fetch DOI data from api.
-function getDoiData(isRerun){   
+function getDoiData(isRerun){
     // Obtaining the relevant doi to look up.
     // Is its own function as it was called from several places. No longer is tho.
     let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
@@ -47,8 +47,8 @@ function getDoiData(isRerun){
     .then((response) => {
         return response.json()
     })
-    .then((data) => {        
-        handleDoiData(data,isRerun);        
+    .then((data) => {
+        handleDoiData(data,isRerun);
     })
     .catch((err) => {
         hideAndShow("none");
@@ -60,8 +60,8 @@ function getDoiData(isRerun){
 // Start presenting the DOI-page
 function handleDoiData(data,isRerun){
     // Prep the page
-    emptyAppenders();    
-    let attributes = data.data.attributes;      
+    emptyAppenders();
+    let attributes = data.data.attributes;
 
     hideAndShow("show");
     if(!isRerun){
@@ -70,7 +70,7 @@ function handleDoiData(data,isRerun){
         hideProgressbar(attributes);
     }
 
-    let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");   
+    let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");
     // Main Content
     addTimeDetails(attributes);
     addIngressData(attributes);
@@ -78,7 +78,7 @@ function handleDoiData(data,isRerun){
     addFiles(attributes);
     addDoi(desc);
     addArtskartUrl(desc);
-    addAreas(desc);        
+    addAreas(desc);
     addDescriptions(desc);
 
     // Sidebar
@@ -86,42 +86,42 @@ function handleDoiData(data,isRerun){
     addFileInfo(attributes,desc);
     addCitation(attributes);
     // addStats(attributes);
-    // addTypes(attributes); 
-    
+    // addTypes(attributes);
+
     //console.log("All data loaded")
 }
 
 // During dataset generation this checks for more data and updated progress
-function getTimeUpdate(submitted,created,updated,valid){       
+function getTimeUpdate(submitted,created,updated,valid){
     let timeout = 30000;
     try{
-        setTimeout(function(){ 
+        setTimeout(function(){
             // Obtaining the relevant doi to look up.
             let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDatesByGuid/'+getGuid();
             fetch(url)
             .then((response) => {
                 return response.json()
             })
-            .then((data) => {     
+            .then((data) => {
                 // UPDATE THESE WHEN NEW API
-                let newsubmitted = data.Submitted || false; 
-                let newcreated = data.Created || false; 
-                let newupdated = data.Updated || false; 
-                let newvalid = data.Valid || false; 
+                let newsubmitted = data.Submitted || false;
+                let newcreated = data.Created || false;
+                let newupdated = data.Updated || false;
+                let newvalid = data.Valid || false;
                 let trigger_page_update = false;
 
-                if(newsubmitted && !submitted){  
-                    // Should never trigger, 
-                    // we should always have a submitted                 
+                if(newsubmitted && !submitted){
+                    // Should never trigger,
+                    // we should always have a submitted
                     trigger_page_update = true;
                     //console.log("Rerun change at SUBMITTED")
                 }else if(newcreated && !created){
                     // Received a new created date where we used to have none
                     trigger_page_update = true;
-                    //console.log("Rerun change at CREATED?")                    
-                }else if(newvalid){ // && !valid){      
-                    // Received a new valid date where we used to have none    
-                    // There should be no case where we previously had a valid date     
+                    //console.log("Rerun change at CREATED?")
+                }else if(newvalid){ // && !valid){
+                    // Received a new valid date where we used to have none
+                    // There should be no case where we previously had a valid date
                     trigger_page_update = true;
                     //console.log("Rerun change at VALID?");
                 }else if(created && !newvalid){
@@ -143,8 +143,8 @@ function getTimeUpdate(submitted,created,updated,valid){
                     getDoiData(true);
                 }else{
                     //console.info(">>rerun: check again in timeout")
-                    getTimeUpdate(submitted,created,valid) 
-                }               
+                    getTimeUpdate(submitted,created,valid)
+                }
             })
             .catch((err) => {
                 console.error("failed at fetch valid")
@@ -160,7 +160,7 @@ function getTimeUpdate(submitted,created,updated,valid){
 
 
 // Lets pretend this is a part of the main site
-function getHeaderMenu(){       
+function getHeaderMenu(){
     try{
         console.log("making header menu")
         // Obtaining the relevant doi to look up.
@@ -169,9 +169,9 @@ function getHeaderMenu(){
         .then((response) => {
             return response.json()
         })
-        .then((data) => {     
+        .then((data) => {
             try{
-                let apimenus = data.Records;            
+                let apimenus = data.Records;
                 for (let i in apimenus){
                     let item = apimenus[i];
                     let id = item.Values.toString().replace(" ","");
@@ -180,8 +180,8 @@ function getHeaderMenu(){
                     let menubutton = document.createElement('button');
                     menubutton.className = "menuitems";
 
-                    // Generate the dropdowncontent 
-                    let newdropdown ="<ul class='dropdown' id='"+id+"' style='display:none'>";                
+                    // Generate the dropdowncontent
+                    let newdropdown ="<ul class='dropdown' id='"+id+"' style='display:none'>";
                     let subitems = item.References;
                     for(let j in subitems){
                         subitem = subitems[j];
@@ -199,11 +199,11 @@ function getHeaderMenu(){
                             }else if(name=="Portal for økologiske grunnkart"){
                                 url = "https://okologiskegrunnkart.artsdatabanken.no/";
                             }
-                            
+
                         }
                         newdropdown += "<li><a href='"+url+"'>"+name+"</a></li>";
 
-                    }                
+                    }
                     newdropdown +="</ul>";
                     menubutton.innerHTML = item.Values+newdropdown; // attach it
 
@@ -222,7 +222,7 @@ function getHeaderMenu(){
                 }
             }catch(err){
                 console.error("failed at headermenu")
-            }        
+            }
         })
         .catch((err) => {
             console.error("failed obtaining headermenu")
@@ -236,9 +236,9 @@ function hideProgressbar(attributes){
     try{
         let dates = attributes.dates;
         for(let i in dates){
-            if(dates[i].dateType == "Valid"){        
+            if(dates[i].dateType == "Valid"){
                 // PROGRESSBAR HIDE
-                updateStyle(document.getElementById("notyetvalid"),"display","none");                    
+                updateStyle(document.getElementById("notyetvalid"),"display","none");
             }
         }
     }catch(err){
@@ -308,7 +308,7 @@ function addTimeDetails(attributes){
             addData("Progress.Valid","-");
             getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Updated||false,dates.Valid||false);
         }
-        addData("progresstext",text);  
+        addData("progresstext",text);
 
     }catch(err){
         console.error("Failed at times")
@@ -317,7 +317,7 @@ function addTimeDetails(attributes){
 
 function addIngressData(attributes){
     try{
-        addData("Titles.type",attributes.titles[0].title);   
+        addData("Titles.type",attributes.titles[0].title);
         addData("Creators.sourcename",attributes.creators[0].name);
         addData("publisher",attributes.publisher);
         addData("Time.year",attributes.publicationYear);
@@ -331,12 +331,12 @@ function addFiles(attributes){
     // Also contains doi-sources which are duplicated in descriptions.doi
     // They are placed here due to the doi-system tracking the use through this parameter
     // But we instead fetch them from descriptions, as they there contain more data.
-    // A bit unnecessary grouping, but ensures that anything relevant is found, 
+    // A bit unnecessary grouping, but ensures that anything relevant is found,
     // and anything doi is excluded
     try{
         let unwrappedRelatedIdentifiers = unWrap(attributes.relatedIdentifiers,"relatedIdentifierType",false);
-        let relatedurls = unwrappedRelatedIdentifiers["URL"];        
-    
+        let relatedurls = unwrappedRelatedIdentifiers["URL"];
+
         for (let i in relatedurls){
             let item = relatedurls[i];
             if(item.resourceTypeGeneral=="Image"){
@@ -345,11 +345,11 @@ function addFiles(attributes){
                 const closebutton = document.createElement('button');
                 closebutton.innerHTML= "<span class='material-icons'>fullscreen</span>";
                 closebutton.id = "fullscreenbutton"
-                
-                
+
+
                 // Make image BIG
                 $("#img.appender").addEventListener('click',function(e){
-                    let target = $("#img.appender"); 
+                    let target = $("#img.appender");
                     let body = document.getElementsByTagName("BODY")[0];
                     if(target.className == "fullscreen"){
                         target.className = "sectionimage"
@@ -373,7 +373,7 @@ function addFiles(attributes){
         }
     }catch(err){
         console.error("Failed in addFiles")
-    }    
+    }
 }
 
 
@@ -381,27 +381,27 @@ function addDoi(desc){
     // Contains all source datasets. Also those without a doi, but of doi-type data.
     // If a doi is missing, it will instead contain an id.
     try{
-        let doi = desc['DOI'];           
+        let doi = desc['DOI'];
         // Text formatting:
         let datacontributors = doi.length+" dataleverandør";
         if(doi.length>1){
             datacontributors +="er";
         }
-        addData("Nr.Sources",datacontributors);       
+        addData("Nr.Sources",datacontributors);
         for (let i in doi){
             let items = doi[i].split("|");
             let div = document.createElement('div');
             div.className = "listitem";
             let link = items[0];
             let linkline = ""; // There is an id here, but what type? what it do?
-            
+
             if(link.includes("https")){
                 let doitext = link.replace("https://doi.org/","");
-                linkline = "<a href="+link+">"+doitext+"</a>";                
-            }           
+                linkline = "<a href="+link+">"+doitext+"</a>";
+            }
 
             let numberline = "<span> ("+ items[1]+" element)</span></br>";
-            let nameline = "<span>"+ items[2]+"</span>";            
+            let nameline = "<span>"+ items[2]+"</span>";
             div.innerHTML = nameline+numberline+linkline;
             appendData('doi.appender',div);
         }
@@ -415,7 +415,7 @@ function addArtskartUrl(desc){
         let artskartelement = desc['ArtskartUrl'][0];
         let a = document.createElement('div');
         let launch = "<span class='material-icons'>launch</span>";
-        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg i Arskart </span></a>";       
+        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg i Arskart </span></a>";
         appendData('a.appender',a);
     }catch(err){
         console.error("Failed at artskarturl;")
@@ -425,8 +425,8 @@ function addArtskartUrl(desc){
 function addAreas(desc){
     try{
         // Add areas if exists
-        let areas = desc['Areas'];   
-        if(areas && areas.length >0)   { 
+        let areas = desc['Areas'];
+        if(areas && areas.length >0)   {
             let ar = document.createElement('div');
             ar.innerHTML = "<h3> Områder </h3>";
                 for (let i in areas){
@@ -452,12 +452,12 @@ function addDescriptions(desc){
 
 function addGeneralData(attributes){
     try{
-        // DOI URL 
+        // DOI URL
         // URL is always the non-test version as it's from api.
-        let doilink = "<a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a>";        
+        let doilink = "<a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a>";
         addData('Attributes.doi',doilink);
         addData('header-doi',attributes.doi);
-        addData("Guid",getGuid());        
+        addData("Guid",getGuid());
         //addData("Attributes.url",attributes.url);
         //addData("data.Id",data.data.id);
         //addData("data.Type",data.data.type);
@@ -475,18 +475,18 @@ function addFileInfo(attributes,desc){
         addData("Size",convertBytes(attributes.sizes));
         addData("Attributes.formats",attributes.formats);
         let apiurl = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
-        let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";        
+        let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";
         addData('Api.link',apilink);
-        addData("Titles.lang",attributes.titles[0].lang);        
+        addData("Titles.lang",attributes.titles[0].lang);
         addData("Attributes.state",attributes.state);
-        //addData("Creators.sourcetype",attributes.creators[0].nameType);  
+        //addData("Creators.sourcetype",attributes.creators[0].nameType);
         //addData("Attributes.version",attributes.version);
         //addData("Attributes.metadataVersion",attributes.metadataVersion);
         //addData("Attributes.schemaVersion",attributes.schemaVersion);
     }catch(err){
         console.error("File info failed")
     }
-    
+
 }
 
 function addTypes(attributes){
@@ -495,7 +495,7 @@ function addTypes(attributes){
         addData("Attributes.types.schemaOrg",attributes.types.schemaOrg);
         addData("Attributes.types.bibtex",attributes.types.bibtex);
         addData("Attributes.types.citeproc",attributes.types.citeproc);
-        addData("Attributes.types.ris",attributes.types.ris); 
+        addData("Attributes.types.ris",attributes.types.ris);
     }catch(err){
         console.error("Types failed")
     }
@@ -509,14 +509,14 @@ function addCitation(attributes){
         for(let i in dates){
             if(dates[i].dateType == "Updated"){
                 accesseddate = dates[i].date.split("T")[0];
-            }            
+            }
         }
 
         attributes.dates
         let year = "("+attributes.publicationYear+")";
-        
+
         let citation = attributes.publisher+" "+year+". "
-        +attributes.creators[0].name+". " 
+        +attributes.creators[0].name+". "
         + attributes.types.resourceTypeGeneral
         +" "+getDoiUrl(attributes)
         +" accessed via artsdatabanken.no"
@@ -526,7 +526,7 @@ function addCitation(attributes){
     }catch(err){
         console.error("citation failed")
     }
-   
+
 }
 
 function addStats(attributes){
@@ -542,7 +542,7 @@ function addStats(attributes){
     }catch(err){
         console.error("Satistics failed")
     }
-    
+
 }
 
 function addGeoLocation(attributes){
@@ -570,12 +570,12 @@ function $(id){
     return document.getElementById(id);
 }
 
-function getGuid(){    
+function getGuid(){
     let guid = window.location.hash;
     return guid.replace("#","");
 }
 
-function detectTest(){    
+function detectTest(){
     // Detect if we're running on test or not
     let url = window.location.href;
     if(url.includes("test") || url.includes("index")){
@@ -601,7 +601,7 @@ function convertBytes(x){
     while(n >= 1024 && ++l){
         n = n/1024;
     }
-    //include a decimal point and a tenths-place digit if presenting 
+    //include a decimal point and a tenths-place digit if presenting
     //less than ten of KB or greater units
     return(n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
 }
@@ -615,8 +615,8 @@ function unWrap(wrapped,criteria,content){
         }
         let unwrapped = {};
         for(let i in wrapped){
-            let item = wrapped[i];        
-            let key = item[criteria] || null;   
+            let item = wrapped[i];
+            let key = item[criteria] || null;
             if (content == "TechnicalInfo"){
                 item = item.split("#");
                 key = item[0];
@@ -624,20 +624,20 @@ function unWrap(wrapped,criteria,content){
             }
             else if(content !== false){
                 item = item[content];
-            } 
+            }
 
-            let exists = unwrapped[key] || null;  
+            let exists = unwrapped[key] || null;
             if(exists){
-                unwrapped[key].push(item);                    
+                unwrapped[key].push(item);
             }else{
                 unwrapped[key] = [item];
-            }                
-        }    
-        return unwrapped;   
+            }
+        }
+        return unwrapped;
     }catch(err){
         console.error("unwrap failed")
     }
-    
+
 }
 
 function unWrapDescriptions(wrapped,criteria,content){
@@ -660,22 +660,22 @@ function addData(id,content){
         catch(err){
             console.error("failed for id: ",id,"and content:" ,content)
         }
-    }            
+    }
 }
 
 function appendData(id,content){
-    
+
     if(content!= undefined && id!= undefined ){
         try{
             document.getElementById(id).appendChild(content);
         } catch(err){
             console.error("failed for id: ",id,"and content:" ,content);
         }
-        
+
     }else{
         // To avoid entire page breaking down if one error occurs
         console.error("no such content ", id,content);
-    }            
+    }
 }
 
 function hideAndShowActions(param,otherparam){
@@ -691,7 +691,7 @@ function hideAndShowActions(param,otherparam){
         updateStyle(document.getElementById("timedetails"),"display",param);
     }catch(err){
         console.error("failed at hideandshowactions")
-    }   
+    }
 }
 
 function emptyAppenders(){
