@@ -85,7 +85,6 @@ body{
 }
 
 
-
 .sidebarmenu ul{
     font-family: "Roboto Condensed";
     padding-right: 1em;
@@ -226,28 +225,6 @@ p{
     }
 }
 
-/* SECTION IMAGE (Map) */
-
-.section img{
-    max-width: 365px;  
-    float:left;
-    display:block;
-    padding:20px;
-    
-    padding-top:0px;
-    padding-left: 0px;
-}
-
-@media only screen and (max-width: 600px),
-    only screen and (min-width: 740px) and (max-width:1124px ){
-    .section img{
-        max-width: 100%;  
-        float:none;
-        display:block;
-        padding:0px;
-        padding-bottom:20px;
-    }
-}
 
 /* SIDEBAR */
 
@@ -551,6 +528,7 @@ nav{
     font-size: 15px;
     text-align: left;
     background-color: #fff;
+    z-index: 1;
 }
 
 .dropdown li a {
@@ -572,3 +550,95 @@ nav{
 #Omoss{
     display:block;
 }
+
+/* SECTION IMAGE (Map) */
+
+.sectionimage{
+    display: inline;
+    position: relative;
+    float: left;
+}
+
+.sectionimage img{
+    max-width: 365px;  
+    padding:20px;    
+    padding-top:0px;
+    padding-left: 0px;
+}
+
+@media only screen and (max-width: 600px),
+    only screen and (min-width: 740px) and (max-width:1124px ){
+    .sectionimage{
+        max-width: 100%;  
+        float:none;
+        display:block;
+    }
+
+    .sectionimage img{
+        max-width: 100%;  
+        padding:0px;
+        padding-bottom:20px;
+    }
+}
+
+/* IMAGE AS FULLSCREEN */
+body.freeze-scroll {
+    overflow: hidden;
+  }
+
+
+.sectionimage:hover,
+.fullscreen:hover{
+    cursor:pointer;
+}
+
+.fullscreen{
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    height: 100vh;
+    width:100vw;
+    background: rgba(0,0,0,0.7);
+}
+
+.fullscreen img{
+    width:100%;
+    padding:10px;
+    max-width: 100%;
+}
+
+#fullscreenbutton{
+    border-radius: 5px;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    right: 25px;
+    font-size: 14pt;
+    border: 1px solid gray;
+    top: 5px;
+    text-align: center;
+    padding: 2px;
+}
+
+@media only screen and (max-width: 600px),
+    only screen and (min-width: 740px) and (max-width:1124px ){
+        #fullscreenbutton{
+            right: 5px;
+        }
+}
+
+.fullscreen #fullscreenbutton{
+    right: 25px;
+    top: 25px;
+}
+
+#fullscreenbutton:hover{
+    background:black;
+    color:white;
+    cursor:pointer;
+}
+
+
+
+

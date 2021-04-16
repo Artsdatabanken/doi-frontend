@@ -18,6 +18,8 @@ window.onhashchange = function() {
     runApiCall()
 }
 
+
+
 // If no parameter - show frontpage, otherwise run the doi page
 function runApiCall(){
     let guid = getGuid();
@@ -160,6 +162,7 @@ function getTimeUpdate(submitted,created,updated,valid){
 // Lets pretend this is a part of the main site
 function getHeaderMenu(){       
     try{
+        console.log("making header menu")
         // Obtaining the relevant doi to look up.
         let url = "https://www.artsdatabanken.no/api/Content/224883";
         fetch(url)
@@ -339,6 +342,26 @@ function addFiles(attributes){
             if(item.resourceTypeGeneral=="Image"){
                 const image = document.createElement('img');
                 image.src  = item.relatedIdentifier;
+                const closebutton = document.createElement('button');
+                closebutton.innerHTML= "<span class='material-icons'>fullscreen</span>";
+                closebutton.id = "fullscreenbutton"
+                
+                
+                // Make image BIG
+                $("#img.appender").addEventListener('click',function(e){
+                    let target = $("#img.appender"); 
+                    let body = document.getElementsByTagName("BODY")[0];
+                    if(target.className == "fullscreen"){
+                        target.className = "sectionimage"
+                        body.className = "";
+                        closebutton.innerHTML = "<span class='material-icons'>fullscreen</span>";
+                    }else{
+                        target.className = "fullscreen";
+                        body.className = "freeze-scroll";
+                        closebutton.innerHTML = "<span class='material-icons'>fullscreen_exit</span>";
+                    }
+                });
+                appendData('img.appender',closebutton);
                 appendData('img.appender',image);
             }else if(item.resourceTypeGeneral=="Dataset"){
                 let zipurl = item.relatedIdentifier;
@@ -352,6 +375,7 @@ function addFiles(attributes){
         console.error("Failed in addFiles")
     }    
 }
+
 
 function addDoi(desc){
     // Contains all source datasets. Also those without a doi, but of doi-type data.
