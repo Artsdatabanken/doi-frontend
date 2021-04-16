@@ -585,7 +585,7 @@ function unWrap(wrapped,criteria,content){
             if (content == "TechnicalInfo"){
                 item = item.split("#");
                 key = item[0];
-                item = item[1]
+                item = item.slice(1).join("#");
             }
             else if(content !== false){
                 item = item[content];
