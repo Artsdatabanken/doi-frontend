@@ -25,4 +25,3 @@ Trykk på _Liste_ -> _Eksport_. Velg eksporttype.
 
 Da opprettes en eksportjobb med en DOI. Klikk på link til DOI for å se DOI'en.
 
-PS: Viktig at siden ikke viser _ingen data_ el.l. på en DOI som ikke er helt ferdig (det er litt data lagret i DOI-en)
