@@ -515,6 +515,26 @@ nav{
     margin-right:2px;
     position: relative;
     border:0;
+    font-size: 15px;
+}
+
+.menuitems:active,
+.menuitems:focus,
+.menuitems:hover{
+    background:#ededed;
+    cursor: pointer;
+    color:#3d3b3a;
+}
+
+.menuitems span{
+    font-weight: 400;
+    font-size: 15px;
+    font-style: normal;
+    vertical-align: bottom;
+}
+
+.englishbutton {
+    background:none;
 }
 
 .dropdown{
