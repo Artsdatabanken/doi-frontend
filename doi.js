@@ -15,7 +15,7 @@ window.addEventListener('load', function() {
 // Change parameter/navigate between pages 
 window.onhashchange = function() { 
     console.info("Updated doi-parameter, re-fetch")
-    runApiCall()
+    runApiCall();
 }
 
 
@@ -158,79 +158,6 @@ function getTimeUpdate(submitted,created,updated,valid){
 // Data formatters
 
 
-
-// Lets pretend this is a part of the main site
-function getHeaderMenu(){       
-    try{
-        console.log("making header menu")
-        // Obtaining the relevant doi to look up.
-        let url = "https://www.artsdatabanken.no/api/Content/224883";
-        fetch(url)
-        .then((response) => {
-            return response.json()
-        })
-        .then((data) => {     
-            try{
-                let apimenus = data.Records;            
-                for (let i in apimenus){
-                    let item = apimenus[i];
-                    let id = item.Values.toString().replace(" ","");
-
-                    // Using createelement to enable attachment of eventlistener
-                    let menubutton = document.createElement('button');
-                    menubutton.className = "menuitems";
-
-                    // Generate the dropdowncontent 
-                    let newdropdown ="<ul class='dropdown' id='"+id+"' style='display:none'>";                
-                    let subitems = item.References;
-                    for(let j in subitems){
-                        subitem = subitems[j];
-                        let name = subitem.Heading;
-                        let url = "https://artsdatabanken.no"+subitem.Url;
-                        if(!subitem.Heading){
-                            name= subitem.Header.Content;
-                            url = "https://"+name+".artsdatabanken.no/";
-                            if(name =="Artsnavnebasen"){
-                                url = "http://www2.artsdatabanken.no/artsnavn/Contentpages/Sok.aspx";
-                            }else if(name=="Artsobservasjoner"){
-                                url = "https://www.artsobservasjoner.no/"
-                            }else if(name=="NiN-kart"){
-                                url = "https://nin.artsdatabanken.no/";
-                            }else if(name=="Portal for økologiske grunnkart"){
-                                url = "https://okologiskegrunnkart.artsdatabanken.no/";
-                            }
-                            
-                        }
-                        newdropdown += "<li><a href='"+url+"'>"+name+"</a></li>";
-
-                    }                
-                    newdropdown +="</ul>";
-                    menubutton.innerHTML = item.Values+newdropdown; // attach it
-
-                    // Toggle the relevant dropdownmenu
-                    menubutton.addEventListener('click',function(e){
-                        let target = e.target.querySelector('.dropdown');
-                        if(target.style.display == "none"){
-                            target.style.display = "block";
-                        }else{
-                            target.style.display = "none";
-                        }
-                    });
-
-                    // Add to page
-                    appendData('headermenu',menubutton);
-                }
-            }catch(err){
-                console.error("failed at headermenu")
-            }        
-        })
-        .catch((err) => {
-            console.error("failed obtaining headermenu")
-        })
-    }catch{
-        console.log("error in headermenu")
-    }
-}
 
 function hideProgressbar(attributes){
     try{

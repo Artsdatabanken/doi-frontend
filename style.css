@@ -544,7 +544,19 @@ nav{
     margin: 8px 0;
     display: block;
     text-decoration: none;
+}
 
+.dropdown li a span{
+    font-weight: 400;
+    font-size: 15px;
+    color: #4c4a48;
+    font-style: normal;
+    display: block;
+}
+
+.dropdown li a b{
+    font-size:10pt;
+    vertical-align: middle;
 }
 
 #Omoss{
