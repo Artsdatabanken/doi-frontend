@@ -1,3 +1,14 @@
+window.addEventListener('click', function(e) {
+    // Closes dropdown menu when clicking outside it. 
+    if (document.getElementById('headermenu')){
+        if (!document.getElementById('headermenu').contains(e.target)) {
+            document.getElementById("Omoss").style.display = "none";
+            document.getElementById("Meny").style.display = "none";
+            document.getElementById("English").style.display = "none";
+        }
+    }
+})
+
 // Lets pretend this is a part of the main site
 function getHeaderMenu(){       
     try{
@@ -60,10 +71,14 @@ function getHeaderMenu(){
 
                     // Toggle the relevant dropdownmenu
                     menubutton.addEventListener('click',function(e){
-                        let target = e.target.querySelector('.dropdown');
+                        let target = e.target;
+                        if(target.className =="material-icons"){
+                            target = target.parentElement;
+                        }
+                        target = target.querySelector('.dropdown');
                         let siblings = $(".dropdown");
                         let show = false;
-                        if(target.style.display == "none"){
+                        if(target && target.style.display == "none"){
                             show = true;
                         }
                         for(let i in siblings){
