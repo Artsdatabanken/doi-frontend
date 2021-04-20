@@ -1,8 +1,15 @@
 # doi-frontend
 Tar inn DOI-api, presenterer dem som om det er en del av hjemmesiden
 
+## Hvor finner jeg den?
+- Testversjon: https://doi.test.artsdatabanken.no/
+- Lokalt: siden den er ei enkeltfil, gå til din egen filbane der du klonet og åpne index.html
+
 ## Hva består den av?
-Denne er omtrent så enkel som det er mulig å få en nettside. Den har en html, en javascript og css-stylesheets. Man trenger med andre ord ikke installere noe for å kjøre, men kan åpne index.html i nettleseren så er alt på plass. Rett og slett fordi den ikke skal gjøre så mye avansert.
+Denne er omtrent så enkel som det er mulig å få en nettside. Den har en html, et par javascript og css-stylesheets. Man trenger med andre ord ikke installere noe for å kjøre, men kan åpne index.html i nettleseren så er alt på plass. 
+
+Headeren og footeren henter den inn med javascript fra apiet til hjemmesiden, og dytter inn. Det er helt sikkert ikke helt sikkerhets-optimalt at vi tillater å injisere data fra et api. Men det er det vi gjør. En vakker dag kan vi bruke tid på å fikse opp det. Se f.eks denne:
+https://labs.tadigital.com/index.php/2020/04/10/safe-ways-to-inject-html-through-javascript/
 
 ## deployment
 I utgangspunktet overføres alle filer og kataloger, i prosjektet, til webserveren. Ekskuderinger gjøres i filen deploy.sh og med følgende kommando:
