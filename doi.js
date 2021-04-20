@@ -382,7 +382,7 @@ function addGeneralData(attributes){
     try{
         // DOI URL 
         // URL is always the non-test version as it's from api.
-        let doilink = "<a href="+attributes.url+" >"+attributes.doi+"</a>";        
+        let doilink = "<a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a>";        
         addData('Attributes.doi',doilink);
         addData('header-doi',attributes.doi);
         addData("Guid",getGuid());        
@@ -446,7 +446,7 @@ function addCitation(attributes){
         let citation = attributes.publisher+" "+year+". "
         +attributes.creators[0].name+". " 
         + attributes.types.resourceTypeGeneral
-        +" https://doi.org/"+attributes.doi
+        +" "+getDoiUrl(attributes)
         +" accessed via artsdatabanken.no"
         +" on "+accesseddate+".";
 
@@ -510,6 +510,17 @@ function detectTest(){
         return "test."
     }
     return "";
+}
+
+function getDoiUrl(attributes){
+    // Create doi-url if state != draft
+    if(attributes.state === "draft") {
+        return attributes.url;
+    }
+    if (detectTest() !== ""){
+        return "https://handle.stage.datacite.org/"+attributes.doi;
+    }
+    return "https://doi.org/"+attributes.doi;
 }
 
 function convertBytes(x){
