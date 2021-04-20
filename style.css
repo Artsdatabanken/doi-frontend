@@ -4,8 +4,73 @@ body{
     font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+/* FOOTER */
+
+footer{
+    width: 100%;
+    background: #4c4a48;
+    display:inline-block;
+    color:white;
+    border-top: 3px solid #cecfd1;
+    padding-top: 1em;
+    padding-bottom: 20px;
+    font-family: "Roboto Condensed";
+    padding-left: 45px;
+    padding-right: 45px;
+    font-size: 15px;
+}
+
+footer a{
+    color:white;
+}
+
+footer ul {
+    list-style-type: none;
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 10.5px;
+}
+
+footer table td:first-child {
+    text-align: right;
+    padding-right: 1em;
+    vertical-align: top;
+}
+
+
+
+@media only screen and (min-width: 766px){
+
+    .row{
+        display:flex;
+    }
+    .col-sm-2,
+    .col-sm-4, 
+    .col-sm-6 {
+        flex:1;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .col-sm-6 {
+        flex:2;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+@media only screen and (max-width: 766px){
+    .col-sm-4, 
+    .col-sm-6 {
+        display:block;
+        border-bottom: thin solid #777368;
+        margin-bottom: 1em;
+    }
+}
+
+
+
 /* HEADER */
-.footer,
 .header {
     width: 100%;
     background: #4c4a48;

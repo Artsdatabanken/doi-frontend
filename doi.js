@@ -10,6 +10,7 @@ or replacing the existing text.
 window.addEventListener('load', function() {
     runApiCall();
     getHeaderMenu();
+    getFooter();
 })
 
 // Change parameter/navigate between pages 
