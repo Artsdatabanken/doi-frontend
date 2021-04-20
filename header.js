@@ -6,8 +6,20 @@ window.addEventListener('click', function(e) {
             document.getElementById("Meny").style.display = "none";
             //document.getElementById("English").style.display = "none";
         }
-    }
+
+        if(e.target.id == "navbar-mobile"){
+            let drop = document.getElementById("headermenu");
+            if(drop.style.display != "block"){
+                drop.style.display = "block"
+            }else{
+                drop.style.display = "none"
+            }
+        }
+
+   }
 })
+
+
 
 // Lets pretend this is a part of the main site
 function getHeaderMenu(){       

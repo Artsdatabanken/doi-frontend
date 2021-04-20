@@ -574,9 +574,6 @@ nav{
     text-decoration: none;
 }
 
-
-
-
 @media only screen and (max-width: 766px){
     .dropdown{
         /*Since content is inside a padded box and we want to keep clickability...*/
@@ -633,10 +630,31 @@ nav{
 .mobile{display:none}
 .normal{display:inline-block;}
 
+#navbar-mobile{
+    position:absolute;
+    right:20px;
+    top:12px;
+    display:none;
+    color:white;
+    background:none;
+    border:none;
+    font-size: 15pt;
+}
+
+#navbar-mobile:hover,
+#navbar-mobile:active,
+#navbar-mobile:focus{
+    cursor:pointer;
+    background:grey;
+}
+
 @media only screen and (max-width: 766px){
 
     .normal{display:none}
     .mobile{display:inline-block;}
+    #navbar-mobile{
+        display:block;
+    }
 
     nav{
         height:0px;
@@ -655,6 +673,7 @@ nav{
         top:50px;
         border-top:1px solid #3a3837;
         box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+        display:none;
 
     }
 
