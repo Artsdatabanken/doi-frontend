@@ -9,10 +9,10 @@ window.addEventListener('click', function(e) {
 
         if(e.target.id == "navbar-mobile"){
             let drop = document.getElementById("headermenu");
-            if(drop.style.display != "block"){
-                drop.style.display = "block"
+            if(drop.className == "hide"){
+                drop.className = "show"
             }else{
-                drop.style.display = "none"
+                drop.className = "hide"
             }
         }
 
