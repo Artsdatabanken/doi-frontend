@@ -21,6 +21,16 @@ body{
     margin-left: 25px;
     display: block;
     text-align: center;
+    position: relative;
+    z-index:3;
+}
+
+@media only screen and (max-width: 766px){
+
+    .header-logo {
+        background: none;
+    }
+
 }
 
 .header-logo img{
@@ -506,7 +516,7 @@ nav{
     display:inline-block;
     height:50px;
     background-color: #3d3b3a;
-    padding: 10px 15px;
+    padding: 15px;
     padding-bottom: 14px;
     padding-top: 1em;
     font-family: "Roboto Condensed";
@@ -526,29 +536,28 @@ nav{
     color:#3d3b3a;
 }
 
-.menuitems span{
+.menuitems .dropicon{
     font-weight: 400;
     font-size: 15px;
     font-style: normal;
     vertical-align: bottom;
+    width:10px;
 }
 
-.englishbutton {
-    background:none;
+.englishspacer {
+    width: 53px;
+    height:20px;
+    display: inline-block;
 }
 
 .dropdown{
-    position:absolute;
-    top:50px;
-    right:0px;
-    border: 1px solid rgba(0,0,0,.15);
-    box-shadow: 0 6px 12px rgba(0,0,0,.175);
-    min-width: 160px;
+    font-size: 15px;
+    text-align: left;
+    background:#3d3b3a;
+    color:white;
     padding: 5px 0;
     font-size: 15px;
     text-align: left;
-    background-color: #fff;
-    z-index: 1;
 }
 
 .dropdown li a {
@@ -556,14 +565,45 @@ nav{
     clear: both;
     font-weight: 400;
     line-height: 1.42857143;
-    color: #333333;
+    color: white;
     white-space: nowrap;
     font-size: 16px;
     font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
-    font-weight: 700;
     margin: 8px 0;
     display: block;
     text-decoration: none;
+}
+
+
+
+
+@media only screen and (max-width: 766px){
+    .dropdown{
+        /*Since content is inside a padded box and we want to keep clickability...*/
+        margin-top: 15px;
+        margin-right: -15px;
+        margin-left: -15px;
+        margin-bottom: -15px;
+    }
+}
+
+@media only screen and (min-width: 766px){
+    .dropdown{
+        position:absolute;
+        top:50px;
+        right:0px;
+        border: 1px solid rgba(0,0,0,.15);
+        box-shadow: 0 6px 12px rgba(0,0,0,.175);
+        min-width: 160px;    
+        background-color: #fff;
+        z-index: 1;
+    }
+
+    .dropdown li a {
+
+        color: #333333;
+        font-weight: 700;
+    }
 }
 
 .dropdown li a:active,
@@ -589,6 +629,47 @@ nav{
 #Omoss{
     display:block;
 }
+
+.mobile{display:none}
+.normal{display:inline-block;}
+
+@media only screen and (max-width: 766px){
+
+    .normal{display:none}
+    .mobile{display:inline-block;}
+
+    nav{
+        height:0px;
+    }
+
+    #headermenu{
+        right:0px;
+        visibility:visible;
+        box-sizing: border-box;
+        height:auto;
+        width:100%;
+        padding:15px;
+        padding-top:0px;
+        background:#4c4a48;        
+        z-index: 2;
+        top:50px;
+        border-top:1px solid #3a3837;
+        box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
+
+    }
+
+    .menuitems{
+        display:block;
+        width:100%;
+        margin-right:0px;
+        height:auto;
+        min-height:50px;
+        margin-left:0px;
+        text-align: left;  
+    }
+
+}
+
 
 /* SECTION IMAGE (Map) */
 

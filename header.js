@@ -4,7 +4,7 @@ window.addEventListener('click', function(e) {
         if (!document.getElementById('headermenu').contains(e.target)) {
             document.getElementById("Omoss").style.display = "none";
             document.getElementById("Meny").style.display = "none";
-            document.getElementById("English").style.display = "none";
+            //document.getElementById("English").style.display = "none";
         }
     }
 })
@@ -25,16 +25,22 @@ function getHeaderMenu(){
                 for (let i in apimenus){
                     let item = apimenus[i];
                     let id = item.Values.toString().replace(" ","");
+
                     // Using createelement to enable attachment of eventlistener
-                    let menubutton = document.createElement('button');
-                    menubutton.className = "menuitems";
                     let buttonname = item.Values;
-                    let dropicon = " <span class='material-icons'>arrow_drop_down</span>";
                     if(buttonname == "English"){
-                        // TODO : WHEN DECIDED HOW WE WANT IT: MAKE THE ENGLISH BUTTON
-                        //menubutton.className += " englishbutton";
-                        //menubutton.innerHTML = "<img src='https://www.artsdatabanken.no/Content/Images/english.svg'></img>"
+                        // Currently hiding it due to lack of uu in homepage. 
+                        // Add to page
+                        let spacer = document.createElement('div');
+                        spacer.className = "englishspacer";   
+                        appendData('headermenu',spacer);
+                        return null;                       
                     }
+
+                    let menubutton = document.createElement('button');
+                    menubutton.className = "menuitems";                    
+                    let dropicon = " <span class='dropicon material-icons'>arrow_drop_down</span>";
+                    
                     // Generate the dropdowncontent 
                     let newdropdown ="<ul class='dropdown' id='"+id+"' style='display:none'>";      
                     let subitems = item.References;                    
@@ -67,12 +73,12 @@ function getHeaderMenu(){
                     newdropdown +="</ul>";
                     
                     // ADD ALL BUTTONCNTENT
-                    menubutton.innerHTML = buttonname+dropicon+ newdropdown; // attach it
+                    menubutton.innerHTML = "<span class='buttoncontent'>"+buttonname+dropicon+"</span>"+ newdropdown; // attach it
 
                     // Toggle the relevant dropdownmenu
                     menubutton.addEventListener('click',function(e){
                         let target = e.target;
-                        if(target.className =="material-icons"){
+                        if(target.className =="dropicon material-icons"){
                             target = target.parentElement;
                         }
                         target = target.querySelector('.dropdown');
