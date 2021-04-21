@@ -425,7 +425,6 @@ function addGeneralData(attributes){
         let doilink = "<a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a>";        
         addData('Attributes.doi',doilink);
         addData('header-doi',attributes.doi);
-        addData("Guid",getGuid());        
         //addData("Attributes.url",attributes.url);
         //addData("data.Id",data.data.id);
         //addData("data.Type",data.data.type);
