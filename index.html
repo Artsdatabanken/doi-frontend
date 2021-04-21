@@ -9,6 +9,7 @@
     <script src="header.js"></script> 
     <script src="footer.js"></script> 
     <script src="doi-lookup.js"></script> 
+    <script src="language.js"></script> 
     <script src="doi.js"></script> 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
@@ -20,9 +21,7 @@
             <img  alt="Artsdatabanken" src="https://artsdatabanken.no/Files/20973" class="normal">
             <img  alt="Artsdatabanken" src="https://artsdatabanken.no/Files/20978" class="mobile">
         </a>
-
            <button id="navbar-mobile" class='material-icons'>menu</button>
-
         <nav id="headermenu" class="hide"></nav>
     </div>
 </header>
@@ -30,37 +29,83 @@
         <div class="main-content width-adjuster">
             <div class="sidebarmenu">
                 <ul>
-                    <li class="lead"><a href="?">Datasett DOI</a></li>
-                    <li><a href="?">Sideoversikt</a>
-                    <li><a href="https://artskart.artsdatabanken.no/">Artskart (ekstern lenke)</a>
+                    <li class="lead">
+                        <a href="?">
+                            <span class="nb nn lang-show">Datasett DOI</span>
+                            <span class="en">Dataset DOI</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="?">
+                            <span class="nb nn lang-show">Sideoversikt</span>
+                            <span class="en">Overview</span>
+                        </a>
+                    <li>
+                        <a href="https://artskart.artsdatabanken.no/">                            
+                            <span class="nb nn lang-show">Artskart (ekstern lenke)</span>
+                            <span class="en">Species map (external application)</span>
+                        </a>
                 </ul>
             </div>
 
+            <button id="lang-en">ENGLISH</button>
+            <button id="lang-nb">BOKMÅL</button>
+            <button id="lang-nn">NYNORSK</button>
+
 
             <div class="content-placer">
-
                 <div class="page-header">
-                    <h1>Datasett DOI</h1>
+                    <h1>
+                        <span class="nb nn lang-show">Datasett DOI</span>
+                        <span class="en">Dataset DOI</span>
+                    </h1>
                     <h2 id="header-doi"></h2>
-                    <sp#an id="timedetails">
-                        Opprettet <span id="Time.Created">-</span>
-                         | Oppdatert <span id="Time.Updated">-</span>
-                         | Publisert <span id="Time.Valid">-</span>
+                    <span id="timedetails">
+                        <span class="nb nn lang-show">Opprettet </span> 
+                        <span class="en">Created </span> 
+                        <span class="timestamp" id="Time.Created">-</span>
+                        <span class="nb nn lang-show">Oppdatert </span> 
+                        <span class="en">Updated </span> 
+                        <span class="timestamp" id="Time.Updated">-</span>
+                        <span class="nb nn lang-show">Gyldig </span> 
+                        <span class="en">Valid </span> 
+                        <span class="timestamp" id="Time.Valid">-</span>
                     </span>
                 </div>
 
 
                 <div class="mid">
                     <div id="nodata">
-                        <h2>Oversikt </h2>     
+                        <h2>
+                            <span class="nb nn lang-show">Oversikt</span>
+                            <span class="en">Overview</span>                             
+                        </h2>     
                         <div id="find.doi"></div>                   
                     </div>
                     <div class="ingress">
-                        <p>Datasettet er en <span id="Titles.type">Henter ned data</span> fra kildesystemet <span id="Creators.sourcename">kildenavn</span> hos dataleverandøren <span id="publisher">dataleverandør</span>, i <span id="Time.year">Henter ned data</span>. 
+
+                        <p>
+                            <span class="nb lang-show">Datasettet er en </span>
+                            <span class="nn">Datasettet er ein </span>
+                            <span class="en">The dataset is of the type </span>                             
+                            <span id="Titles.type">datatype</span>
+                            
+                            <span class="nb lang-show">fra kildesystemet </span>
+                            <span class="nn">frå kildesystemet </span>
+                            <span class="en">from the source system </span>     
+                            <span id="Creators.sourcename">kildenavn</span> 
+                            
+                            <span class="nb lang-show">hos dataleverandøren </span>
+                            <span class="nn">hos dataleverandøren </span>
+                            <span class="en">by the source </span> 
+                            <span id="publisher">dataleverandør</span>
+                            
+                            <span class="nb nn lang-show"> i </span>
+                            <span class="en"> in </span> 
+                            <span id="Time.year">yyyy</span>. 
                     </div>              
                     
                     <div class="section"  id="notyetvalid">
-
                         <h2>Laster inn</h2>                            
                         <p id="progresstext">
                             ?
@@ -68,19 +113,48 @@
                         <div class="progressbar">
                             <hr id="progressindicator" />
                             <ul>
-                                <li class="next"><div>1</div><br/><span>Bestilt </span><br/><b id="Progress.Submitted">-</b></li>                                
-                                <li class="next"><div>2</div><br/><span>Under arbeid </span><br/><b id="Progress.Created">-</b></li>
-                                <li class="next"><div>3</div><br/><span>Publisert </span><br/><b id="Progress.Valid">-</b></li>
+                                <li class="next"><div>1</div><br/>
+                                    <span> </span>
+                                    <span class="nb nn lang-show">Bestilt</span>
+                                    <span class="en">Ordered</span> 
+                                    <br/><b id="Progress.Submitted">-</b>
+                                </li>                                
+                                <li class="next"><div>2</div><br/>
+                                    <span class="nb nn lang-show">Under arbeid </span>
+                                    <span class="en">In progress </span>                                     
+                                    <br/><b id="Progress.Created">-</b>
+                                </li>
+                                <li class="next"><div>3</div><br/>
+                                    <span class="nb nn lang-show">Publisert </span>
+                                    <span class="en">Published </span>                                     
+                                    <br/><b id="Progress.Valid">-</b>
+                                </li>
                             </ul>
                         </div>
                     </div>
 
                     <div class="section">
-                        <h2>Last ned datasettet!</h2>                    
+                        <h2>
+                            <span class="nb nn lang-show">Last ned datasettet</span>
+                            <span class="en">Download dataset</span>                                     
+                        </h2>                    
                         <p>
-
-                            Datasettet du er inne på nå vil ikke endres, og er således et øyeblikksbilde på hvordan ditt utvalg 
-                            av data så ut på et gitt tidspunkt. </br>                            
+                            <span class="nb lang-show"> 
+                                Datasettet du er inne på nå vil ikke endres, 
+                                og er således et øyeblikksbilde på hvordan ditt utvalg 
+                                av data så ut på et gitt tidspunkt. 
+                            </span>
+                            <span class="nn">
+                                Datasettet du er inne på no vil ikkje endrast, 
+                                og er såleis eit augonbliksbilete på korleis ditt utvalg 
+                                av data såg ut på eit gitt tidspunkt. 
+                            </span>
+                            <span class="en">
+                                The dataset you are currently viewing will not change, 
+                                as it is a snapshot of your current selection of data at 
+                                a specific time.
+                            </span>  
+                           </br>                            
                             <span id="zip.appender"></span>                                          
                             
                         </p>
@@ -88,110 +162,241 @@
 
                     <div class="section">
 
-                        <h2>Kartinformasjon</h2>   
+                        <h2>
+                            <span class="nb nn lang-show">Kartinformasjon</span>
+                            <span class="en">Map information</span>     
+                        </h2>
                         <p>
-                            Selve datasettet er generert ut i fra et kartutsnitt. Dette utsnittet er bestemt av en omkransningsboks, 
-                            eller "bounding box" basert på lengde- og breddegrad som strekker seg fra minimumsverdiene til maksimumsverdiene for 
-                            utsnittet.
+                            <span class="nb lang-show"> 
+                                Selve datasettet er generert ut i fra et kartutsnitt. 
+                                Dette utsnittet er bestemt av en omkransningsboks, 
+                                eller "bounding box" basert på lengde- og breddegrad 
+                                som strekker seg fra minimumsverdiene til maksimumsverdiene for 
+                                utsnittet.
+                            </span>
+                            <span class="nn">
+                                Sjølve datasettet er generert ut i frå eit kartutsnitt. 
+                                Dette utsnittet er bestemt av ein omkransningsboks, 
+                                eller "bounding box" basert på lengde- og breddegrad 
+                                som strekk seg frå minimumsverdiane til maksimumsverdiane for 
+                                utsnittet.
+                            </span>
+                            <span class="en">
+                                The dataset is generated from a map region which is determined 
+                                by a bounding box based on longitude and latitude, which ranges from 
+                                their minimum to their maximum values.
+                            </span>  
                         </p>
                         
                         <p>
                         <span id="img.appender" class="sectionimage"></span>
-                            Bildet viser kartutsnittet som en rød firkant på norgeskartet, (kilde?) og dataelementene som punkter.
+                            <span class="nb lang-show"> 
+                                Bildet viser kartutsnittet som en rød firkant på norgeskartet, 
+                                (kilde?) og dataelementene som punkter.
+
+                            </span>
+                            <span class="nn">
+                                Bildet viser kartutsnittet som ein raud firkant på noregskartet, 
+                                (kilde?) og dataelementane som punktar.
+                            </span>
+                            <span class="en">
+                                The image shows the map selection as a red square on the map of Norway
+                                with the data elements as dots.
+                            </span>  
                         </p>
-
-                        <p>
-                            Minimumsverdiene for dette datasettet er vestlig lengdegrad <span id="geoLocationBox.westBoundLongitude">Henter ned data</span>,
-                            sørlig breddegrad <span id="geoLocationBox.southBoundLatitude">Henter ned data</span>, og maksimumsverdiene er østlig lengdegrad 
-                            <span id="geoLocationBox.eastBoundLongitude">Henter ned data</span> og vestlig breddegrad <span id="geoLocationBox.northBoundLatitude">Henter ned data</span>.
-                            </p>
-
                         <span id="area.appender"></span>  
                     </div>
                     <br clear="all" />
-
-
                     <div class="section">
-                        <h2>Beskrivelse av datainnholdet</h2>      
+                        <h2>
+                            <span class="nb nn lang-show"> 
+                                Beskrivelse av datainnholdet
+                            </span>
+                            <span class="en">
+                                Description of content
+                            </span>  
+                        </h2>      
                         <p>
-                            Datainnholdet består av et utvalg av elementer fra artskart. Dette utvalget er bygget opp 
-                            av en sammensetning av filtere i form av kategorier og emneknagger (tags).
+                            <span class="nb lang-show"> 
+                                Datainnholdet består av et utvalg av elementer fra Artskart. Dette utvalget er bygget opp 
+                                av en sammensetning av filtere i form av kategorier og emneknagger (tags).
+                            </span>
+                            <span class="nn">
+                                Datainnhaldet består av eit utval av elementar frå Artskart. Dette utvalget er bygga opp 
+                                av ei samansetjing av filtera i form av kategoriar og emneknagger (tags).
+                            </span>
+                            <span class="en">
+                                The content consists of a selection of elements from Artskart. This selection is generated 
+                                by combining filters for categories and tags.
+                            </span> 
                         </p>              
                         <p>
-                            <span id="Descriptions.Description">Henter ned data</span><br/>
+                            <span id="Descriptions.Description"> - </span><br/>
                         </p>
                     </div>
 
                     <div class="section">
-                        <h2>Datagrunnlag</h2>                    
+                        <h2>
+                            <span class="nb nn lang-show"> 
+                                Datagrunnlag
+                            </span>
+                            <span class="en">
+                                Data elements
+                            </span> 
+                        </h2>                    
                         <p> 
-
-                            Datasettet er satt sammen av <span id="Descriptions.count">henter antall</span> element fra 
-                            <span id="Nr.Sources">henter antall dataleverandører </span>, som finnes i oversikten nedenfor.
-                            Der det finnes en DOI er den oppgitt med lenke til datasettet.                          
-
+                            <span class="nb lang-show"> 
+                                Datasettet er satt sammen av 
+                            </span>
+                            <span class="nn"> 
+                                Datasettet er satt samen av 
+                            </span>
+                            <span class="en">
+                                The dataset is a collection of 
+                            </span>                             
+                            <span id="Descriptions.count">henter antall</span>
+                            <span class="nb lang-show"> 
+                                element fra 
+                            </span>
+                            <span class="nn"> 
+                                elementar frå 
+                            </span>
+                            <span class="en">
+                                elements from 
+                            </span>   
+                            <span id="Nr.Sources">henter antall dataleverandører </span>
+                            <span class="nb lang-show"> 
+                                , som finnes i oversikten nedenfor.
+                                Der det finnes en DOI er den oppgitt med lenke til datasettet. 
+                            </span>
+                            <span class="nn"> 
+                                , som finnast i oversikta nedfor.
+                                Der det finnast ein DOI er den oppgitt med lenke til datasettet. 
+                            </span>
+                            <span class="en">
+                                , which is shown in the overview below.
+                                Where a DOI exists, it is shown with an external link to the source dataset.
+                            </span> 
                             <span id="doi.appender"></span>      
                         </p>
                     </div>
 
                     <div class="section">
-                        <h2>Samme utvalg med dagens data</h2>                    
+                        <h2>
+                            <span class="nb lang-show"> 
+                                Samme utvalg med dagens data
+                            </span>
+                            <span class="nn"> 
+                                Same utval med dagens data
+                            </span>
+                            <span class="en">
+                                Same selection with current data
+                            </span>      
+                        </h2>                    
                         <p> 
-                            Datagrunnlaget i Artskart er i konstant forandring når nye funndata kommer til,
-                            korrigeres, eller fjernes om feil oppdages. For å se en oppdatert variant av samme datautsnitt,
-                            ta en titt i Artskart med samme filtre og innstillinger her.
+                            <span class="nb lang-show"> 
+                                Datagrunnlaget i Artskart er i konstant forandring når nye funndata kommer til,
+                                korrigeres, eller fjernes om feil oppdages. For å se en oppdatert variant av samme datautsnitt,
+                                ta en titt i Artskart med samme filtre og innstillinger her.
+                            </span>
+                            <span class="nn"> 
+                                Datagrunnlaget i Artskart er i konstant endring når nye funndata kjem til,
+                                korrigerast, eller fjernes om feil oppdages. For å sjå ei oppdatert variant av same datautsnitt,
+                                ta ein titt i Artskart med same filtre og innstillingar her.
+                            </span>
+                            <span class="en">
+                                The data content in Artskart is in constant change when new ovservations are added, 
+                                corrected or removed should any errors be detected. To show an updated version of the same 
+                                data selection, take a look in Artskart with the same filters and adjustments here.
+                            </span> 
                             <br/>
-
                             <span id="a.appender"></span>   
-               
                         </p>
                     </div>
-
-
-
-                    
                 </div>
-
-
                 <div class="sidebar">
-
                     <div class="section">
-                        <h2>Identifikator </h2>
-                            <!--
-                            <span id="data.Id">Henter ned data</span> av typen <span id="data.Type">Henter ned data</span></br>
-                            <h3>prefix:</h3>  <span id="Attributes.prefix">Henter ned data</span> <br/>
-                            <h3>suffix:</h3>  <span id="Attributes.suffix">Henter ned data</span> <br/>
-                            <h3>identifiers:</h3>  <span id="Attributes.identifiers">Henter ned data</span><br/>
-                            -->
-                        <p>DOI (Digital object identifier) er en ID for et elektronisk dokument</p>
+                        <h2>
+                            <span class="nb nn lang-show"> 
+                                Identifikator 
+                            </span>
+                            <span class="en">
+                                Identifier
+                            </span> 
+                        </h2>                         
                         <p>
-                            <h3>DOI</h3>  <span id="Attributes.doi">Henter ned data</span>
-                            <h3>GUID</h3>  <span id="Guid">Henter ned data</span> 
+                            <span class="nb lang-show"> 
+                                DOI (Digital object identifier) er en ID for et elektronisk dokument
+                            </span>
+                            <span class="nn"> 
+                                DOI (Digital object identifier) er ein ID for eit elektronisk dokument
+                            </span>
+                            <span class="en">
+                                DOI (Digital object identifier) is an ID for electronic documents
+                            </span>                             
+                            </p>
+                        <p>
+                            <h3>DOI</h3>  <span id="Attributes.doi">-</span>
+                            <h3>GUID</h3>  <span id="Guid">-</span> 
                             <!--
                             <h3>Jobb-id:</h3>  <span id="Descriptions.JobId">Henter ned data</span><br/>
                             <h3>Progress:</h3>  <span id="Descriptions.Progress">Henter ned data</span><br/>
                             <h3>Status:</h3>  <span id="Descriptions.Status">Henter ned data</span><br/>
                             <h3>isActive:</h3>  <span id="Attributes.isActive">Henter ned data</span><br/>
                             -->
-                            
                         </p>                        
                     </div>
-
                     <div class="section">
-                        <h2>Filinformasjon </h2>                                               
-                            <h3>Eksporttype</h3>  <span id="Descriptions.ExportType">Henter ned data</span>                            
-                            <h3>Filstørrelse</h3>  <span id="Size">Henter ned data</span> 
-                            <h3>Format</h3>  <span id="Attributes.formats">Henter ned data</span> 
-                            <h3>Kilde</h3>  <span id="Api.link"></span>
-                            <h3>språk</h3>  <span id="Titles.lang">Henter ned data</span>
-                            <h3>Status</h3>  <span id="Attributes.state">Henter ned data</span><br/>
-                            <!--
-                            <h3>Kildetype:</h3>  <span id="Creators.sourcetype">Henter ned data</span><br/>
-                            <h3>version:</h3>  <span id="Attributes.version">Henter ned data</span><br/>
-                            <h3>metadataVersion:</h3>  <span id="Attributes.metadataVersion">Henter ned data</span><br/>
-                            <h3>schemaVersion:</h3>  <span id="Attributes.schemaVersion">Henter ned data</span><br/>
-                            -->
-                    </p>                        
+                        <h2>
+                            <span class="nb nn lang-show"> 
+                                Filinformasjon 
+                            </span>
+                            <span class="en">
+                                File information 
+                            </span> 
+                        </h2>          
+                        <p>                                 
+                            <h3>
+                                <span class="nb nn lang-show"> 
+                                    Eksporttype 
+                                </span>
+                                <span class="en">
+                                    Export type
+                                </span> 
+                            </h3>  <span id="Descriptions.ExportType">-</span>                            
+                            <h3>
+                                <span class="nb nn lang-show"> 
+                                    Filstørrelse 
+                                </span>
+                                <span class="en">
+                                    File size
+                                </span> 
+                            </h3>  <span id="Size">-</span> 
+                            <h3>Format</h3>  <span id="Attributes.formats">-</span> 
+                            <h3>
+                                <span class="nb nn lang-show"> 
+                                    Kilde 
+                                </span>
+                                <span class="en">
+                                    Source
+                                </span>                                 
+                            </h3>  <span id="Api.link"></span>
+                            <h3>
+                                <span class="nb nn lang-show"> 
+                                    Språk 
+                                </span>
+                                <span class="en">
+                                    Language
+                                </span>    
+                            </h3>  <span id="Titles.lang">-</span>
+                            <h3>Status</h3>  <span id="Attributes.state">-</span><br/>
+                                <!--
+                                <h3>Kildetype:</h3>  <span id="Creators.sourcetype">Henter ned data</span><br/>
+                                <h3>version:</h3>  <span id="Attributes.version">Henter ned data</span><br/>
+                                <h3>metadataVersion:</h3>  <span id="Attributes.metadataVersion">Henter ned data</span><br/>
+                                <h3>schemaVersion:</h3>  <span id="Attributes.schemaVersion">Henter ned data</span><br/>
+                                -->
+                        </p>                        
                     </div>
                     <!--
                     <div class="section">
@@ -212,40 +417,23 @@
                     -->
 
                     <div class="section">
-                        <h2>Siter datasettet</h2>         
-       
+                        <h2>
+                            <span class="nb nn lang-show"> 
+                                Siter datasettet 
+                            </span>
+                            <span class="en">
+                                Cite dataset
+                            </span>    
+                        </h2>               
                         <p>
-                            <span id="citation">Henter ned data</span><br/>
-                    
-
-                            <!--
-                            <h3>resourceTypeGeneral:</h3>  <span id="Attributes.types.resourceTypeGeneral">Henter ned data</span><br/>
-                            <h3>schemaOrg:</h3>  <span id="Attributes.types.schemaOrg">Henter ned data</span><br/>
-                            <h3>bibtex:</h3>  <span id="Attributes.types.bibtex">Henter ned data</span><br/>
-                            <h3>citeproc:</h3>  <span id="Attributes.types.citeproc">Henter ned data</span><br/>
-                            <h3>ris:</h3>  <span id="Attributes.types.ris">Henter ned data</span><br/>
-                            -->
-                        </p>
- 
+                            <span id="citation">-</span><br/>
+                        </p> 
                     </div>
-
- 
-
-                    
-
-
-
                 </div>
-            
-   
                 </div>
             </div>
         </div>
-            
-
-
-    <footer id="footer" >
-        
+    <footer id="footer" >        
     </footer>
 </body>
 </html>

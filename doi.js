@@ -11,6 +11,7 @@ window.addEventListener('load', function() {
     runApiCall();
     getHeaderMenu();
     getFooter();
+    languageSupport();
 })
 
 // Change parameter/navigate between pages 
@@ -19,6 +20,45 @@ window.onhashchange = function() {
     runApiCall();
 }
 
+window.addEventListener('click', function(e) {
+    // Closes dropdown menu when clicking outside it. 
+    if (document.getElementById('headermenu')){
+        if (!document.getElementById('headermenu').contains(e.target)) {
+            document.getElementById("Omoss").style.display = "none";
+            document.getElementById("Meny").style.display = "none";
+            //document.getElementById("English").style.display = "none";
+        }
+
+        if(e.target.id == "navbar-mobile"){
+            let drop = document.getElementById("headermenu");
+            if(drop.className == "hide"){
+                drop.className = "show"
+            }else{
+                drop.className = "hide"
+            }
+        }
+
+   }
+})
+
+function languageSupport(){
+    changeLanguage("nn");
+    changeLanguage("nb");
+    changeLanguage("en");
+}
+
+function changeLanguage(lang){    
+    let id = "lang-" + lang;
+    let classselector = "."+ lang;
+    document.getElementById(id).addEventListener('click',function(e){   
+        let these = document.querySelectorAll(classselector);
+        let those = document.querySelectorAll('.lang-show');
+        those.forEach(x=>x.classList.replace('lang-show','lang-hide'));  
+        these.forEach(x=>x.classList.remove('lang-hide'));
+        these.forEach(x=>x.classList.add('lang-show'));
+        
+    });
+}
 
 
 // If no parameter - show frontpage, otherwise run the doi page
@@ -489,8 +529,7 @@ function addGeoLocation(attributes){
 // Help Functions
 
 function $(id){
-    if(id[0]=="."){
-        id
+    if(id[0]=="."){        
         return document.getElementsByClassName(id.substring(1));
     }else if(id[0]=="#"){
         return document.getElementById(id.substring(1));
