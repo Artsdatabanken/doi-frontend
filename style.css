@@ -4,6 +4,21 @@ body{
     font-family: Roboto,"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+.nb,
+.nn,
+.en{
+    display: none;
+}
+
+.lang-show{
+    display:inline;
+}
+
+.lang-hide{
+    display:none;
+}
+
+
 /* FOOTER */
 
 footer{
@@ -249,9 +264,19 @@ p{
 }
 
 
-.page-header span {
+#timedetails span {
     text-align: left;
     font-size: 10pt;
+}
+
+.timestamp{    
+    padding-right: 5px;
+    margin-right: 5px;
+    border-right: 1px solid grey;
+}
+
+.timestamp:last-child{
+    border:none;
 }
 
 
@@ -662,7 +687,6 @@ nav{
     }
 
     .dropdown li a {
-
         color: #333333;
         font-weight: 700;
     }
@@ -682,6 +706,13 @@ nav{
     font-style: normal;
     display: block;
 }
+
+@media only screen and (max-width: 766px){
+    .dropdown li a span{
+        display:none;
+    }
+}
+
 
 .dropdown li a b{
     font-size:10pt;

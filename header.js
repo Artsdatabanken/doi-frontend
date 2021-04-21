@@ -85,7 +85,7 @@ function getHeaderMenu(){
                     newdropdown +="</ul>";
                     
                     // ADD ALL BUTTONCNTENT
-                    menubutton.innerHTML = "<span class='buttoncontent'>"+buttonname+dropicon+"</span>"+ newdropdown; // attach it
+                    menubutton.innerHTML = buttonname+dropicon+ newdropdown; // attach it
 
                     // Toggle the relevant dropdownmenu
                     menubutton.addEventListener('click',function(e){
