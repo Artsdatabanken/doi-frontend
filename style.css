@@ -200,6 +200,12 @@ footer table td:first-child {
     color: #4c4a48;
 }
 
+.sidebarmenu .material-icons{
+    padding-left: 5px;
+    vertical-align: top;
+    font-size: inherit;
+}
+
 /* GENERIC STYLING */
 
 
@@ -330,8 +336,8 @@ p{
 
 .sidebar{
     max-width: 260px;
-    display:inline-block;
-    vertical-align: top;
+    display:block;
+    float:right;
 }
 
 @media only screen and (max-width: 740px) {
@@ -397,12 +403,12 @@ p{
 /* FLASHY LINKS */
 
 .biglink{
-    font-size: 14pt;
-    padding: 20px;
     display: inline-block;
-    margin-top: 10px;
-    text-decoration: none;
-    width:365px;
+    background:#4c4a48;
+    color:white;
+    vertical-align: top;
+    width:100%;
+    margin-top:20px;
 }
 
 @media only screen and (max-width: 740px) {
@@ -417,22 +423,18 @@ p{
     opacity:0.7;
 }
 
-.biglink span {
+.biglink span{
     padding: 10px;
-    vertical-align: middle;
-    border-bottom:2px solid white;
-    padding-bottom: 2px;
+    vertical-align: top;
+    display:inline-block;
 }
 
 .biglink span:first-child {
     border-bottom: 2px solid transparent;
-    font-size: 44px;
-    background: white;
-    margin-right: 5px;
-    border-radius: 50%;
-    color: #4c4a48;
+    
 }
 
+/*
 @media only screen and (max-width: 740px) {
     .biglink span:nth-child(3)::before ,
     .biglink span:nth-child(2)::before {
@@ -452,21 +454,8 @@ p{
         border: 0px;
     }
 
-}
+}*/
 
-.downloadlink{
-    color: white;
-    background: #4c4a48;
-}
-
-.artskartlink{
-    color: black;
-    background: lightgrey;
-}
-
-.artskartlink span{
-    border-color:black;
-}
 
 #citation{
     font-size: 10pt;

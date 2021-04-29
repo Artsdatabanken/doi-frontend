@@ -16,9 +16,12 @@ function addListData(){
         .then((data) => {        
            try{
             let items = "";
-            for (let key in data){
-                 let doiurl = '#'+data[key];
-                items += "<a href="+doiurl+" class='doilink'>"+key+"<span> "+data[key]+"</span></a>";
+            let order = Object.keys(data).reverse();
+            for (let i in order){
+                let key = order[i]
+                //onsole.log(data[key]) The list only contains doi and guid
+                let doiurl = '#'+data[key];
+                items += "<a href="+doiurl+" class='doilink'>"+key+"<span></a>";
              }
              addData("find.doi",items);
            }catch(err){

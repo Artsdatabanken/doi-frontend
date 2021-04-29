@@ -114,18 +114,19 @@ function handleDoiData(data,isRerun){
     let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");   
     // Main Content
     addTimeDetails(attributes);
-    addIngressData(attributes);
-    addGeoLocation(attributes);
-    addFiles(attributes);
-    addDoi(desc);
-    addArtskartUrl(desc);
+    addIngressData(attributes,desc);
+    //addGeoLocation(attributes);
+    addFiles(attributes,desc); // Download dataset is a part of addFiles, and lives in the sidebar.
+    addDoi(desc);    
     addAreas(desc);        
     addDescriptions(desc);
 
+
     // Sidebar
     addGeneralData(attributes);
-    addFileInfo(attributes,desc);
+    //addFileInfo(attributes,desc);
     addCitation(attributes);
+    addArtskartUrl(desc);
     // addStats(attributes);
     // addTypes(attributes); 
     
@@ -241,7 +242,7 @@ function addTimeDetails(attributes){
 
         // HEADER TEXT
         addData("Time.Created",formatDate(dates.Created));
-        addData("Time.Updated",formatDate(dates.Updated));
+        //addData("Time.Updated",formatDate(dates.Updated));
         addData("Time.Valid",formatDate(dates.Valid));
 
         let text = "loading";
@@ -283,19 +284,23 @@ function addTimeDetails(attributes){
     }
 }
 
-function addIngressData(attributes){
+function addIngressData(attributes,desc){
     try{
+
+        addData("Ingress.count",desc['Count']);
+        /*
         addData("Titles.type",attributes.titles[0].title);   
         addData("Creators.sourcename",attributes.creators[0].name);
         addData("publisher",attributes.publisher);
         addData("Time.year",attributes.publicationYear);
+        */
     }catch(err){
         console.error("Failed at Ingress")
     }
 }
 
 
-function addFiles(attributes){
+function addFiles(attributes,desc){
     // Also contains doi-sources which are duplicated in descriptions.doi
     // They are placed here due to the doi-system tracking the use through this parameter
     // But we instead fetch them from descriptions, as they there contain more data.
@@ -334,8 +339,14 @@ function addFiles(attributes){
             }else if(item.resourceTypeGeneral=="Dataset"){
                 let zipurl = item.relatedIdentifier;
                 let zip = document.createElement('div');
+                let format = attributes.formats.toString().replace("application/","");//TODO
+                console.log(format)
+                let innerformat = desc['ExportType'];
+                console.log(desc['ExportType'])
+                
+                let buttontext = "<span>Last ned datasett <br/>"+convertBytes(attributes.sizes)+" ("+format+"/"+innerformat+")</span>";
                 let material = "<span class='material-icons'>download</span>";
-                zip.innerHTML = "<a href="+zipurl+" class='biglink downloadlink'>"+material+"<span>Last ned datasett </span><span>"+convertBytes(attributes.sizes)+"</span></a>";
+                zip.innerHTML = "<a href="+zipurl+" class='biglink downloadlink'>"+material+buttontext+"</a>";
                 appendData('zip.appender',zip);
             }
         }
@@ -383,7 +394,7 @@ function addArtskartUrl(desc){
         let artskartelement = desc['ArtskartUrl'][0];
         let a = document.createElement('div');
         let launch = "<span class='material-icons'>launch</span>";
-        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg i Arskart </span></a>";       
+        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg <br/>i Arskart </span></a>";       
         appendData('a.appender',a);
     }catch(err){
         console.error("Failed at artskarturl;")
@@ -422,8 +433,8 @@ function addGeneralData(attributes){
     try{
         // DOI URL 
         // URL is always the non-test version as it's from api.
-        let doilink = "<a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a>";        
-        addData('Attributes.doi',doilink);
+        //let doilink = "<a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a>";        
+        //addData('Attributes.doi',doilink);
         addData('header-doi',attributes.doi);
         //addData("Attributes.url",attributes.url);
         //addData("data.Id",data.data.id);
@@ -440,7 +451,7 @@ function addFileInfo(attributes,desc){
     try{
         addData("Descriptions.ExportType",desc['ExportType']);
         addData("Size",convertBytes(attributes.sizes));
-        addData("Attributes.formats",attributes.formats);
+        addData("Attributes.formats",attributes.formats); // TODO: OMPLASSER
         let apiurl = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
         let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";        
         addData('Api.link',apilink);
@@ -474,7 +485,7 @@ function addCitation(attributes){
         let accesseddate = "yyyy-mm-dd";
         let dates = attributes.dates;
         for(let i in dates){
-            if(dates[i].dateType == "Updated"){
+            if(dates[i].dateType == "Created"){
                 accesseddate = dates[i].date.split("T")[0];
             }            
         }
@@ -607,7 +618,9 @@ function unWrap(wrapped,criteria,content){
 }
 
 function unWrapDescriptions(wrapped,criteria,content){
+    console.log(wrapped)
     wrapped = unWrap(wrapped,criteria,content)["TechnicalInfo"];
+    
     return unWrap(wrapped,criteria,"TechnicalInfo");
 }
 
@@ -668,7 +681,7 @@ function emptyAppenders(){
         document.getElementById("a.appender").innerHTML = "";
         document.getElementById("doi.appender").innerHTML = "";
         document.getElementById("area.appender").innerHTML = "";
-        document.getElementById("Api.link").innerHTML = "";
+        //document.getElementById("Api.link").innerHTML = "";
     }catch(err){
         console.error("failed at emptying appenders")
     }
