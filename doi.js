@@ -20,27 +20,6 @@ window.onhashchange = function() {
     runApiCall();
 }
 
-window.addEventListener('click', function(e) {
-    // Closes dropdown menu when clicking outside it. 
-    if (document.getElementById('headermenu')){
-        if (!document.getElementById('headermenu').contains(e.target)) {
-            document.getElementById("Omoss").style.display = "none";
-            document.getElementById("Meny").style.display = "none";
-            //document.getElementById("English").style.display = "none";
-        }
-
-        if(e.target.id == "navbar-mobile"){
-            let drop = document.getElementById("headermenu");
-            if(drop.className == "hide"){
-                drop.className = "show"
-            }else{
-                drop.className = "hide"
-            }
-        }
-
-   }
-})
-
 function languageSupport(){
     changeLanguage("nn");
     changeLanguage("nb");
@@ -424,7 +403,6 @@ function addAreas(desc){
         console.error("failed at areas")
     }
 }
-
 
 
 function addDescriptions(desc){

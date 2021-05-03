@@ -777,7 +777,7 @@ nav{
 }
 
 .show{
-    display:block
+    display:inline-block
 }
 @media only screen and (max-width: 766px){
 

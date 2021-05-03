@@ -20,7 +20,6 @@ window.addEventListener('click', function(e) {
 })
 
 
-
 // Lets pretend this is a part of the main site
 function getHeaderMenu(){       
     try{
