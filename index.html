@@ -29,46 +29,46 @@
         <div class="main-content width-adjuster">
             <div class="sidebarmenu">
                 <ul>
-                    <li class="lead">
-                        <a href="?">
-                            <span class="nb nn lang-show">Datasett DOI</span>
-                            <span class="en">Dataset DOI</span>
+                    <li class="lead in-breadcrumb">
+                        <a href="">
+                            <span class="nb lang-show">Datasett fra Artskart</span>
+                            <span class="nn">Datasett frå Artskart</span>
+                            <span class="en">Dataset from Artskart</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="?">
-                            <span class="nb nn lang-show">Sideoversikt</span>
-                            <span class="en">Overview</span>
-                        </a>
-                    <li>
+                    <span id="Attributes.doi" >                     
+                    </span>
+                    
+                    <li class="not-in-breadcrumb">
                         <a href="https://artskart.artsdatabanken.no/">                            
-                            <span class="nb nn lang-show">Artskart (ekstern lenke)</span>
-                            <span class="en">Species map (external application)</span>
-                        </a>
+                            <span class="nb nn lang-show">Artskart (ekstern lenke)<span class='material-icons'>launch</span> </span>
+                            <span class="en">Species map (external application) <span class='material-icons'>launch</span></span>
+                        </a>                    
                 </ul>
             </div>
 
-            <button id="lang-en">ENGLISH</button>
-            <button id="lang-nb">BOKMÅL</button>
-            <button id="lang-nn">NYNORSK</button>
+            <div class="languageselector">                
+                <button id="lang-nb" class="lang-chosen">BOKMÅL</button>
+                <button id="lang-nn" class="lang-not-chosen">NYNORSK</button>
+                <button id="lang-en" class="lang-not-chosen">ENGLISH</button>
+            </div>
 
 
             <div class="content-placer">
                 <div class="page-header">
                     <h1>
-                        <span class="nb nn lang-show">Datasett DOI</span>
-                        <span class="en">Dataset DOI</span>
+                        <span class="nb lang-show">Datasett fra Artskart</span>
+                        <span class="nn">Datasett frå Artskart</span>
+                        <span class="en">Dataset from Artskart</span>
                     </h1>
                     <h2 id="header-doi"></h2>
                     <span id="timedetails">
                         <span class="nb nn lang-show">Opprettet </span> 
                         <span class="en">Created </span> 
                         <span class="timestamp" id="Time.Created">-</span>
-                        <span class="nb nn lang-show">Oppdatert </span> 
-                        <span class="en">Updated </span> 
-                        <span class="timestamp" id="Time.Updated">-</span>
-                        <span class="nb nn lang-show">Gyldig </span> 
-                        <span class="en">Valid </span> 
+
+                        <span class="nb nn lang-show">Registrert </span> 
+                        <span class="en">Registred </span> 
                         <span class="timestamp" id="Time.Valid">-</span>
                     </span>
                 </div>
@@ -85,6 +85,19 @@
                     <div class="ingress">
 
                         <p>
+
+                            <span class="nb lang-show">Datasettet inneholder </span>
+                            <span class="nn">Datasettet inneheld </span>
+                            <span class="en">The dataset contains </span>                             
+                            <span id="Ingress.count">-</span>
+                            <span class="nb lang-show">observasjoner</span>
+                            <span class="nn">observasjonar</span>
+                            <span class="en">observations</span>
+
+                            <span class="nb lang-show"> og er et øyeblikksbilde fra da datasettet ble opprettet.</span>
+                            <span class="nn"> og er eit augonbliksbilete frå da datasettet blei oppretta.</span>
+                            <span class="en"> and is a snapshot of when the dataset was created. </span>         
+                            <!--
                             <span class="nb lang-show">Datasettet er en </span>
                             <span class="nn">Datasettet er ein </span>
                             <span class="en">The dataset is of the type </span>                             
@@ -103,6 +116,8 @@
                             <span class="nb nn lang-show"> i </span>
                             <span class="en"> in </span> 
                             <span id="Time.year">yyyy</span>. 
+                             -->
+                        </p>
                     </div>              
                     
                     <div class="section"  id="notyetvalid">
@@ -134,148 +149,60 @@
                     </div>
 
                     <div class="section">
-                        <h2>
-                            <span class="nb nn lang-show">Last ned datasettet</span>
-                            <span class="en">Download dataset</span>                                     
-                        </h2>                    
                         <p>
                             <span class="nb lang-show"> 
-                                Datasettet du er inne på nå vil ikke endres, 
-                                og er således et øyeblikksbilde på hvordan ditt utvalg 
-                                av data så ut på et gitt tidspunkt. 
-                            </span>
-                            <span class="nn">
-                                Datasettet du er inne på no vil ikkje endrast, 
-                                og er såleis eit augonbliksbilete på korleis ditt utvalg 
-                                av data såg ut på eit gitt tidspunkt. 
-                            </span>
-                            <span class="en">
-                                The dataset you are currently viewing will not change, 
-                                as it is a snapshot of your current selection of data at 
-                                a specific time.
-                            </span>  
-                           </br>                            
-                            <span id="zip.appender"></span>                                          
-                            
-                        </p>
-                    </div>
-
-                    <div class="section">
-
-                        <h2>
-                            <span class="nb nn lang-show">Kartinformasjon</span>
-                            <span class="en">Map information</span>     
-                        </h2>
-                        <p>
-                            <span class="nb lang-show"> 
-                                Selve datasettet er generert ut i fra et kartutsnitt. 
-                                Dette utsnittet er bestemt av en omkransningsboks, 
-                                eller "bounding box" basert på lengde- og breddegrad 
-                                som strekker seg fra minimumsverdiene til maksimumsverdiene for 
-                                utsnittet.
-                            </span>
-                            <span class="nn">
-                                Sjølve datasettet er generert ut i frå eit kartutsnitt. 
-                                Dette utsnittet er bestemt av ein omkransningsboks, 
-                                eller "bounding box" basert på lengde- og breddegrad 
-                                som strekk seg frå minimumsverdiane til maksimumsverdiane for 
-                                utsnittet.
-                            </span>
-                            <span class="en">
-                                The dataset is generated from a map region which is determined 
-                                by a bounding box based on longitude and latitude, which ranges from 
-                                their minimum to their maximum values.
-                            </span>  
-                        </p>
-                        
-                        <p>
-                        <span id="img.appender" class="sectionimage"></span>
-                            <span class="nb lang-show"> 
-                                Bildet viser kartutsnittet som en rød firkant på norgeskartet, 
-                                (kilde?) og dataelementene som punkter. 
-                                Minimumsverdiene for dette datasettet er vestlig lengdegrad 
-                            </span>
-                            <span class="nn">
-                                Bildet viser kartutsnittet som ein raud firkant på noregskartet, 
-                                (kilde?) og dataelementane som punktar.
-                                Minimumsverdiane for dette datasettet er vestlig lengdegrad   
-                            </span>
-                            <span class="en">
-                                The image shows the map selection as a red square on the map of Norway
-                                with the data elements as dots. 
-                                The minimum values for this dataset is westbound Longitude
-                            </span>  
-                            <span id="geoLocationBox.westBoundLongitude">-</span>                               
-                            <span class="nb lang-show"> 
-                                , sørlig breddegrad 
-                            </span>
-                            <span class="nn">
-                                , sørlig breddegrad 
-                            </span>
-                            <span class="en">
-                                , southbound Latitude 
-                            </span> 
-                            <span id="geoLocationBox.southBoundLatitude">-</span>
-                            <span class="nb lang-show"> 
-                                og maksimumsverdiene er østlig lengdegrad 
-                            </span>
-                            <span class="nn">
-                                og maksimumsverdiane er austleg lengdegrad 
-                            </span>
-                            <span class="en">
-                                and the maximumvalues eastbound longitude 
-                            </span> 
-                            <span id="geoLocationBox.eastBoundLongitude">-</span>
-                            <span class="nb lang-show"> 
-                                og nordlig breddegrad 
-                            </span>
-                            <span class="nn">
-                                og nordlig breddegrad 
-                            </span>
-                            <span class="en">
-                                 and northbound latitude.
-                            </span> 
-                            <span id="geoLocationBox.northBoundLatitude">-</span>.
-                        </p>
-                        <span id="area.appender"></span>  
-                    </div>
-                    <br clear="all" />
-                    <div class="section">
-                        <h2>
-                            <span class="nb nn lang-show"> 
-                                Beskrivelse av datainnholdet
-                            </span>
-                            <span class="en">
-                                Description of content
-                            </span>  
-                        </h2>      
-                        <p>
-                            <span class="nb lang-show"> 
-                                Datainnholdet består av et utvalg av elementer fra Artskart. Dette utvalget er bygget opp 
+                                Utvalget er bygget opp 
                                 av en sammensetning av filtere i form av kategorier og emneknagger (tags).
                             </span>
                             <span class="nn">
-                                Datainnhaldet består av eit utval av elementar frå Artskart. Dette utvalget er bygga opp 
+                                Utvalget er bygga opp 
                                 av ei samansetjing av filtera i form av kategoriar og emneknagger (tags).
                             </span>
                             <span class="en">
-                                The content consists of a selection of elements from Artskart. This selection is generated 
+                                This selection is generated 
                                 by combining filters for categories and tags.
                             </span> 
                         </p>              
                         <p>
                             <span id="Descriptions.Description"> - </span><br/>
                         </p>
+                                            
+                        <p>
+                        <span id="img.appender" class="sectionimage"></span>
+
+                        Beskrivelse av kartbildet kommer her. inkl. kilde og lisens.
+
+                        <!-- BBOX
+                            <span class="nb lang-show">Vestlig lengdegrad </span>
+                            <span class="nn">Vestleg lengdegrad </span>
+                            <span class="en">Westbound Longitude </span>  
+                            <span id="geoLocationBox.westBoundLongitude">-</span>   
+
+                            <span class="nb lang-show">, sørlig breddegrad </span>
+                            <span class="nn">, sørlig breddegrad </span>
+                            <span class="en">, southbound Latitude </span> 
+                            <span id="geoLocationBox.southBoundLatitude">-</span>
+
+                            <span class="nb lang-show">og maksimumsverdiene er østlig lengdegrad </span>
+                            <span class="nn">og maksimumsverdiane er austleg lengdegrad </span>
+                            <span class="en">and the maximumvalues eastbound longitude </span> 
+                            <span id="geoLocationBox.eastBoundLongitude">-</span>
+
+                            <span class="nb lang-show">og nordlig breddegrad</span>
+                            <span class="nn">og nordlig breddegrad </span>
+                            <span class="en">and northbound latitude. </span> 
+                            <span id="geoLocationBox.northBoundLatitude">-</span>.
+                        -->
+                        </p>
+                        <span id="area.appender"></span>  
                     </div>
+                    <br clear="all" />
+
 
                     <div class="section">
                         <h2>
-                            <span class="nb nn lang-show"> 
-                                Datagrunnlag
-                            </span>
-                            <span class="en">
-                                Data elements
-                            </span> 
+                            <span class="nb nn lang-show">Datagrunnlag</span>
+                            <span class="en">Data elements</span> 
                         </h2>                    
                         <p> 
                             <span class="nb lang-show"> 
@@ -287,7 +214,7 @@
                             <span class="en">
                                 The dataset is a collection of 
                             </span>                             
-                            <span id="Descriptions.count">henter antall</span>
+                            <span id="Descriptions.count">-</span>
                             <span class="nb lang-show"> 
                                 element fra 
                             </span>
@@ -297,57 +224,15 @@
                             <span class="en">
                                 elements from 
                             </span>   
-                            <span id="Nr.Sources">henter antall dataleverandører </span>
-                            <span class="nb lang-show"> 
-                                , som finnes i oversikten nedenfor.
-                                Der det finnes en DOI er den oppgitt med lenke til datasettet. 
-                            </span>
-                            <span class="nn"> 
-                                , som finnast i oversikta nedfor.
-                                Der det finnast ein DOI er den oppgitt med lenke til datasettet. 
-                            </span>
-                            <span class="en">
-                                , which is shown in the overview below.
-                                Where a DOI exists, it is shown with an external link to the source dataset.
-                            </span> 
+                            <span id="Nr.Sources"> - </span>.
                             <span id="doi.appender"></span>      
                         </p>
                     </div>
 
-                    <div class="section">
-                        <h2>
-                            <span class="nb lang-show"> 
-                                Samme utvalg med dagens data
-                            </span>
-                            <span class="nn"> 
-                                Same utval med dagens data
-                            </span>
-                            <span class="en">
-                                Same selection with current data
-                            </span>      
-                        </h2>                    
-                        <p> 
-                            <span class="nb lang-show"> 
-                                Datagrunnlaget i Artskart er i konstant forandring når nye funndata kommer til,
-                                korrigeres, eller fjernes om feil oppdages. For å se en oppdatert variant av samme datautsnitt,
-                                ta en titt i Artskart med samme filtre og innstillinger her.
-                            </span>
-                            <span class="nn"> 
-                                Datagrunnlaget i Artskart er i konstant endring når nye funndata kjem til,
-                                korrigerast, eller fjernes om feil oppdages. For å sjå ei oppdatert variant av same datautsnitt,
-                                ta ein titt i Artskart med same filtre og innstillingar her.
-                            </span>
-                            <span class="en">
-                                The data content in Artskart is in constant change when new ovservations are added, 
-                                corrected or removed should any errors be detected. To show an updated version of the same 
-                                data selection, take a look in Artskart with the same filters and adjustments here.
-                            </span> 
-                            <br/>
-                            <span id="a.appender"></span>   
-                        </p>
-                    </div>
+                    
                 </div>
                 <div class="sidebar">
+                    <!--
                     <div class="section">
                         <h2>
                             <span class="nb nn lang-show"> 
@@ -370,16 +255,17 @@
                             </p>
                         <p>
                             <h3>DOI</h3>  <span id="Attributes.doi">-</span>
-                            <h3>GUID</h3>  <span id="Guid">-</span> 
-                            <!--
+                            
+                            
+                                <h3>GUID</h3>  <span id="Guid">-</span> 
                             <h3>Jobb-id:</h3>  <span id="Descriptions.JobId">Henter ned data</span><br/>
                             <h3>Progress:</h3>  <span id="Descriptions.Progress">Henter ned data</span><br/>
                             <h3>Status:</h3>  <span id="Descriptions.Status">Henter ned data</span><br/>
                             <h3>isActive:</h3>  <span id="Attributes.isActive">Henter ned data</span><br/>
-                            -->
+                            
                         </p>                        
-                    </div>
-                    <div class="section">
+                    </div>-->
+                    <!--<div class="section">
                         <h2>
                             <span class="nb nn lang-show"> 
                                 Filinformasjon 
@@ -423,14 +309,14 @@
                                 </span>    
                             </h3>  <span id="Titles.lang">-</span>
                             <h3>Status</h3>  <span id="Attributes.state">-</span><br/>
-                                <!--
+                                
                                 <h3>Kildetype:</h3>  <span id="Creators.sourcetype">Henter ned data</span><br/>
                                 <h3>version:</h3>  <span id="Attributes.version">Henter ned data</span><br/>
                                 <h3>metadataVersion:</h3>  <span id="Attributes.metadataVersion">Henter ned data</span><br/>
                                 <h3>schemaVersion:</h3>  <span id="Attributes.schemaVersion">Henter ned data</span><br/>
-                                -->
+                                
                         </p>                        
-                    </div>
+                    </div>-->
                     <!--
                     <div class="section">
                         <h2>Statistikk</h2>   
@@ -451,6 +337,27 @@
 
                     <div class="section">
                         <h2>
+                            <span class="nb nn lang-show">Last ned datasettet</span>
+                            <span class="en">Download dataset</span>                                     
+                        </h2>                    
+                        <p>
+                            <span class="nb lang-show"> 
+                                Datasettet du er inne på nå vil ikke endres. 
+                            </span>
+                            <span class="nn">
+                                Datasettet du er inne på no vil ikkje endrast. 
+                            </span>
+                            <span class="en">
+                                The dataset you are currently viewing will not change.
+                            </span>  
+                           </br>                            
+                            <span id="zip.appender"></span>                                          
+                            
+                        </p>
+                    </div>
+
+                    <div class="section">
+                        <h2>
                             <span class="nb nn lang-show"> 
                                 Siter datasettet 
                             </span>
@@ -461,6 +368,36 @@
                         <p>
                             <span id="citation">-</span><br/>
                         </p> 
+                    </div>
+
+                    <div class="section">
+                        <h2>
+                            <span class="nb lang-show"> 
+                                Gjør søket på nytt
+                            </span>
+                            <span class="nn"> 
+                                Gjer søket på nytt
+                            </span>
+                            <span class="en">
+                                Search again
+                            </span>      
+                        </h2>                    
+                        <p> 
+                            <span class="nb lang-show"> 
+                                Artskart oppdateres når nye funndata kommer til,
+                                korrigeres, eller fjernes om feil oppdages. 
+                            </span>
+                            <span class="nn"> 
+                                Artskart oppdateres når nye funndata kjem til,
+                                korrigerast, eller fjernes om feil oppdages.
+                            </span>
+                            <span class="en">
+                                Artskart gets updated when new ovservations are added, 
+                                corrected or removed should any errors be detected. 
+                            </span> 
+                            <br/>
+                            <span id="a.appender"></span>   
+                        </p>
                     </div>
                 </div>
                 </div>
