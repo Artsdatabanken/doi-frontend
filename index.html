@@ -29,29 +29,29 @@
         <div class="main-content width-adjuster">
             <div class="sidebarmenu">
                 <ul>
-                    <li class="lead">
-                        <a href="?">
+                    <li class="lead in-breadcrumb">
+                        <a href="">
                             <span class="nb lang-show">Datasett fra Artskart</span>
                             <span class="nn">Datasett frå Artskart</span>
                             <span class="en">Dataset from Artskart</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="?">
-                            <span class="nb nn lang-show">Sideoversikt</span>
-                            <span class="en">Overview</span>
-                        </a>
-                    <li>
+                    <span id="Attributes.doi" >                     
+                    </span>
+                    
+                    <li class="not-in-breadcrumb">
                         <a href="https://artskart.artsdatabanken.no/">                            
                             <span class="nb nn lang-show">Artskart (ekstern lenke)<span class='material-icons'>launch</span> </span>
                             <span class="en">Species map (external application) <span class='material-icons'>launch</span></span>
-                        </a>
+                        </a>                    
                 </ul>
             </div>
 
-            <button id="lang-en">ENGLISH</button>
-            <button id="lang-nb">BOKMÅL</button>
-            <button id="lang-nn">NYNORSK</button>
+            <div class="languageselector">                
+                <button id="lang-nb" class="lang-chosen">BOKMÅL</button>
+                <button id="lang-nn" class="lang-not-chosen">NYNORSK</button>
+                <button id="lang-en" class="lang-not-chosen">ENGLISH</button>
+            </div>
 
 
             <div class="content-placer">

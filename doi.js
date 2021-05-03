@@ -55,9 +55,16 @@ function changeLanguage(lang){
         let those = document.querySelectorAll('.lang-show');
         those.forEach(x=>x.classList.replace('lang-show','lang-hide'));  
         these.forEach(x=>x.classList.remove('lang-hide'));
-        these.forEach(x=>x.classList.add('lang-show'));
+        these.forEach(x=>x.classList.add('lang-show'));     
         
+        let them = document.querySelectorAll('.languageselector button');
+        them.forEach(x=>x.className = "lang-not-chosen");  
+
+        let thisone = document.getElementById(id);
+        thisone.className = "lang-chosen";  
     });
+
+
 }
 
 
@@ -433,8 +440,10 @@ function addGeneralData(attributes){
     try{
         // DOI URL 
         // URL is always the non-test version as it's from api.
-        //let doilink = "<a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a>";        
-        //addData('Attributes.doi',doilink);
+        let crumbdivider = "<span class='breadcrumbdivider'>> </span>"
+        let doilink = crumbdivider+"<li class='in-breadcrumb'><a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a></li>";      
+        updateStyle($('Attributes.doi'),"display","inline-block");
+        addData('Attributes.doi',doilink);
         addData('header-doi',attributes.doi);
         //addData("Attributes.url",attributes.url);
         //addData("data.Id",data.data.id);
