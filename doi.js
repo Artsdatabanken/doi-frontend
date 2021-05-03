@@ -430,7 +430,16 @@ function addAreas(desc){
 function addDescriptions(desc){
     try{
         addData("Descriptions.count",desc['Count']);
-        addData("Descriptions.Description",desc['Description']);
+
+        let descriptioncontent = JSON.parse(desc['Description']);
+        let taxons = descriptioncontent.Taxons;
+        let tags = descriptioncontent.Tags;
+        let geometry = descriptioncontent.Geometry;
+        //console.log(descriptioncontent)
+
+        addData("Descriptions.geometry",geometry);
+        addData("Descriptions.tags",tags);
+        addData("Descriptions.taxons",taxons);
     }catch(err){
         console.error("failed at descriptions")
     }
