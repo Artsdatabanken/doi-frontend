@@ -170,21 +170,6 @@ footer table td:first-child {
     padding:15px;
 }
 
-
-.sidebarmenu ul{
-    font-family: "Roboto Condensed";
-    padding-right: 1em;
-    border-right: 1px solid #cecfd1;
-}
-
-.sidebarmenu li{
-    display:block;
-    width:100%;
-    padding: .5em 0 .5em 1em;
-    border-top: 1px solid #e4e3e2;    
-    font-family: "Roboto Condensed";
-}
-
 .sidebarmenu li.lead{
     font-size: 22.5px;
     padding-left:0px;
@@ -196,54 +181,25 @@ footer table td:first-child {
     color: #4c4a48;
 }
 
-.sidebarmenu .material-icons{
-    padding-left: 5px;
-    vertical-align: top;
-    font-size: inherit;
+.sidebarmenu ul{
+    font-family: "Roboto Condensed";
+    padding-right: 1em;
+    border-right: 1px solid #cecfd1;
 }
 
-.breadcrumbdivider{
-    display:none;
+
+.sidebarmenu li{
+    display:block;
+    width:100%;
+    padding: .5em 0 .5em 1em;
+    border-top: 1px solid #e4e3e2;    
+    font-family: "Roboto Condensed";
 }
+
+
 @media only screen and (max-width: 940px) {
     .sidebarmenu{
-        display:inline-block;
-        width:100%;
-        max-width:500px;
-        margin:0;
-        padding:0px;
-        margin-bottom:10px;
-        padding-left:15px;
-    }
-    
-    .sidebarmenu ul{
-        border:none;
-    }
-
-    .sidebarmenu li.in-breadcrumb{
-        display: inline-block;
-        width: auto;
-        border: none;
-        font-size: 12pt;
-        text-decoration: underline;
-        color: #1b57a9;
-        padding:0px;
-    }
-
-    .sidebarmenu li.in-breadcrumb a{
-        color:inherit
-    }
-
-    .sidebarmenu li.not-in-breadcrumb{
         display:none;
-    }
-
-    .breadcrumbdivider{
-        display:inline;
-        padding: 0 5px;
-        color: #ccc;
-        border-bottom:none;
-    
     }
 }
 

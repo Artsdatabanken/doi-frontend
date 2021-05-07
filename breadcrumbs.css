@@ -1,5 +1,31 @@
-.breadcrumbdivider{
-    display:none;
+
+.breadcrumbs{
+    display:inline-block;
+    width:100%;
+    max-width:500px;
+    margin:0;
+    padding:0px;
+    margin-bottom:10px;
+    padding-left:15px;
+}
+
+.breadcrumbs ul{
+    font-family: "Roboto Condensed";
+    padding-right: 1em;
+}
+
+.breadcrumbs li{
+    display: inline-block;
+    padding: .5em 0 .5em 1em;  
+    font-family: "Roboto Condensed";
+    font-size: 12pt;
+    text-decoration: underline;
+    color: #1b57a9;
+    padding:0px;
+}
+
+.breadcrumbs li a{
+    color:inherit
 }
 
 .breadcrumbdivider{
@@ -7,9 +33,4 @@
     padding: 0 5px;
     color: #ccc;
     border-bottom:none;
-
-}
-
-.sidebarmenu{
-    background:hotpink
 }
