@@ -380,7 +380,7 @@ function addArtskartUrl(desc){
         let artskartelement = desc['ArtskartUrl'][0];
         let a = document.createElement('div');
         let launch = "<span class='material-icons'>launch</span>";
-        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg <br/>i Arskart </span></a>";       
+        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg <br/>i Artskart </span></a>";       
         appendData('a.appender',a);
     }catch(err){
         console.error("Failed at artskarturl;")
