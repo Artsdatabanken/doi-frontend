@@ -431,7 +431,8 @@ function addGeneralData(attributes){
         let doilink = crumbdivider+"<li class='in-breadcrumb'><a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a></li>";      
         updateStyle($('Attributes.doi'),"display","inline-block");
         addData('Attributes.doi',doilink);
-        addData('header-doi',attributes.doi);
+        let headerdoi = "DOI: "+ attributes.doi;
+        addData('header-doi',headerdoi);
         //addData("Attributes.url",attributes.url);
         //addData("data.Id",data.data.id);
         //addData("data.Type",data.data.type);

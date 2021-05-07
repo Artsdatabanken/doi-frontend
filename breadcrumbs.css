@@ -1,0 +1,15 @@
+.breadcrumbdivider{
+    display:none;
+}
+
+.breadcrumbdivider{
+    display:inline;
+    padding: 0 5px;
+    color: #ccc;
+    border-bottom:none;
+
+}
+
+.sidebarmenu{
+    background:hotpink
+}
