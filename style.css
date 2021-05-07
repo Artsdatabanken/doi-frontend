@@ -143,8 +143,8 @@ footer table td:first-child {
 }
 
 .content-placer {
-    width: 75%;
-    margin-left: 25%;
+    width: 85%;
+    margin-left: auto;
     box-sizing: border-box;
     padding-left: 15px;
     padding-right: 15px;
@@ -159,8 +159,8 @@ footer table td:first-child {
 }
 
 .sidebarmenu{
-    float: left;
-    width:25%;
+    margin-left:0px;
+    max-width:25%;
     margin-top: 15px;
     left:0px;
     width:25%;
@@ -168,6 +168,7 @@ footer table td:first-child {
     font-size: 12pt;
     height:100%;
     padding:15px;
+    display:none;
 }
 
 .sidebarmenu li.lead{
@@ -321,12 +322,13 @@ p{
     width:calc(100% - 260px);
     display:inline-block;
     font-size: 0;
-
+    padding-right: 20px;
 }
 @media only screen and (max-width: 740px) {
     .mid {
         width: 100%;
         max-width: 100%;
+        padding-right:0px;
     }
 }
 
