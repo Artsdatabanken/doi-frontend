@@ -411,8 +411,11 @@ function addDescriptions(desc){
         let descriptioncontent = JSON.parse(desc['Description']);
         let taxons = descriptioncontent.Taxons;
         let tags = descriptioncontent.Tags;
-        let geometry = descriptioncontent.Geometry;
-        let ingresstaxons = "av ";
+        let geometry = descriptioncontent.Geometry;        
+        let lang_nn_nb = "<span class='nb nn lang-show'>av </span>";
+        let lang_eng = "<span class='en'>of </span>";
+        let ingresstaxons = lang_nn_nb + lang_eng;
+
         let taxonarray = Object.keys(taxons);
         if(taxonarray.length < 3){            
             for(let i in taxonarray){   
@@ -424,7 +427,9 @@ function addDescriptions(desc){
                 }
                 if(i == taxonarray.length - 2 && taxonarray.length > 1){
                     // -2 because 0 index vs 2nd last item in length
-                    taxonformat += " og ";
+                    let lang_nn_nb = "<span class='nb nn lang-show'> og </span>";
+                    let lang_eng = "<span class='en'> and </span>";
+                    taxonformat += lang_nn_nb + lang_eng;
                 }
                 ingresstaxons += taxonformat;
             }
