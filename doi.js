@@ -99,6 +99,8 @@ function handleDoiData(data,isRerun){
 
     let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");   
     // Main Content
+
+    
     addTimeDetails(attributes);
     addIngressData(attributes,desc);
     //addGeoLocation(attributes);
@@ -106,6 +108,7 @@ function handleDoiData(data,isRerun){
     addDoi(desc);    
     addAreas(desc);        
     addDescriptions(desc);
+    addImageSources(desc);
 
 
     // Sidebar
@@ -405,6 +408,51 @@ function addAreas(desc){
 }
 
 
+function addImageSources(desc){
+    try{
+        console.log(desc);
+    // TODO
+    let CoverageSource = desc.CoverageSource;
+    let finishedstring = "";
+    let sourceowners = {};
+    for (let i in CoverageSource){
+        let source = CoverageSource[i].split("|");
+        let name = source[0];
+        let owner = source[1];
+        let url = source[2];
+
+        // Re-wrap to better suit the display
+        let exists = sourceowners[owner] || null;  
+        if(exists){
+            sourceowners[owner]["name"].push(name);                    
+        }else{
+            let dict = {};
+            dict["url"] = url;
+            dict["name"] = [name];
+            sourceowners[owner] = dict;
+        } 
+    }
+
+    
+    for (let owner in sourceowners){
+        let source = sourceowners[owner];        
+        let url = source.url || "";
+        let names = source.name || [];
+        
+        let namestring = "";
+        for(let i in names){
+           
+            namestring += "<span>"+names[i]+"</span>";
+        }
+        finishedstring += "<span class='img-source'><a href='"+url+"'>"+owner+"</a>"+namestring+"</span>"
+    }
+    addData("img.source",finishedstring)
+    }catch(err){
+        console.error("failed at img source")
+    }
+    
+}
+
 function addDescriptions(desc){
     try{
         addData("Descriptions.count",desc['Count']);
@@ -413,7 +461,7 @@ function addDescriptions(desc){
         let tags = descriptioncontent.Tags;
         let geometry = descriptioncontent.Geometry;        
         let lang_nn_nb = "<span class='nb nn lang-show'>av </span>";
-        let lang_eng = "<span class='en'>of </span>";
+        let lang_eng = "<span class='en'>giof </span>";
         let ingresstaxons = lang_nn_nb + lang_eng;
 
         let taxonarray = Object.keys(taxons);

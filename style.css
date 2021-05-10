@@ -445,11 +445,12 @@ p{
 
 .biglink{
     display: inline-block;
-    background:#4c4a48;
-    color:white;
+    background: #4c4a48;
+    color: white;
     vertical-align: top;
-    width:100%;
-    margin-top:20px;
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid black;
 }
 
 @media only screen and (max-width: 740px) {
@@ -458,6 +459,12 @@ p{
         box-sizing: border-box;    
         text-align: center;  
     }
+}
+
+.artskartlink{
+    color: black;
+    background: #d8d8d8;
+    border: 1px solid #918f8f;
 }
 
 .biglink:hover{
@@ -471,7 +478,10 @@ p{
 }
 
 .biglink span:first-child {
-    border-bottom: 2px solid transparent;    
+    border-bottom: 2px solid transparent;
+    font-size: 25pt;
+    padding: 12px 5px 12px 10px;
+    vertical-align: middle;
 }
 
 #citation{
@@ -820,4 +830,28 @@ body.freeze-scroll {
         width:100%;
         margin-left:10px;
     }
+}
+
+/* img sources */
+
+.img-container{
+    position:relative;
+}
+
+.img-source-container{
+    position: absolute;
+    background: white;
+    bottom: 27px;
+    width: 149px;
+    right: 3px;
+}
+
+.img-source{
+    display:block;    
+    padding:5px;
+}
+
+
+.img-source span{
+    display: block;
 }
