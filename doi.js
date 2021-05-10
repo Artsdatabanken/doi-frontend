@@ -326,9 +326,9 @@ function addFiles(attributes,desc){
                 let zipurl = item.relatedIdentifier;
                 let zip = document.createElement('div');
                 let format = attributes.formats.toString().replace("application/","");//TODO
-                console.log(format)
+                //console.log(format)
                 let innerformat = desc['ExportType'];
-                console.log(desc['ExportType'])
+                //console.log(desc['ExportType'])
                 
                 let buttontext = "<span>Last ned datasett <br/>"+convertBytes(attributes.sizes)+" ("+format+"/"+innerformat+")</span>";
                 let material = "<span class='material-icons'>download</span>";
@@ -408,13 +408,29 @@ function addAreas(desc){
 function addDescriptions(desc){
     try{
         addData("Descriptions.count",desc['Count']);
-
         let descriptioncontent = JSON.parse(desc['Description']);
         let taxons = descriptioncontent.Taxons;
         let tags = descriptioncontent.Tags;
         let geometry = descriptioncontent.Geometry;
-        //console.log(descriptioncontent)
-
+        let ingresstaxons = "av ";
+        let taxonarray = Object.keys(taxons);
+        if(taxonarray.length < 3){            
+            for(let i in taxonarray){   
+                let key = taxonarray[i];       
+                let taxon = taxons[key]; 
+                let taxonformat = "<i>"+taxon.scientificname+"</i> "+taxon.author;
+                if(i == 0 && taxonarray.length > 2){
+                    taxonformat += ", ";
+                }
+                if(i == taxonarray.length - 2 && taxonarray.length > 1){
+                    // -2 because 0 index vs 2nd last item in length
+                    taxonformat += " og ";
+                }
+                ingresstaxons += taxonformat;
+            }
+            addData("ingress.taxons",ingresstaxons)
+        }
+        
         addData("Descriptions.geometry",geometry);
         addData("Descriptions.tags",tags);
         addData("Descriptions.taxons",taxons);
@@ -615,9 +631,7 @@ function unWrap(wrapped,criteria,content){
 }
 
 function unWrapDescriptions(wrapped,criteria,content){
-    console.log(wrapped)
     wrapped = unWrap(wrapped,criteria,content)["TechnicalInfo"];
-    
     return unWrap(wrapped,criteria,"TechnicalInfo");
 }
 

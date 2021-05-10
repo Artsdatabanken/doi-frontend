@@ -3,7 +3,7 @@
 // Lets pretend this is a part of the main site
 function getFooter(){       
     try{
-        console.log("making header menu")
+        console.log("making footer")
         // Obtaining the relevant doi to look up.
         let url = "https://www.artsdatabanken.no/api/Content/224885";
         fetch(url)
@@ -17,13 +17,13 @@ function getFooter(){
                   
                 
             }catch(err){
-                console.error("failed at headermenu")
+                console.error("failed at footer")
             }        
         })
         .catch((err) => {
-            console.error("failed obtaining headermenu")
+            console.error("failed obtaining footer")
         })
     }catch{
-        console.log("error in headermenu")
+        console.log("error in footer")
     }
 }
