@@ -1,0 +1,153 @@
+
+/* Container for image and its contents */
+.img-container{
+    padding-right:20px;
+    float: left;
+    position: relative;
+    max-width: 365px;
+    display:inline;
+}
+
+@media only screen and (max-width: 600px),
+    only screen and (min-width: 740px) and (max-width:1124px ){
+    .img-container{
+        display: block;
+        padding-right:0px;
+        float:none;
+    }
+}
+
+@media only screen and (max-width: 400px){
+    .img-container{
+        display: block;
+        border-bottom:2px solid pink;
+        padding-right:0px;
+        float:none;
+    }
+}
+
+/* SECTION IMAGE (Map) */
+
+.sectionimage{
+    position: relative;
+    max-width: 100%;  
+    display:block;
+}
+
+.sectionimage img{
+    max-width: 100%;  
+}
+
+/* SOURCE CONTAINER */
+.img-source-container{
+    position:absolute;
+    right:0;
+    margin-right:23px;
+}
+
+@media only screen and (min-width: 400px){
+    .img-source-container{
+        position: absolute;
+        margin-bottom:0px;
+        background: rgba(255,255,255,0.7);
+        bottom: 7px;
+        width: 153px;
+        font-size: 8pt;
+    }
+}
+
+@media only screen and (max-width: 600px),
+    only screen and (min-width: 740px) and (max-width:1124px ){
+
+    .img-source-container{
+        margin-right:3px;
+        right:0px;
+    }
+}
+
+@media only screen and (max-width: 400px){
+    .img-source-container{
+        margin:0;
+        margin-bottom:20px;
+        display: block;
+        border:1px solid #e2e3e4;
+        font-size: 10pt;
+        width:100%;
+        position: relative;
+    }
+}
+
+/* img sources */
+
+.img-source{
+    display:block;    
+    padding:5px;
+}
+    
+.img-source a{
+    display: block;
+    color:black;
+}
+
+/* FULLSCREEN BUTTON */
+
+#fullscreenbutton{
+    border-radius: 5px;
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    right: 5px;
+    font-size: 14pt;
+    border: 1px solid gray;
+    top: 5px;
+    text-align: center;
+    padding: 2px;
+}
+
+@media only screen and (max-width: 600px),
+    only screen and (min-width: 740px) and (max-width:1124px ){
+        #fullscreenbutton{
+            right: 5px;
+        }
+}
+
+#fullscreenbutton:hover{
+    background:black;
+    color:white;
+    cursor:pointer;
+}
+
+/* IMAGE AS FULLSCREEN */
+
+.fullscreen{
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    height: 100vh;
+    width:100vw;
+    background: rgba(0,0,0,0.7);    
+    text-align: center;
+}
+
+.fullscreen img{
+    margin:auto;
+    padding:10px;
+    max-width:100%;
+    max-height:100%;
+    height: auto;
+    width:auto;
+}
+
+.freeze-scroll .img-source{
+    display:none;  
+}
+
+body.freeze-scroll {
+    overflow: hidden;
+  }
+
+.sectionimage:hover,
+.fullscreen:hover{
+    cursor:pointer;
+}

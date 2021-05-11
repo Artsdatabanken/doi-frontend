@@ -441,8 +441,11 @@ function addImageSources(desc){
         
         let namestring = "";
         for(let i in names){
-           
-            namestring += "<span>"+names[i]+"</span>";
+            let comma = "";
+            if(i<=names.length-1&&names.length>1){
+                comma = ", "
+            }          
+            namestring += "<span>"+names[i]+comma+"</span>";
         }
         finishedstring += "<span class='img-source'><a href='"+url+"'>"+owner+"</a>"+namestring+"</span>"
     }
