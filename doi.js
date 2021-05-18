@@ -42,8 +42,6 @@ function changeLanguage(lang){
         let thisone = document.getElementById(id);
         thisone.className = "lang-chosen";  
     });
-
-
 }
 
 
@@ -105,8 +103,7 @@ function handleDoiData(data,isRerun){
     addIngressData(attributes,desc);
     //addGeoLocation(attributes);
     addFiles(attributes,desc); // Download dataset is a part of addFiles, and lives in the sidebar.
-    addDoi(desc);    
-    addAreas(desc);        
+    addDoi(desc);       
     addDescriptions(desc);
     addImageSources(desc);
 
@@ -390,27 +387,9 @@ function addArtskartUrl(desc){
     }
 }
 
-function addAreas(desc){
-    try{
-        // Add areas if exists
-        let areas = desc['Areas'];   
-        if(areas && areas.length >0)   { 
-            let ar = document.createElement('div');
-            ar.innerHTML = "<h3> Områder </h3>";
-                for (let i in areas){
-                    ar.innerHTML += "<span>"+areas[i]+"</span>";
-                }
-            appendData('area.appender',ar);
-        }
-    }catch(err){
-        console.error("failed at areas")
-    }
-}
-
-
 function addImageSources(desc){
     try{
-        console.log(desc);
+        //console.log(desc);
     // TODO
     let CoverageSource = desc.CoverageSource;
     let finishedstring = "";
@@ -431,9 +410,7 @@ function addImageSources(desc){
             dict["name"] = [name];
             sourceowners[owner] = dict;
         } 
-    }
-
-    
+    }   
     for (let owner in sourceowners){
         let source = sourceowners[owner];        
         let url = source.url || "";
@@ -458,15 +435,136 @@ function addImageSources(desc){
 
 function addDescriptions(desc){
     try{
-        addData("Descriptions.count",desc['Count']);
-        let descriptioncontent = JSON.parse(desc['Description']);
-        let taxons = descriptioncontent.Taxons;
-        let tags = descriptioncontent.Tags;
-        let geometry = descriptioncontent.Geometry;        
-        let lang_nn_nb = "<span class='nb nn lang-show'>av </span>";
-        let lang_eng = "<span class='en'>giof </span>";
-        let ingresstaxons = lang_nn_nb + lang_eng;
+        addData("Descriptions.count",desc['Count']);        
+        let descriptioncontent = desc['Description'];
+        //console.log(descriptioncontent)
+        descriptioncontent = JSON.parse(descriptioncontent);
+        console.log(descriptioncontent)
 
+        // TODO: FIlter is currently not displayed, due to changing structure.
+        // 
+
+        addTaxons(descriptioncontent.Taxons);
+        addAreas(descriptioncontent.Areas);
+        addTags(descriptioncontent.Tags);
+        //let geometry = descriptioncontent.Geometry;  
+        //console.log("geometry",geometry)      
+
+        
+        //addData("Descriptions.geometry",geometry);
+        //addData("Descriptions.tags",tags);
+        //addData("Descriptions.taxons",taxons);
+    }catch(err){
+        console.error("failed at descriptions")
+    }
+}
+
+function addTags(tags){
+    try{
+
+        // TODO: AWAIT API CORRECTIONS
+        console.log(tags)
+
+        // USE CASE: NOT RECOVERED AND ABSENT ("Ikke gjenfunnet" og "Ikke funnet");
+        // Cases are hardcoded, so using their ID.
+        // 5 = Absent, 6 = not recovered
+
+        let speciesdata = true;
+        let absent = !tags[5].inverted;
+        let notrecovered = !tags[6].inverted
+        let casenumber = 0;
+
+        if(!absent && !notrecovered && speciesdata){
+            casenumber = 1;
+        }else if(absent && !notrecovered && speciesdata){
+            casenumber = 2;
+        }else if(!absent && notrecovered && speciesdata){
+            casenumber = 3;
+        }
+        else if(absent && notrecovered && speciesdata){
+            casenumber = 4;
+        }else if(absent && notrecovered && !speciesdata){
+            casenumber = 5;
+        }else if(absent && !notrecovered && !speciesdata){
+            casenumber = 5;
+        }else if(!absent && notrecovered && !speciesdata){
+            casenumber = 5;
+        }
+
+        
+        console.log(absent, notrecovered, casenumber)
+        
+        let absence_items = document.getElementsByClassName("tags_absence");
+        for (let element of absence_items){            
+            casenumber = "tags_case_" + casenumber;
+            if(element.className.includes(casenumber)){                
+                element.style.display="inline";
+            }            
+         }
+
+
+        
+
+/*
+        console.log(tags[5].name)
+        console.log(tags[5].inverted)
+        console.log(tags[6].name)
+        console.log(tags[6].inverted)
+*/
+
+    }catch(err){
+        console.error("failed at tags")
+    }
+}
+
+function addAreas(areas){
+        try{
+            if(Object.keys(areas).length>0){
+                updateStyle($('tags_areas'),"display","inline-block");       
+                addDescriptionItems(areas,"Descriptions.area");
+            }          
+            
+        }catch(err){
+            console.error("failed at addAreas")
+        }
+    
+}
+
+function addDescriptionItems(what,where){
+    try{
+        let whatarray = Object.keys(what);
+        let endresult = "";          
+        for(let i in whatarray){   
+            let key = whatarray[i];       
+            let item = what[key]; 
+            // Here we may need specific things for different fields
+            let writestring = "<span>"+item.name+"</span>";
+
+            // Handle different lengths of lists (plurality)
+            if(i == 0 && whatarray.length > 2){
+                writestring += ", ";
+            }
+            if(i == whatarray.length - 2 && whatarray.length > 1){
+                // -2 because 0 index vs 2nd last item in length
+                let lang_nn_nb = "<span class='nb nn lang-show'> og </span>";
+                let lang_eng = "<span class='en'> and </span>";
+                writestring += lang_nn_nb + lang_eng;
+            }
+            endresult += writestring + ".";
+        }
+        addData(where,endresult)
+        
+    }catch(err){
+        console.error("failed at addDescriptionItems")
+    }
+}
+
+function addTaxons(taxons){
+    try{
+        // TAXONS
+        let lang_nn_nb = "<span class='nb nn lang-show'>av </span>";
+        let lang_eng = "<span class='en'> of </span>";
+        let ingresstaxons = lang_nn_nb + lang_eng;
         let taxonarray = Object.keys(taxons);
         if(taxonarray.length < 3){            
             for(let i in taxonarray){   
@@ -487,11 +585,8 @@ function addDescriptions(desc){
             addData("ingress.taxons",ingresstaxons)
         }
         
-        addData("Descriptions.geometry",geometry);
-        addData("Descriptions.tags",tags);
-        addData("Descriptions.taxons",taxons);
     }catch(err){
-        console.error("failed at descriptions")
+        console.error("failed at taxons")
     }
 }
 
@@ -747,7 +842,6 @@ function emptyAppenders(){
         document.getElementById("zip.appender").innerHTML = "";
         document.getElementById("a.appender").innerHTML = "";
         document.getElementById("doi.appender").innerHTML = "";
-        document.getElementById("area.appender").innerHTML = "";
         //document.getElementById("Api.link").innerHTML = "";
     }catch(err){
         console.error("failed at emptying appenders")

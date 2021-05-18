@@ -738,5 +738,7 @@ nav{
     }
 }
 
-
-
+#tags_areas,
+.tags_absence{
+    display:none;
+}
