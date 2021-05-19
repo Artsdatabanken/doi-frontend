@@ -440,20 +440,36 @@ function addDescriptions(desc){
         //console.log(descriptioncontent)
         descriptioncontent = JSON.parse(descriptioncontent);
         console.log(descriptioncontent)
+        // TODO: ADD MORE THINGS THAT LIMIT. Need list and example data
 
         // TODO: FIlter is currently not displayed, due to changing structure.
         // 
 
-        addTaxons(descriptioncontent.Taxons);
-        addAreas(descriptioncontent.Areas);
-        addTags(descriptioncontent.Tags);
-        //let geometry = descriptioncontent.Geometry;  
-        //console.log("geometry",geometry)      
 
+        for(let i in descriptioncontent){
+            if (i== "Areas"){
+                addAreas(descriptioncontent[i],"area");
+            }else if(i == "Geometry"){
+                addAreas(descriptioncontent[i],"geometry");
+            }else if(i == "Tags"){
+                //addTags(descriptioncontent.Tags); TODO FIX THIS FILTERS
+            }else if(i == "Taxons"){
+                addTaxons(descriptioncontent.Taxons); // INTO INGRESS = ADDITIONS      
+            }
+            else{
+                console.log("adding")
+                if(descriptioncontent[i] != ""){
+                    console.log("ye")
+                    let span = document.createElement('span');
+                    span.id = "Descriptions."+i;   
+                    addDescriptionItems(descriptioncontent[i],span,i);
+                    appendData("Descriptions.other",span)
+                    updateStyle($('tags_other'),"display","inline-block");
+                }
+           }
+           
+        }
         
-        //addData("Descriptions.geometry",geometry);
-        //addData("Descriptions.tags",tags);
-        //addData("Descriptions.taxons",taxons);
     }catch(err){
         console.error("failed at descriptions")
     }
@@ -492,7 +508,7 @@ function addTags(tags){
         }
 
         
-        console.log(absent, notrecovered, casenumber)
+        //console.log(absent, notrecovered, casenumber)
         
         let absence_items = document.getElementsByClassName("tags_absence");
         for (let element of absence_items){            
@@ -501,9 +517,7 @@ function addTags(tags){
                 element.style.display="inline";
             }            
          }
-
-
-        
+  
 
 /*
         console.log(tags[5].name)
@@ -517,31 +531,51 @@ function addTags(tags){
     }
 }
 
-function addAreas(areas){
+function addAreas(what,where){
         try{
-            if(Object.keys(areas).length>0){
-                updateStyle($('tags_areas'),"display","inline-block");       
-                addDescriptionItems(areas,"Descriptions.area");
-            }          
+            if(what){
+                if(Object.keys(what).length>0){
+                    updateStyle($('tags_'+where),"display","inline-block");       
+                    addDescriptionItems(what,"Descriptions."+where);
+                } else{
+                    console.log("nope")
+                }         
+            }
             
         }catch(err){
-            console.error("failed at addAreas")
-        }
-    
+            console.error("failed at add"+where)
+        }    
 }
 
-function addDescriptionItems(what,where){
+function addDescriptionItems(what,where,title){
     try{
         let whatarray = Object.keys(what);
-        let endresult = "";          
+        let endresult = "";    
+        
+        if(title){
+            console.log(title)
+            console.log(what)
+            endresult += "<span class='contenttitle'>"+title+": </span>";
+        }
+
+    
+                
         for(let i in whatarray){   
             let key = whatarray[i];       
             let item = what[key]; 
             // Here we may need specific things for different fields
-            let writestring = "<span>"+item.name+"</span>";
+            let content = item.name || item;
+            if(item.code){
+                content = item.code += " - "+ content;
+            }
+            if(item.inverted){
+                content = "not " + content;
+            }
+
+            let writestring = "<span>"+content+"</span>";
 
             // Handle different lengths of lists (plurality)
-            if(i == 0 && whatarray.length > 2){
+            if(whatarray.length > 2 && i < whatarray.length - 2){
                 writestring += ", ";
             }
             if(i == whatarray.length - 2 && whatarray.length > 1){
@@ -550,10 +584,16 @@ function addDescriptionItems(what,where){
                 let lang_eng = "<span class='en'> and </span>";
                 writestring += lang_nn_nb + lang_eng;
             }
-            endresult += writestring + ".";
-        }
-        addData(where,endresult)
+            endresult += writestring;
         
+        }
+
+        endresult += ". ";
+            if(title){
+                endresult += "</br>";
+            }
+        addData(where,endresult)
+    
     }catch(err){
         console.error("failed at addDescriptionItems")
     }
@@ -561,7 +601,8 @@ function addDescriptionItems(what,where){
 
 function addTaxons(taxons){
     try{
-        // TAXONS
+        if(taxons){
+             // TAXONS
         let lang_nn_nb = "<span class='nb nn lang-show'>av </span>";
         let lang_eng = "<span class='en'> of </span>";
         let ingresstaxons = lang_nn_nb + lang_eng;
@@ -570,7 +611,8 @@ function addTaxons(taxons){
             for(let i in taxonarray){   
                 let key = taxonarray[i];       
                 let taxon = taxons[key]; 
-                let taxonformat = "<i>"+taxon.scientificname+"</i> "+taxon.author;
+                let name = taxon.name +" " || "";
+                let taxonformat = name+"<i>"+taxon.scientificname+"</i> "+taxon.author;
                 if(i == 0 && taxonarray.length > 2){
                     taxonformat += ", ";
                 }
@@ -584,6 +626,8 @@ function addTaxons(taxons){
             }
             addData("ingress.taxons",ingresstaxons)
         }
+        }
+       
         
     }catch(err){
         console.error("failed at taxons")
@@ -787,10 +831,12 @@ function unWrapDescriptions(wrapped,criteria,content){
 }
 
 
-function addData(id,content){
+function addData(id,content){    
     if(content!= undefined && id!= undefined){
         try{
-            document.getElementById(id).innerHTML = content;}
+            let object = document.getElementById(id) || id;
+            object.innerHTML = content;     
+        }
         catch(err){
             console.error("failed for id: ",id,"and content:" ,content)
         }

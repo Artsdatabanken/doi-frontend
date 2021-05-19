@@ -738,7 +738,16 @@ nav{
     }
 }
 
-#tags_areas,
+#tags_other,
+#tags_geometry,
+#tags_area,
 .tags_absence{
     display:none;
+}
+
+
+.licence img{
+    padding-top:15px;
+    opacity:0.7;
+    max-width:50px;
 }
