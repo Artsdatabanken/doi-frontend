@@ -455,11 +455,12 @@ function addDescriptions(desc){
                 //addTags(descriptioncontent.Tags); TODO FIX THIS FILTERS
             }else if(i == "Taxons"){
                 addTaxons(descriptioncontent.Taxons); // INTO INGRESS = ADDITIONS      
+                // IF MORE THAN 3, add to the filterlist
             }
             else{
                 console.log("adding")
                 if(descriptioncontent[i] != ""){
-                    console.log("ye")
+                    console.log("yeps")
                     let span = document.createElement('span');
                     span.id = "Descriptions."+i;   
                     addDescriptionItems(descriptioncontent[i],span,i);
@@ -549,6 +550,10 @@ function addAreas(what,where){
 
 function addDescriptionItems(what,where,title){
     try{
+
+        if( typeof what === 'string' ) {
+            what = [ what ];
+        }
         let whatarray = Object.keys(what);
         let endresult = "";    
         
@@ -558,8 +563,8 @@ function addDescriptionItems(what,where,title){
             endresult += "<span class='contenttitle'>"+title+": </span>";
         }
 
-    
-                
+        console.log(what, whatarray)
+
         for(let i in whatarray){   
             let key = whatarray[i];       
             let item = what[key]; 
@@ -870,6 +875,12 @@ function hideAndShowActions(param,otherparam){
         for (let el of document.getElementsByClassName("section")){
             updateStyle(el,"display",param)
         }
+
+        for (let el of document.getElementsByClassName("inlinesection")){
+            updateStyle(el,"display","inline");
+            console.log("inlining")
+        }
+
 
         for (let el of document.getElementsByClassName("ingress")){
             updateStyle(el,"display",param)

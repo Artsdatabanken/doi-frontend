@@ -20,7 +20,6 @@
 @media only screen and (max-width: 400px){
     .img-container{
         display: block;
-        border-bottom:2px solid pink;
         padding-right:0px;
         float:none;
     }
