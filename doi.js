@@ -357,15 +357,19 @@ function addDoi(desc){
             let items = doi[i].split("|");
             let div = document.createElement('div');
             div.className = "listitem";
+            
             let link = items[0];
             let linkline = ""; // There is an id here, but what type? what it do?
             
             if(link.includes("https")){
                 let doitext = link.replace("https://doi.org/","");
+                getCitation(doitext);
+                div.id = doitext;
                 linkline = "<a href="+link+">"+doitext+"</a>";                
             }           
 
             let numberline = "<span> ("+ items[1]+" element)</span></br>";
+            
             let nameline = "<span>"+ items[2]+"</span>";            
             div.innerHTML = nameline+numberline+linkline;
             appendData('doi.appender',div);
@@ -373,6 +377,32 @@ function addDoi(desc){
     }catch(err){
         console.error("Failed in doi")
     }
+}
+
+function getCitation(doi){
+    let url = 'https://doiapi.artsdatabanken.no/api/Doi/getcitation/'+doi;
+    console.log("running fetch ",url)
+    fetch(url)
+    .then((response) => {
+        return response.text();
+    })
+    .then((data) => {    
+        let object = $("#"+doi);
+        let newelement = document.createElement('span');
+        //let splitted = data.split("https");
+        //let link = "https"+splitted[1];
+        //let citation = splitted[0]+"<a href='"+link+"'>"+link+"</a>";
+        newelement.className = "citation";
+        newelement.innerHTML = "<br/>"+data;
+        
+        //object.style.background = "lightgrey";
+        object.appendChild(newelement);
+        return data;
+    })
+    .catch((err) => {
+        return doi;
+    })
+
 }
 
 function addArtskartUrl(desc){
@@ -458,9 +488,7 @@ function addDescriptions(desc){
                 // IF MORE THAN 3, add to the filterlist
             }
             else{
-                console.log("adding")
                 if(descriptioncontent[i] != ""){
-                    console.log("yeps")
                     let span = document.createElement('span');
                     span.id = "Descriptions."+i;   
                     addDescriptionItems(descriptioncontent[i],span,i);
@@ -558,12 +586,8 @@ function addDescriptionItems(what,where,title){
         let endresult = "";    
         
         if(title){
-            console.log(title)
-            console.log(what)
             endresult += "<span class='contenttitle'>"+title+": </span>";
         }
-
-        console.log(what, whatarray)
 
         for(let i in whatarray){   
             let key = whatarray[i];       

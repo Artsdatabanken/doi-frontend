@@ -486,6 +486,7 @@ p{
 
 #citation{
     font-size: 10pt;
+    display:block;
 }
 
 .doilink{
