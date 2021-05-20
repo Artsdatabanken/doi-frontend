@@ -413,10 +413,25 @@ p{
 }
 
 .listitem{
-    padding: 20px;
-    border: 1px solid #e2e3e4;
+    padding: 15px;
+    padding-left:0;
+    border-bottom: 1px solid #e2e3e4;
     margin-bottom: 10px;
     margin-right: 20px;
+}
+
+.citationlink,
+.listitem .citation{
+    font-size: 10pt;
+}
+
+.citationlink,
+.listitem a{
+    color:inherit;
+}
+
+.hascitation .citationlink{
+    display:none;
 }
 
 /* LIST ITEMS */
@@ -429,6 +444,10 @@ p{
 
 .listitem:first-child{
     margin-top: 10px;
+}
+
+.listitem:last-child{
+    border:none;
 }
 
 .listitem span{
@@ -758,3 +777,4 @@ nav{
     display:block;
     border:0;
 }
+

@@ -365,10 +365,10 @@ function addDoi(desc){
                 let doitext = link.replace("https://doi.org/","");
                 getCitation(doitext);
                 div.id = doitext;
-                linkline = "<a href="+link+">"+doitext+"</a>";                
+                linkline = "<a href="+link+" class='citationlink'>"+doitext+"</a>";                
             }           
 
-            let numberline = "<span> ("+ items[1]+" element)</span></br>";
+            let numberline = "<span> ("+ items[1]+" element)</span>";
             
             let nameline = "<span>"+ items[2]+"</span>";            
             div.innerHTML = nameline+numberline+linkline;
@@ -388,12 +388,13 @@ function getCitation(doi){
     })
     .then((data) => {    
         let object = $("#"+doi);
+        object.classList.add("hascitation");
         let newelement = document.createElement('span');
-        //let splitted = data.split("https");
-        //let link = "https"+splitted[1];
-        //let citation = splitted[0]+"<a href='"+link+"'>"+link+"</a>";
+        let splitted = data.split("https");
+        let link = "https"+splitted[1];
+        let citation = splitted[0]+"<a href='"+link+"'>"+link+"</a>";
         newelement.className = "citation";
-        newelement.innerHTML = "<br/>"+data;
+        newelement.innerHTML = "<br/>"+citation;
         
         //object.style.background = "lightgrey";
         object.appendChild(newelement);
