@@ -583,11 +583,19 @@ function addDescriptionItems(what,where,title){
         if( typeof what === 'string' ) {
             what = [ what ];
         }
-        let whatarray = Object.keys(what);
+        let whatarray = Object.keys(what);  
         let endresult = "";    
         
         if(title){
-            endresult += "<span class='contenttitle'>"+title+": </span>";
+            let link = " http://rs.tdwg.org/dwc/terms/"; 
+            let formattedtitle = title.replace(/([A-Z])/g, ' $1').trim()
+            link += title.charAt(0).toLowerCase() + title.slice(1);
+            let lastletter = link.substring(link.length - 1,link.length);
+            if(lastletter == "s"){
+                link = link.substring(0, link.length - 1);
+            }
+            
+            endresult += "<a href="+link+" class='contenttitle'>"+formattedtitle+":</a> ";
         }
 
         for(let i in whatarray){   
@@ -663,6 +671,8 @@ function addTaxons(taxons){
         console.error("failed at taxons")
     }
 }
+
+
 
 function addGeneralData(attributes){
     try{
@@ -924,6 +934,7 @@ function emptyAppenders(){
         document.getElementById("zip.appender").innerHTML = "";
         document.getElementById("a.appender").innerHTML = "";
         document.getElementById("doi.appender").innerHTML = "";
+        document.getElementById("Descriptions.other").innerHTML = "";        
         //document.getElementById("Api.link").innerHTML = "";
     }catch(err){
         console.error("failed at emptying appenders")
