@@ -348,11 +348,16 @@ function addDoi(desc){
     try{
         let doi = desc['DOI'];           
         // Text formatting:
-        let datacontributors = doi.length+" dataleverandør";
+        let length = doi.length;
         if(doi.length>1){
-            datacontributors +="er";
+            let these = document.getElementsByClassName('contributor-plural');
+        for (let element of these){            
+                element.style.display="inline";
+         }
         }
-        addData("Nr.Sources",datacontributors);       
+        addData("Nr.Sources",length);   
+        
+        
         for (let i in doi){
             let items = doi[i].split("|");
             let div = document.createElement('div');

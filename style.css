@@ -758,6 +758,7 @@ nav{
     }
 }
 
+.contributor-plural,
 #tags_other,
 #tags_geometry,
 #tags_area,
@@ -777,4 +778,5 @@ nav{
     display:block;
     border:0;
 }
+
 
