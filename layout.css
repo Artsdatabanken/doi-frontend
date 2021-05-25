@@ -104,6 +104,21 @@ p{
         padding-right: 0px;
     }
 }
+
+/* INGRESS */
+
+.ingress {
+    font-size: 22.5px;
+    font-weight: 300;
+    line-height: 1.4;
+    color: #4c4a48;
+    padding-right: 20px;
+}
+
+.ingress span{
+    color:black;
+}
+
 /* Sidebar left side*/
 .sidebarmenu{
     margin-left:0px;
@@ -248,3 +263,4 @@ p{
     color: #ccc;
     border-bottom:none;
 }
+

@@ -55,8 +55,7 @@
 
 /* PAGE SECTIONS */
 
-#nodata,
-.ingress {
+#nodata{
     font-size: 22.5px;
     font-weight: 300;
     line-height: 1.4;
@@ -64,8 +63,7 @@
     padding-right: 20px;
 }
 
-#nodata span,
-.ingress span{
+#nodata span{
     color:black;
 }
 
