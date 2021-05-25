@@ -119,6 +119,15 @@ p{
     color:black;
 }
 
+.byline{
+    box-sizing: border-box;
+    color: rgb(76, 74, 72);
+    font-family: Roboto, "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12.5px;
+    line-height: 17.85px;
+    text-align: left
+}
+
 /* Sidebar left side*/
 .sidebarmenu{
     margin-left:0px;
