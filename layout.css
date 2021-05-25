@@ -31,7 +31,9 @@ h3{
 }
 
 p{
+    font-size: 12pt;
     margin-bottom: 15px;
+    color: black;
 }
 
 /* LAYOUT */
