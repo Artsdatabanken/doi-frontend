@@ -9,8 +9,6 @@ or replacing the existing text.
 // Startup
 window.addEventListener('load', function() {
     runApiCall();
-    getHeaderMenu();
-    getFooter();
     languageSupport();
 })
 
