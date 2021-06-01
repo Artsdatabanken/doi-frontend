@@ -271,7 +271,7 @@ function addTimeDetails(attributes){
 function addIngressData(attributes,desc){
     try{
 
-        addData("Ingress.count",desc['Count']);
+        addData("Ingress.count",desc['Count']||0);
         /*
         addData("Titles.type",attributes.titles[0].title);   
         addData("Creators.sourcename",attributes.creators[0].name);
@@ -344,18 +344,17 @@ function addDoi(desc){
     // Contains all source datasets. Also those without a doi, but of doi-type data.
     // If a doi is missing, it will instead contain an id.
     try{
-        let doi = desc['DOI'];           
+        
+        let doi = desc['DOI'] || [];  
         // Text formatting:
-        let length = doi.length;
-        if(doi.length>1){
+        let length = doi.length;        
+        if(doi.length!=1){
             let these = document.getElementsByClassName('contributor-plural');
         for (let element of these){            
                 element.style.display="inline";
          }
-        }
-        addData("Nr.Sources",length);   
-        
-        
+        }        
+        addData("Nr.Sources",length);  
         for (let i in doi){
             let items = doi[i].split("|");
             let div = document.createElement('div');
@@ -469,40 +468,36 @@ function addImageSources(desc){
 
 function addDescriptions(desc){
     try{
-        addData("Descriptions.count",desc['Count']);        
-        let descriptioncontent = desc['Description'];
-        //console.log(descriptioncontent)
-        descriptioncontent = JSON.parse(descriptioncontent);
-        console.log(descriptioncontent)
-        // TODO: ADD MORE THINGS THAT LIMIT. Need list and example data
-
-        // TODO: FIlter is currently not displayed, due to changing structure.
-        // 
-
-
-        for(let i in descriptioncontent){
-            if (i== "Areas"){
-                addAreas(descriptioncontent[i],"area");
-            }else if(i == "Geometry"){
-                addAreas(descriptioncontent[i],"geometry");
-            }else if(i == "Tags"){
-                //addTags(descriptioncontent.Tags); TODO FIX THIS FILTERS
-            }else if(i == "Taxons"){
-                addTaxons(descriptioncontent.Taxons); // INTO INGRESS = ADDITIONS      
-                // IF MORE THAN 3, add to the filterlist
-            }
-            else{
-                if(descriptioncontent[i] != ""){
-                    let span = document.createElement('span');
-                    span.id = "Descriptions."+i;   
-                    addDescriptionItems(descriptioncontent[i],span,i);
-                    appendData("Descriptions.other",span)
-                    updateStyle($('tags_other'),"display","inline-block");
+        let count = desc['Count'] || 0;
+        addData("Descriptions.count",count);     
+        let descriptioncontent = desc['Description'] || null;
+        if(descriptioncontent){
+            descriptioncontent = JSON.parse(descriptioncontent);
+            console.log(descriptioncontent)
+            // TODO: ADD MORE THINGS THAT LIMIT. Need list and example data
+            // TODO: FIlter is currently not displayed, due to changing structure.
+            for(let i in descriptioncontent){
+                if (i== "Areas"){
+                    addAreas(descriptioncontent[i],"area");
+                }else if(i == "Geometry"){
+                    addAreas(descriptioncontent[i],"geometry");
+                }else if(i == "Tags"){
+                    //addTags(descriptioncontent.Tags); TODO FIX THIS FILTERS
+                }else if(i == "Taxons"){
+                    addTaxons(descriptioncontent.Taxons); // INTO INGRESS = ADDITIONS      
+                    // IF MORE THAN 3, add to the filterlist
                 }
-           }
-           
+                else{
+                    if(descriptioncontent[i] != ""){
+                        let span = document.createElement('span');
+                        span.id = "Descriptions."+i;   
+                        addDescriptionItems(descriptioncontent[i],span,i);
+                        appendData("Descriptions.other",span)
+                        updateStyle($('tags_other'),"display","inline-block");
+                    }
+                }            
+            }
         }
-        
     }catch(err){
         console.error("failed at descriptions")
     }

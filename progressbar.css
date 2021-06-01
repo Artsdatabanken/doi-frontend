@@ -43,7 +43,7 @@
     text-align: center;
     box-sizing: border-box;
     margin:0px;
-    width:33%;
+    width:calc(33% - 4px);
     font-size:10pt;
     
     vertical-align: top;
