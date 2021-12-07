@@ -1,8 +1,8 @@
-/* 
+/*
 
 If there is DOI-data: Doi presentation
-Fetches data from api, presents by adding it to the html either by appending in blank divs, 
-or replacing the existing text. 
+Fetches data from api, presents by adding it to the html either by appending in blank divs,
+or replacing the existing text.
 
 */
 
@@ -12,8 +12,8 @@ window.addEventListener('load', function() {
     languageSupport();
 })
 
-// Change parameter/navigate between pages 
-window.onhashchange = function() { 
+// Change parameter/navigate between pages
+window.onhashchange = function() {
     console.info("Updated doi-parameter, re-fetch")
     runApiCall();
 }
@@ -24,21 +24,21 @@ function languageSupport(){
     changeLanguage("en");
 }
 
-function changeLanguage(lang){    
+function changeLanguage(lang){
     let id = "lang-" + lang;
     let classselector = "."+ lang;
-    document.getElementById(id).addEventListener('click',function(e){   
+    document.getElementById(id).addEventListener('click',function(e){
         let these = document.querySelectorAll(classselector);
         let those = document.querySelectorAll('.lang-show');
-        those.forEach(x=>x.classList.replace('lang-show','lang-hide'));  
+        those.forEach(x=>x.classList.replace('lang-show','lang-hide'));
         these.forEach(x=>x.classList.remove('lang-hide'));
-        these.forEach(x=>x.classList.add('lang-show'));     
-        
+        these.forEach(x=>x.classList.add('lang-show'));
+
         let them = document.querySelectorAll('.languageselector button');
-        them.forEach(x=>x.className = "lang-not-chosen");  
+        them.forEach(x=>x.className = "lang-not-chosen");
 
         let thisone = document.getElementById(id);
-        thisone.className = "lang-chosen";  
+        thisone.className = "lang-chosen";
     });
 }
 
@@ -48,13 +48,13 @@ function runApiCall(){
     let guid = getGuid();
     if(guid == "" || guid == "#" || guid == "undefined"){
         console.log("NO GUID - show default page");
-        try{           
+        try{
             hideAndShow("none");
             showFrontPage();
         }catch(err){
             console.error("Show frontpage failed")
         }
-       
+
     }else{
         getDoiData();
     }
@@ -62,7 +62,7 @@ function runApiCall(){
 
 
 // Fetch DOI data from api.
-function getDoiData(isRerun){   
+function getDoiData(isRerun){
     // Obtaining the relevant doi to look up.
     // Is its own function as it was called from several places. No longer is tho.
     let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
@@ -70,8 +70,8 @@ function getDoiData(isRerun){
     .then((response) => {
         return response.json()
     })
-    .then((data) => {        
-        handleDoiData(data,isRerun);        
+    .then((data) => {
+        handleDoiData(data,isRerun);
     })
     .catch((err) => {
         hideAndShow("none");
@@ -83,8 +83,8 @@ function getDoiData(isRerun){
 // Start presenting the DOI-page
 function handleDoiData(data,isRerun){
     // Prep the page
-    emptyAppenders();    
-    let attributes = data.data.attributes;      
+    emptyAppenders();
+    let attributes = data.data.attributes;
 
     hideAndShow("show");
     if(!isRerun){
@@ -93,15 +93,15 @@ function handleDoiData(data,isRerun){
         hideProgressbar(attributes);
     }
 
-    let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");   
+    let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");
     // Main Content
 
-    
+
     addTimeDetails(attributes);
     addIngressData(attributes,desc);
     //addGeoLocation(attributes);
     addFiles(attributes,desc); // Download dataset is a part of addFiles, and lives in the sidebar.
-    addDoi(desc);       
+    addDoi(desc);
     addDescriptions(desc);
     addImageSources(desc);
 
@@ -112,42 +112,42 @@ function handleDoiData(data,isRerun){
     addCitation(attributes);
     addArtskartUrl(desc);
     // addStats(attributes);
-    // addTypes(attributes); 
-    
+    // addTypes(attributes);
+
     //console.log("All data loaded")
 }
 
 // During dataset generation this checks for more data and updated progress
-function getTimeUpdate(submitted,created,updated,valid){       
+function getTimeUpdate(submitted,created,updated,valid){
     let timeout = 30000;
     try{
-        setTimeout(function(){ 
+        setTimeout(function(){
             // Obtaining the relevant doi to look up.
             let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDatesByGuid/'+getGuid();
             fetch(url)
             .then((response) => {
                 return response.json()
             })
-            .then((data) => {     
+            .then((data) => {
                 // UPDATE THESE WHEN NEW API
-                let newsubmitted = data.Submitted || false; 
-                let newcreated = data.Created || false; 
-                let newupdated = data.Updated || false; 
-                let newvalid = data.Valid || false; 
+                let newsubmitted = data.Submitted || false;
+                let newcreated = data.Created || false;
+                let newupdated = data.Updated || false;
+                let newvalid = data.Valid || false;
                 let trigger_page_update = false;
 
-                if(newsubmitted && !submitted){  
-                    // Should never trigger, 
-                    // we should always have a submitted                 
+                if(newsubmitted && !submitted){
+                    // Should never trigger,
+                    // we should always have a submitted
                     trigger_page_update = true;
                     //console.log("Rerun change at SUBMITTED")
                 }else if(newcreated && !created){
                     // Received a new created date where we used to have none
                     trigger_page_update = true;
-                    //console.log("Rerun change at CREATED?")                    
-                }else if(newvalid){ // && !valid){      
-                    // Received a new valid date where we used to have none    
-                    // There should be no case where we previously had a valid date     
+                    //console.log("Rerun change at CREATED?")
+                }else if(newvalid){ // && !valid){
+                    // Received a new valid date where we used to have none
+                    // There should be no case where we previously had a valid date
                     trigger_page_update = true;
                     //console.log("Rerun change at VALID?");
                 }else if(created && !newvalid){
@@ -169,8 +169,8 @@ function getTimeUpdate(submitted,created,updated,valid){
                     getDoiData(true);
                 }else{
                     //console.info(">>rerun: check again in timeout")
-                    getTimeUpdate(submitted,created,valid) 
-                }               
+                    getTimeUpdate(submitted,created,valid)
+                }
             })
             .catch((err) => {
                 console.error("failed at fetch valid")
@@ -189,9 +189,9 @@ function hideProgressbar(attributes){
     try{
         let dates = attributes.dates;
         for(let i in dates){
-            if(dates[i].dateType == "Valid"){        
+            if(dates[i].dateType == "Valid"){
                 // PROGRESSBAR HIDE
-                updateStyle(document.getElementById("notyetvalid"),"display","none");                    
+                updateStyle(document.getElementById("notyetvalid"),"display","none");
             }
         }
     }catch(err){
@@ -261,7 +261,7 @@ function addTimeDetails(attributes){
             addData("Progress.Valid","-");
             getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Updated||false,dates.Valid||false);
         }
-        addData("progresstext",text);  
+        addData("progresstext",text);
 
     }catch(err){
         console.error("Failed at times")
@@ -273,7 +273,7 @@ function addIngressData(attributes,desc){
 
         addData("Ingress.count",desc['Count']||0);
         /*
-        addData("Titles.type",attributes.titles[0].title);   
+        addData("Titles.type",attributes.titles[0].title);
         addData("Creators.sourcename",attributes.creators[0].name);
         addData("publisher",attributes.publisher);
         addData("Time.year",attributes.publicationYear);
@@ -288,12 +288,12 @@ function addFiles(attributes,desc){
     // Also contains doi-sources which are duplicated in descriptions.doi
     // They are placed here due to the doi-system tracking the use through this parameter
     // But we instead fetch them from descriptions, as they there contain more data.
-    // A bit unnecessary grouping, but ensures that anything relevant is found, 
+    // A bit unnecessary grouping, but ensures that anything relevant is found,
     // and anything doi is excluded
     try{
         let unwrappedRelatedIdentifiers = unWrap(attributes.relatedIdentifiers,"relatedIdentifierType",false);
-        let relatedurls = unwrappedRelatedIdentifiers["URL"];        
-    
+        let relatedurls = unwrappedRelatedIdentifiers["URL"];
+
         for (let i in relatedurls){
             let item = relatedurls[i];
             if(item.resourceTypeGeneral=="Image"){
@@ -302,11 +302,11 @@ function addFiles(attributes,desc){
                 const closebutton = document.createElement('button');
                 closebutton.innerHTML= "<span class='material-icons'>fullscreen</span>";
                 closebutton.id = "fullscreenbutton"
-                
-                
+
+
                 // Make image BIG
                 $("#img.appender").addEventListener('click',function(e){
-                    let target = $("#img.appender"); 
+                    let target = $("#img.appender");
                     let body = document.getElementsByTagName("BODY")[0];
                     if(target.className == "fullscreen"){
                         target.className = "sectionimage"
@@ -321,22 +321,29 @@ function addFiles(attributes,desc){
                 appendData('img.appender',closebutton);
                 appendData('img.appender',image);
             }else if(item.resourceTypeGeneral=="Dataset"){
-                let zipurl = item.relatedIdentifier;
-                let zip = document.createElement('div');
-                let format = attributes.formats.toString().replace("application/","");//TODO
-                //console.log(format)
-                let innerformat = desc['ExportType'];
-                //console.log(desc['ExportType'])
-                
-                let buttontext = "<span>Last ned datasett <br/>"+convertBytes(attributes.sizes)+" ("+format+"/"+innerformat+")</span>";
-                let material = "<span class='material-icons'>download</span>";
-                zip.innerHTML = "<a href="+zipurl+" class='biglink downloadlink'>"+material+buttontext+"</a>";
-                appendData('zip.appender',zip);
+                const languages = ['nb', 'en'];
+                for (let key in languages) {
+                    if (!languages.hasOwnProperty(key)) {
+                        continue;
+                    }
+                    const lang = languages[key];
+                    let zipurl = item.relatedIdentifier;
+                    let zip = document.createElement('div');
+                    let format = attributes.formats.toString().replace("application/","");//TODO
+                    //console.log(format)
+                    let innerformat = desc['ExportType'];
+                    //console.log(desc['ExportType'])
+                    let label = lang == 'nb' ? "Last ned datasett" : "Download dataset";
+                    let buttontext = "<span>" + label + " <br/>"+convertBytes(attributes.sizes)+" ("+format+"/"+innerformat+")</span>";
+                    let material = "<span class='material-icons'>download</span>";
+                    zip.innerHTML = "<a href="+zipurl+" class='biglink downloadlink'>"+material+buttontext+"</a>";
+                    appendData('zip.appender.'+lang,zip);
+                }
             }
         }
     }catch(err){
         console.error("Failed in addFiles")
-    }    
+    }
 }
 
 
@@ -344,35 +351,35 @@ function addDoi(desc){
     // Contains all source datasets. Also those without a doi, but of doi-type data.
     // If a doi is missing, it will instead contain an id.
     try{
-        
-        let doi = desc['DOI'] || [];  
+
+        let doi = desc['DOI'] || [];
         // Text formatting:
-        let length = doi.length;        
+        let length = doi.length;
         if(doi.length!=1){
             let these = document.getElementsByClassName('contributor-plural');
-        for (let element of these){            
+        for (let element of these){
                 element.style.display="inline";
          }
-        }        
-        addData("Nr.Sources",length);  
+        }
+        addData("Nr.Sources",length);
         for (let i in doi){
             let items = doi[i].split("|");
             let div = document.createElement('div');
             div.className = "listitem";
-            
+
             let link = items[0];
             let linkline = ""; // There is an id here, but what type? what it do?
-            
+
             if(link.includes("https")){
                 let doitext = link.replace("https://doi.org/","");
                 getCitation(doitext);
                 div.id = doitext;
-                linkline = "<a href="+link+" class='citationlink'>"+doitext+"</a>";                
-            }           
+                linkline = "<a href="+link+" class='citationlink'>"+doitext+"</a>";
+            }
 
             let numberline = "<span> ("+ items[1]+" element)</span>";
-            
-            let nameline = "<span>"+ items[2]+"</span>";            
+
+            let nameline = "<span>"+ items[2]+"</span>";
             div.innerHTML = nameline+numberline+linkline;
             appendData('doi.appender',div);
         }
@@ -388,7 +395,7 @@ function getCitation(doi){
     .then((response) => {
         return response.text();
     })
-    .then((data) => {    
+    .then((data) => {
         let object = $("#"+doi);
         object.classList.add("hascitation");
         let newelement = document.createElement('span');
@@ -397,7 +404,7 @@ function getCitation(doi){
         let citation = splitted[0]+"<a href='"+link+"'>"+link+"</a>";
         newelement.className = "citation";
         newelement.innerHTML = "<br/>"+citation;
-        
+
         //object.style.background = "lightgrey";
         object.appendChild(newelement);
         return data;
@@ -410,11 +417,20 @@ function getCitation(doi){
 
 function addArtskartUrl(desc){
     try{
-        let artskartelement = desc['ArtskartUrl'][0];
-        let a = document.createElement('div');
-        let launch = "<span class='material-icons'>launch</span>";
-        a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>Se oppdatert utvalg <br/>i Artskart </span></a>";       
-        appendData('a.appender',a);
+        const languages = ['nb', 'en'];
+        for (let key in languages) {
+            if (!languages.hasOwnProperty(key)) {
+                continue;
+            }
+            const lang = languages[key];
+            let artskartelement = desc['ArtskartUrl'][0];
+            let a = document.createElement('div');
+            let launch = "<span class='material-icons'>launch</span>";
+            let label = lang === 'nb' ? "Se oppdatert utvalg" : "Se updated selection";
+            let labelIn = lang === 'nb' ? "i" : "in";
+            a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>"+label+" <br/>"+labelIn+" Artskart </span></a>";
+            appendData('a.appender.'+lang,a);
+        }
     }catch(err){
         console.error("Failed at artskarturl;")
     }
@@ -434,27 +450,27 @@ function addImageSources(desc){
         let url = source[2];
 
         // Re-wrap to better suit the display
-        let exists = sourceowners[owner] || null;  
+        let exists = sourceowners[owner] || null;
         if(exists){
-            sourceowners[owner]["name"].push(name);                    
+            sourceowners[owner]["name"].push(name);
         }else{
             let dict = {};
             dict["url"] = url;
             dict["name"] = [name];
             sourceowners[owner] = dict;
-        } 
-    }   
+        }
+    }
     for (let owner in sourceowners){
-        let source = sourceowners[owner];        
+        let source = sourceowners[owner];
         let url = source.url || "";
         let names = source.name || [];
-        
+
         let namestring = "";
         for(let i in names){
             let comma = "";
             if(i<=names.length-1&&names.length>1){
                 comma = ", "
-            }          
+            }
             namestring += "<span>"+names[i]+comma+"</span>";
         }
         finishedstring += "<span class='img-source'><a href='"+url+"'>"+owner+"</a>"+namestring+"</span>"
@@ -463,13 +479,13 @@ function addImageSources(desc){
     }catch(err){
         console.error("failed at img source")
     }
-    
+
 }
 
 function addDescriptions(desc){
     try{
         let count = desc['Count'] || 0;
-        addData("Descriptions.count",count);     
+        addData("Descriptions.count",count);
         let descriptioncontent = desc['Description'] || null;
         if(descriptioncontent){
             descriptioncontent = JSON.parse(descriptioncontent);
@@ -484,18 +500,18 @@ function addDescriptions(desc){
                 }else if(i == "Tags"){
                     //addTags(descriptioncontent.Tags); TODO FIX THIS FILTERS
                 }else if(i == "Taxons"){
-                    addTaxons(descriptioncontent.Taxons); // INTO INGRESS = ADDITIONS      
+                    addTaxons(descriptioncontent.Taxons); // INTO INGRESS = ADDITIONS
                     // IF MORE THAN 3, add to the filterlist
                 }
                 else{
                     if(descriptioncontent[i] != ""){
                         let span = document.createElement('span');
-                        span.id = "Descriptions."+i;   
+                        span.id = "Descriptions."+i;
                         addDescriptionItems(descriptioncontent[i],span,i);
                         appendData("Descriptions.other",span)
                         updateStyle($('tags_other'),"display","inline-block");
                     }
-                }            
+                }
             }
         }
     }catch(err){
@@ -535,17 +551,17 @@ function addTags(tags){
             casenumber = 5;
         }
 
-        
+
         //console.log(absent, notrecovered, casenumber)
-        
+
         let absence_items = document.getElementsByClassName("tags_absence");
-        for (let element of absence_items){            
+        for (let element of absence_items){
             casenumber = "tags_case_" + casenumber;
-            if(element.className.includes(casenumber)){                
+            if(element.className.includes(casenumber)){
                 element.style.display="inline";
-            }            
+            }
          }
-  
+
 
 /*
         console.log(tags[5].name)
@@ -563,16 +579,16 @@ function addAreas(what,where){
         try{
             if(what){
                 if(Object.keys(what).length>0){
-                    updateStyle($('tags_'+where),"display","inline-block");       
+                    updateStyle($('tags_'+where),"display","inline-block");
                     addDescriptionItems(what,"Descriptions."+where);
                 } else{
                     console.log("nope")
-                }         
+                }
             }
-            
+
         }catch(err){
             console.error("failed at add"+where)
-        }    
+        }
 }
 
 function addDescriptionItems(what,where,title){
@@ -581,24 +597,24 @@ function addDescriptionItems(what,where,title){
         if( typeof what === 'string' ) {
             what = [ what ];
         }
-        let whatarray = Object.keys(what);  
-        let endresult = "";    
-        
+        let whatarray = Object.keys(what);
+        let endresult = "";
+
         if(title){
-            let link = " http://rs.tdwg.org/dwc/terms/"; 
+            let link = " http://rs.tdwg.org/dwc/terms/";
             let formattedtitle = title.replace(/([A-Z])/g, ' $1').trim()
             link += title.charAt(0).toLowerCase() + title.slice(1);
             let lastletter = link.substring(link.length - 1,link.length);
             if(lastletter == "s"){
                 link = link.substring(0, link.length - 1);
             }
-            
+
             endresult += "<a href="+link+" class='contenttitle'>"+formattedtitle+":</a> ";
         }
 
-        for(let i in whatarray){   
-            let key = whatarray[i];       
-            let item = what[key]; 
+        for(let i in whatarray){
+            let key = whatarray[i];
+            let item = what[key];
             // Here we may need specific things for different fields
             let content = item.name || item;
             if(item.code){
@@ -621,7 +637,7 @@ function addDescriptionItems(what,where,title){
                 writestring += lang_nn_nb + lang_eng;
             }
             endresult += writestring;
-        
+
         }
 
         endresult += ". ";
@@ -629,7 +645,7 @@ function addDescriptionItems(what,where,title){
                 endresult += "</br>";
             }
         addData(where,endresult)
-    
+
     }catch(err){
         console.error("failed at addDescriptionItems")
     }
@@ -643,11 +659,11 @@ function addTaxons(taxons){
         let lang_eng = "<span class='en'> of </span>";
         let ingresstaxons = lang_nn_nb + lang_eng;
         let taxonarray = Object.keys(taxons);
-        if(taxonarray.length < 3){            
-            for(let i in taxonarray){   
-                let key = taxonarray[i];       
-                let taxon = taxons[key]; 
-                let name = taxon.name +" " || "";
+        if(taxonarray.length < 3){
+            for(let i in taxonarray){
+                let key = taxonarray[i];
+                let taxon = taxons[key];
+                let name = "<span class='nb nn lang-show'>"+taxon.name +" </span>" || "";
                 let taxonformat = name+"<i>"+taxon.scientificname+"</i> "+taxon.author;
                 if(i == 0 && taxonarray.length > 2){
                     taxonformat += ", ";
@@ -663,8 +679,8 @@ function addTaxons(taxons){
             addData("ingress.taxons",ingresstaxons)
         }
         }
-       
-        
+
+
     }catch(err){
         console.error("failed at taxons")
     }
@@ -674,10 +690,10 @@ function addTaxons(taxons){
 
 function addGeneralData(attributes){
     try{
-        // DOI URL 
+        // DOI URL
         // URL is always the non-test version as it's from api.
         let crumbdivider = "<span class='breadcrumbdivider'>> </span>"
-        let doilink = crumbdivider+"<li class='in-breadcrumb'><a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a></li>";      
+        let doilink = crumbdivider+"<li class='in-breadcrumb'><a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a></li>";
         updateStyle($('Attributes.doi'),"display","inline-block");
         addData('Attributes.doi',doilink);
         let headerdoi = "DOI: "+ attributes.doi;
@@ -699,18 +715,18 @@ function addFileInfo(attributes,desc){
         addData("Size",convertBytes(attributes.sizes));
         addData("Attributes.formats",attributes.formats); // TODO: OMPLASSER
         let apiurl = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
-        let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";        
+        let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";
         addData('Api.link',apilink);
-        addData("Titles.lang",attributes.titles[0].lang);        
+        addData("Titles.lang",attributes.titles[0].lang);
         addData("Attributes.state",attributes.state);
-        //addData("Creators.sourcetype",attributes.creators[0].nameType);  
+        //addData("Creators.sourcetype",attributes.creators[0].nameType);
         //addData("Attributes.version",attributes.version);
         //addData("Attributes.metadataVersion",attributes.metadataVersion);
         //addData("Attributes.schemaVersion",attributes.schemaVersion);
     }catch(err){
         console.error("File info failed")
     }
-    
+
 }
 
 function addTypes(attributes){
@@ -719,7 +735,7 @@ function addTypes(attributes){
         addData("Attributes.types.schemaOrg",attributes.types.schemaOrg);
         addData("Attributes.types.bibtex",attributes.types.bibtex);
         addData("Attributes.types.citeproc",attributes.types.citeproc);
-        addData("Attributes.types.ris",attributes.types.ris); 
+        addData("Attributes.types.ris",attributes.types.ris);
     }catch(err){
         console.error("Types failed")
     }
@@ -733,14 +749,14 @@ function addCitation(attributes){
         for(let i in dates){
             if(dates[i].dateType == "Created"){
                 accesseddate = dates[i].date.split("T")[0];
-            }            
+            }
         }
 
         attributes.dates
         let year = "("+attributes.publicationYear+")";
-        
+
         let citation = attributes.publisher+" "+year+". "
-        +attributes.creators[0].name+". " 
+        +attributes.creators[0].name+". "
         + attributes.types.resourceTypeGeneral
         +" "+getDoiUrl(attributes)
         +" accessed via artsdatabanken.no"
@@ -750,7 +766,7 @@ function addCitation(attributes){
     }catch(err){
         console.error("citation failed")
     }
-   
+
 }
 
 function addStats(attributes){
@@ -766,7 +782,7 @@ function addStats(attributes){
     }catch(err){
         console.error("Satistics failed")
     }
-    
+
 }
 
 function addGeoLocation(attributes){
@@ -785,7 +801,7 @@ function addGeoLocation(attributes){
 // Help Functions
 
 function $(id){
-    if(id[0]=="."){        
+    if(id[0]=="."){
         return document.getElementsByClassName(id.substring(1));
     }else if(id[0]=="#"){
         return document.getElementById(id.substring(1));
@@ -793,12 +809,12 @@ function $(id){
     return document.getElementById(id);
 }
 
-function getGuid(){    
+function getGuid(){
     let guid = window.location.hash;
     return guid.replace("#","");
 }
 
-function detectTest(){    
+function detectTest(){
     // Detect if we're running on test or not
     let url = window.location.href;
     if(url.includes("test") || url.includes("index")){
@@ -824,7 +840,7 @@ function convertBytes(x){
     while(n >= 1024 && ++l){
         n = n/1024;
     }
-    //include a decimal point and a tenths-place digit if presenting 
+    //include a decimal point and a tenths-place digit if presenting
     //less than ten of KB or greater units
     return(n.toFixed(n < 10 && l > 0 ? 1 : 0) + ' ' + units[l]);
 }
@@ -838,8 +854,8 @@ function unWrap(wrapped,criteria,content){
         }
         let unwrapped = {};
         for(let i in wrapped){
-            let item = wrapped[i];        
-            let key = item[criteria] || null;   
+            let item = wrapped[i];
+            let key = item[criteria] || null;
             if (content == "TechnicalInfo"){
                 item = item.split("#");
                 key = item[0];
@@ -847,20 +863,20 @@ function unWrap(wrapped,criteria,content){
             }
             else if(content !== false){
                 item = item[content];
-            } 
+            }
 
-            let exists = unwrapped[key] || null;  
+            let exists = unwrapped[key] || null;
             if(exists){
-                unwrapped[key].push(item);                    
+                unwrapped[key].push(item);
             }else{
                 unwrapped[key] = [item];
-            }                
-        }    
-        return unwrapped;   
+            }
+        }
+        return unwrapped;
     }catch(err){
         console.error("unwrap failed")
     }
-    
+
 }
 
 function unWrapDescriptions(wrapped,criteria,content){
@@ -869,11 +885,11 @@ function unWrapDescriptions(wrapped,criteria,content){
 }
 
 
-function addData(id,content){    
+function addData(id,content){
     if(content!= undefined && id!= undefined){
         try{
             let object = document.getElementById(id) || id;
-            object.innerHTML = content;     
+            object.innerHTML = content;
         }
         catch(err){
             console.error("failed for id: ",id,"and content:" ,content)
@@ -885,22 +901,22 @@ function addData(id,content){
         catch(err){
             console.error("failed for id: ",id,"and content:" ,content)
         }
-    }            
+    }
 }
 
 function appendData(id,content){
-    
+
     if(content!= undefined && id!= undefined ){
         try{
             document.getElementById(id).appendChild(content);
         } catch(err){
             console.error("failed for id: ",id,"and content:" ,content);
         }
-        
+
     }else{
         // To avoid entire page breaking down if one error occurs
         console.error("no such content ", id,content);
-    }            
+    }
 }
 
 function hideAndShowActions(param,otherparam){
@@ -922,17 +938,18 @@ function hideAndShowActions(param,otherparam){
         updateStyle(document.getElementById("timedetails"),"display",param);
     }catch(err){
         console.error("failed at hideandshowactions")
-    }   
+    }
 }
 
 function emptyAppenders(){
     try{
         // Empty appenders:
         document.getElementById("img.appender").innerHTML = "";
-        document.getElementById("zip.appender").innerHTML = "";
+        document.getElementById("zip.appender.nb").innerHTML = "";
+        document.getElementById("zip.appender.en").innerHTML = "";
         document.getElementById("a.appender").innerHTML = "";
         document.getElementById("doi.appender").innerHTML = "";
-        document.getElementById("Descriptions.other").innerHTML = "";        
+        document.getElementById("Descriptions.other").innerHTML = "";
         //document.getElementById("Api.link").innerHTML = "";
     }catch(err){
         console.error("failed at emptying appenders")
