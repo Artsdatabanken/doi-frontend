@@ -6,10 +6,10 @@
     <title>DOI</title>
     <link href="layout.css" rel="stylesheet" />
     <link href="style.css" rel="stylesheet" />
+    <link href="image.css" rel="stylesheet" />
     <link href="footer.css" rel="stylesheet" />
     <link href="header.css" rel="stylesheet" />
     <link href="progressbar.css" rel="stylesheet" />
-    <link href="image.css" rel="stylesheet" />
     <script src="https://design.artsdatabanken.no/script/footer.js"></script>
     <script src="doi-lookup.js"></script>
     <!-- <script src="language.js"></script>  -->
@@ -47,45 +47,44 @@
 </header>
 <div class="main">
 
-    <div class="main-content page-wrapper">
-
-        <div class="breadcrumbs">
-            <ul>
-                <li class="lead in-breadcrumb">
-                    <a href="">
+    <div class="top-section">
+        <div class="page-wrapper">
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="first">
+                        <a href="">
+                            <span class="nb lang-show">Datasett fra Artskart</span>
+                            <span class="nn">Datasett frå Artskart</span>
+                            <span class="en">Dataset from Artskart</span>
+                        </a>
+                    </li>
+                    <span id="Attributes.doi" >
+                    </span>
+                </ol>
+            </nav>
+            <div class="top-box">
+                <div class="page-header">
+                    <h1>
                         <span class="nb lang-show">Datasett fra Artskart</span>
                         <span class="nn">Datasett frå Artskart</span>
                         <span class="en">Dataset from Artskart</span>
-                    </a>
-                </li>
-                <span id="Attributes.doi" >
-                </span>
-            </ul>
-        </div>
-
-        
-        <div class="sidebarmenu"></div>
-
-        <div class="content-placer">
-            <div class="page-header">
-                <h1>
-                    <span class="nb lang-show">Datasett fra Artskart</span>
-                    <span class="nn">Datasett frå Artskart</span>
-                    <span class="en">Dataset from Artskart</span>
-                </h1>
-                <h2 id="header-doi"></h2>
-                <span id="timedetails">
-                    <span class="nb nn lang-show">Opprettet </span>
-                    <span class="en">Created </span>
-                    <span class="timestamp" id="Time.Created">-</span>
-                    <!--
-                    <span class="nb nn lang-show">Registrert </span>
-                    <span class="en">Registred </span>
-                    <span class="timestamp" id="Time.Valid">-</span>
-                        -->
-                </span>
+                    </h1>
+                    <h2 id="header-doi"></h2>
+                    <span id="timedetails">
+                        <span class="nb nn lang-show">Opprettet </span>
+                        <span class="en">Created </span>
+                        <span class="timestamp" id="Time.Created">-</span>
+                        <!--
+                        <span class="nb nn lang-show">Registrert </span>
+                        <span class="en">Registred </span>
+                        <span class="timestamp" id="Time.Valid">-</span>
+                            -->
+                    </span>
+                </div>
             </div>
-
+        </div>
+    </div>
+    <div class="main-content page-wrapper">
 
             <div class="mid">
                 <div id="nodata">
@@ -96,7 +95,6 @@
                     <div id="find.doi"></div>
                 </div>
                 <div class="ingress">
-
                     <p>
                         <span class="nb lang-show">Datasettet inneholder </span>
                         <span class="nn">Datasettet inneheld </span>
@@ -105,13 +103,10 @@
                         <span class="nb lang-show">observasjoner</span>
                         <span class="nn">observasjonar</span>
                         <span class="en">observations</span>
-
                         <span id="ingress.taxons"></span>
-
                         <span class="nb lang-show"> og er et øyeblikksbilde fra da datasettet ble opprettet.</span>
                         <span class="nn"> og er eit augeblinksbilete frå då datasettet vart oppretta.</span>
                         <span class="en"> and is a snapshot of when the dataset was created. </span>
-
                     </p>
                 </div>
 

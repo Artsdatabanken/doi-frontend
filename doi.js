@@ -679,21 +679,17 @@ function addTaxons(taxons){
             addData("ingress.taxons",ingresstaxons)
         }
         }
-
-
     }catch(err){
         console.error("failed at taxons")
     }
 }
 
 
-
 function addGeneralData(attributes){
     try{
         // DOI URL
         // URL is always the non-test version as it's from api.
-        let crumbdivider = "<span class='breadcrumbdivider'>> </span>"
-        let doilink = crumbdivider+"<li class='in-breadcrumb'><a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a></li>";
+        let doilink = "<li class='in-breadcrumb'><a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a></li>";
         updateStyle($('Attributes.doi'),"display","inline-block");
         addData('Attributes.doi',doilink);
         let headerdoi = "DOI: "+ attributes.doi;

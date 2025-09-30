@@ -10,7 +10,8 @@
     --font-default-family:"Chivo", sans-serif;
     --text-primary: #262f31;
     --default-size:8px;
-    --max-width:1400px;
+    --max-width:1216px; /* check this one, looks weird */
+    --spacing-xsm: calc(.25rem * 2)
 }
 
 *,::after, ::before {
@@ -44,4 +45,42 @@ a {
     margin-left: auto;
     width:100%;
     max-width:var(--max-width);
+  }
+
+
+  .breadcrumb{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: var(--spacing-xsm) 0;
+    list-style: none;
+    margin-top:0;
+  }
+
+  .breadcrumb li:not(.first)::before{
+    content: '';
+    display: inline-block;
+    border: 2px solid #e55440;
+    border-width: 2px 2px 0 0;
+    height: 7px;
+    width: 7px;
+    transform: rotate(43deg);
+    margin: 4px;
+  }
+
+
+  .top-section{
+    background:#e4f6f2;
+    width:100vw;
+    padding: 0 0.75rem;
+    padding-bottom:0.75rem;
+  }
+
+  .top-box{
+    padding: 80px;
+
+    & h1{
+        font-weight: bold;
+    }
+
   }

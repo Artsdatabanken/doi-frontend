@@ -42,5 +42,13 @@
 
 
 .doilink{
-display:block
+    display:block
+}
+
+.img-container{
+    max-width: 400px;
+
+    & img{
+        max-width: 100%;
+    }
 }
