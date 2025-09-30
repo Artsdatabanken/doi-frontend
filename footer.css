@@ -1,0 +1,14 @@
+
+/* 
+Requires variables from layout stylesheet
+*/
+.footer{
+  background: #1C3840;
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  border-top: 1px solid #8C9799;
+  margin-top: 16px;
+
+}

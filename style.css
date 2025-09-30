@@ -40,7 +40,7 @@
 
 /* NEW STUFF */
 
-a {
-    color: var(--text-accent);
-    text-decoration: none;
-  }
+
+.doilink{
+display:block
+}

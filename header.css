@@ -1,3 +1,8 @@
+
+/* 
+Requires variables from layout stylesheet
+*/
+
 .header {
     background: var(--background-default);
     display: flex;
@@ -14,7 +19,7 @@
         flex: 1;
         font-size: 21px;
         line-height: 120%;
-        padding:var(--default-size);
+        
       }
 
       & nav {
@@ -32,4 +37,14 @@
     display: inline-block;
     display: flex;
     align-items: center;
+
+    & svg{
+        margin:0 var(--default-size);
+    }
+  }
+
+  .header-elements{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
