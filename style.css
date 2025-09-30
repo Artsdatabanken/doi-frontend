@@ -1,3 +1,4 @@
+
 /* Language handling */
 
 .nb,
@@ -16,190 +17,10 @@
 
 /* Language Buttons */
 
-.languageselector{
-    float: right;
-    padding-right: 20px;
-}
-
-.languageselector button{
-   border:none;
-   background:none;
-   font-size: 12pt;
-   color:#4c4a48;
-   font-family: 'Roboto Condensed', sans-serif;
-   padding:0px;
-   margin:5px;
-}
-
 .languageselector .lang-chosen{
-    color:black;
-    border-bottom:2px solid black;
+    background:pink
 }
 
-
-.languageselector button:hover{
-    cursor:pointer;   
-    border-bottom:2px solid #7e7b79;
-}
-
-@media only screen and (max-width: 650px){
-
-    .languageselector{
-        float:none;
-        width:100%;
-        margin-left:10px;
-    }
-}
-
-
-
-/* PAGE SECTIONS */
-
-#nodata{
-    font-size: 22.5px;
-    font-weight: 300;
-    line-height: 1.4;
-    color: #4c4a48;
-    padding-right: 20px;
-}
-
-#nodata span{
-    color:black;
-}
-
-/* Byline */
-
-#timedetails span {
-    text-align: left;
-    font-size: 10pt;
-}
-
-.timestamp{    
-    padding-right: 5px;
-    margin-right: 5px;
-    border-right: 1px solid grey;
-}
-
-.timestamp:last-child{
-    border:none;
-}
-
-/* LIST Elements on page */
-.listitem{
-    padding: 15px;
-    padding-left:0;
-    border-bottom: 1px solid #e2e3e4;
-    margin-bottom: 10px;
-    margin-right: 20px;
-}
-
-.citationlink,
-.listitem .citation{
-    font-size: 10pt;
-}
-
-.citationlink,
-.listitem a{
-    color:inherit;
-}
-
-.hascitation .citationlink{
-    display:none;
-}
-
-@media only screen and (max-width: 740px) {
-    .listitem{
-        margin-right: 0px;
-    }
-}
-
-.listitem:first-child{
-    margin-top: 10px;
-}
-
-.listitem:last-child{
-    border:none;
-}
-
-.listitem span{
-    color:grey;
-}
-
-.listitem span:first-child{
-    font-size: 14pt;
-    color:black;
-}
-
-
-/* FLASHY LINKS */
-
-.biglink{
-    display: inline-block;
-    background: #4c4a48;
-    color: white;
-    vertical-align: top;
-    width: 100%;
-    margin-top: 20px;
-    border: 1px solid black;
-}
-
-@media only screen and (max-width: 740px) {
-    .biglink{
-        width: 100%;
-        box-sizing: border-box;    
-        text-align: center;  
-    }
-}
-
-.artskartlink{
-    color: black;
-    background: #d8d8d8;
-    border: 1px solid #918f8f;
-}
-
-.biglink:hover{
-    opacity:0.7;
-}
-
-.biglink span{
-    padding: 10px;
-    vertical-align: top;
-    display:inline-block;
-}
-
-.biglink span:first-child {
-    border-bottom: 2px solid transparent;
-    font-size: 25pt;
-    padding: 12px 5px 12px 10px;
-    vertical-align: middle;
-}
-
-.doilink{
-    display: block;
-    border-bottom: 1px solid #e3e0e0;
-    padding: 4px;
-    text-decoration: none;
-    margin-bottom: 10px;
-    padding-left: 0px;
-}
-
-.doilink span{
-    display:block;
-    font-size:10pt;
-}
-
-/* Grey box with citation content */
-
-#citation{
-    font-size: 10pt;
-    display:block;
-}
-
-.licence img{
-    padding-top:15px;
-    opacity:0.7;
-    max-width:50px;
-}
 
 /* Hide before content load */
 
@@ -217,4 +38,9 @@
     border:0;
 }
 
+/* NEW STUFF */
 
+a {
+    color: var(--text-accent);
+    text-decoration: none;
+  }

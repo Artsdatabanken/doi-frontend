@@ -1,0 +1,35 @@
+:root {
+    --background-default: #FFFCF7;
+    --border:#F2DFC5;
+    --text-accent: #005A71;
+    --font-default-family:"Chivo", sans-serif;
+    --text-primary: #262f31;
+    --default-size:8px;
+    --max-width:1400px;
+}
+
+*,::after, ::before {
+    -webkit-box-sizing: inherit;
+    box-sizing: border-box;
+  }
+
+body {
+    background: var(--background-default);
+    font-family: var(--font-default-family);
+    color: var(--text-primary);
+    margin:0;
+    padding:0;
+}
+
+a {
+    color: var(--text-accent);
+    text-decoration: none;
+}
+
+.page-wrapper {
+    padding: 0 0.75rem;
+    margin-right: auto;
+    margin-left: auto;
+    width:100%;
+    max-width:var(--max-width);
+  }

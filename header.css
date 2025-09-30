@@ -1,0 +1,35 @@
+.header {
+    background: var(--background-default);
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);;
+    height: 80px;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-primary);
+
+    & .header-title {
+        text-decoration: none;
+        font-weight: bold;
+        flex: 1;
+        font-size: 21px;
+        line-height: 120%;
+        padding:var(--default-size);
+      }
+
+      & nav {
+        display: flex;
+        align-items: center;
+      }
+
+      & a{
+        color:var(--text-primary);
+      }    
+  }
+
+  .logo-container {
+    height: 100%;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+  }
