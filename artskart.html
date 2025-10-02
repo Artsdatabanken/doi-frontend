@@ -13,6 +13,7 @@
     <script src="https://design.artsdatabanken.no/script/footer.js"></script>
     <script src="doi-lookup.js"></script>
     <script src="language.js"></script>
+    <script src="header.js"></script>
     <!-- <script src="language.js"></script>  -->
     <script src="doi.js"></script>
     
@@ -20,69 +21,47 @@
       rel="stylesheet">
 </head>
 <body>
-<header class="header">
-    <div class="page-wrapper header-elements">
-        <nav class="header-bar">
-            <a href="https://artsdatabanken.no" class="logo-container">
-                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                    <path d="M10.2964 20.3063C4.77713 20.3063 0.285685 15.815 0.285685 10.296C0.285685 4.77699 4.77713 0.285709 10.2964 0.285709C15.8156 0.285709 20.307 4.77699 20.307 10.296H17.7811C17.7811 6.17054 14.4249 2.81442 10.2993 2.81442C6.17364 2.81442 2.81739 6.17054 2.81739 10.296C2.81739 14.4215 6.17364 17.7805 10.2993 17.7805V20.3063H10.2964Z" fill="#262F31" />
-                    <path d="M20.307 20.3071H13.4377V17.8045H17.8043V13.438H20.307V20.3071Z" fill="#E55440" />
-                    <path d="M13.1183 11.8697C13.9857 11.8697 14.689 11.1665 14.689 10.2991C14.689 9.43162 13.9857 8.72842 13.1183 8.72842C12.2508 8.72842 11.5476 9.43162 11.5476 10.2991C11.5476 11.1665 12.2508 11.8697 13.1183 11.8697Z" fill="#262F31" />
-                </svg>
-                <svg width="14" height="80" viewBox="0 0 14 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M1.97561 0.00069053L13.6911 40.0003L1.97561 80H0.00069053L11.7162 40.0003L0 0L1.97561 0.00069053Z"
-                        fill="#F2DFC5" />
-                </svg>
-            </a>
-            <a class="header-title" href="/">
-                <span>DOI</span>
-            </a>
+<header class="header" id="header"></header>
+<div class="main">   
+    <div class="page-wrapper">
+        <nav>
+            <ol class="breadcrumb">
+                <li class="first">
+                    <a href="index.html">
+                        <span lang="nb">Artsdatabanken DOI</span>
+                        <span lang="nn">Artsdatabanken DOI</span>
+                        <span lang="en">Artsdatabanken DOI</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <span lang="nb">Datasett fra Artskart</span>
+                        <span lang="nn">Datasett frå Artskart</span>
+                        <span lang="en">Dataset from Artskart</span>
+                    </a>
+                </li>
+                <!-- ADD ARTSKART HERE IF NOT-->
+                <span id="Attributes.doi" >
+                </span>
+            </ol>
         </nav>
-        <div class="languageselector">
-            <button onclick="changeLanguage('nb')">BOKMÅL</button>
-            <button onclick="changeLanguage('nn')">NYNORSK</button>
-            <button onclick="changeLanguage('en')">ENGLISH</button>
-        </div>
+                        
+        <h1>DOI fra Artskart</h1>           
+        
+        <h2 id="header-doi"></h2>
+        <span id="timedetails">
+            <span lang="nn">Opprettet </span>
+            <span lang="nb">Opprettet </span>
+            <span lang="en">Created </span>
+            <span class="timestamp" id="Time.Created">-</span>
+            <!--
+            <span lang="nb nn">Registrert </span>
+            <span lang="en">Registred </span>
+            <span class="timestamp" id="Time.Valid">-</span>
+                -->
+        </span>          
     </div>
-</header>
-<div class="main">
-    <div class="top-section">
-        <div class="page-wrapper">
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="first">
-                        <a href="">
-                            <span lang="nb">Datasett fra Artskart</span>
-                            <span lang="nn">Datasett frå Artskart</span>
-                            <span lang="en">Dataset from Artskart</span>
-                        </a>
-                    </li>
-                    <!-- ADD ARTSKART HERE IF NOT-->
-                    <span id="Attributes.doi" >
-                    </span>
-                </ol>
-            </nav>
-            
-                
-            <h1>DOI fra Artskart</h1>           
-           
-            <h2 id="header-doi"></h2>
-            <span id="timedetails">
-                <span lang="nn">Opprettet </span>
-                <span lang="nb">Opprettet </span>
-                <span lang="en">Created </span>
-                <span class="timestamp" id="Time.Created">-</span>
-                <!--
-                <span lang="nb nn">Registrert </span>
-                <span lang="en">Registred </span>
-                <span class="timestamp" id="Time.Valid">-</span>
-                    -->
-            </span>
-                
-            
-        </div>
-    </div>
+    
     <div class="main-content page-wrapper">
         <div class="mid">
             <div id="nodata">
@@ -148,13 +127,11 @@
                 </h2>
 
                 <p>
-                    <span id="zip.appender.nb" lang="nn"></span>
+                    <span id="zip.appender.nb" lang="nb"></span>
                     <span id="zip.appender.nb" lang="nn"></span>
                     <span id="zip.appender.en" lang="en"></span>
                 </p>
             </div>
-            <hr class="invis" />
-            
             <div class="section inlinesection">
 
                 <div class="img-container">

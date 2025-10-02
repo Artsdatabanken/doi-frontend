@@ -29,7 +29,14 @@ Requires variables from layout stylesheet
 
       & a{
         color:var(--text-primary);
-      }    
+      }  
+      
+      &  .header-elements{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
   }
 
   .logo-container {
@@ -43,8 +50,20 @@ Requires variables from layout stylesheet
     }
   }
 
-  .header-elements{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  #lang-container{
+    position: absolute;
+    right: 0;
+    top: 80px;
+    width:max-content;
+    z-index: 100;
+    
+
+
+    & button{
+      display: block;
+      width:100%;
+
+    }
   }
+
+

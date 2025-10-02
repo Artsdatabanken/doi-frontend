@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html >
+<html lang="nb">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -10,68 +10,71 @@
     <link href="footer.css" rel="stylesheet" />
     <link href="header.css" rel="stylesheet" />
     <link href="progressbar.css" rel="stylesheet" />
-    <script src="https://design.artsdatabanken.no/script/footer.js"></script>   
+    <script src="https://design.artsdatabanken.no/script/footer.js"></script>
+    <script src="doi-lookup.js"></script>
+    <script src="language.js"></script>
+    <script src="header.js"></script>
+    <!-- <script src="language.js"></script>  -->
+    <script src="doi.js"></script>
+    
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 </head>
 <body>
-<header class="header">
-    <div class="page-wrapper header-elements">
-        <nav class="header-bar">
-            <a href="https://artsdatabanken.no" class="logo-container">
-                <svg width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
-                    <path d="M10.2964 20.3063C4.77713 20.3063 0.285685 15.815 0.285685 10.296C0.285685 4.77699 4.77713 0.285709 10.2964 0.285709C15.8156 0.285709 20.307 4.77699 20.307 10.296H17.7811C17.7811 6.17054 14.4249 2.81442 10.2993 2.81442C6.17364 2.81442 2.81739 6.17054 2.81739 10.296C2.81739 14.4215 6.17364 17.7805 10.2993 17.7805V20.3063H10.2964Z" fill="#262F31" />
-                    <path d="M20.307 20.3071H13.4377V17.8045H17.8043V13.438H20.307V20.3071Z" fill="#E55440" />
-                    <path d="M13.1183 11.8697C13.9857 11.8697 14.689 11.1665 14.689 10.2991C14.689 9.43162 13.9857 8.72842 13.1183 8.72842C12.2508 8.72842 11.5476 9.43162 11.5476 10.2991C11.5476 11.1665 12.2508 11.8697 13.1183 11.8697Z" fill="#262F31" />
-                </svg>
-                <svg width="14" height="80" viewBox="0 0 14 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M1.97561 0.00069053L13.6911 40.0003L1.97561 80H0.00069053L11.7162 40.0003L0 0L1.97561 0.00069053Z"
-                        fill="#F2DFC5" />
-                </svg>
-            </a>
-            <a class="header-title" href="/">
-                <span>DOI</span>
-            </a>
-        </nav>
-        <div class="languageselector">
-            <button id="lang-nb" class="lang-chosen">BOKMÅL</button>
-            <button id="lang-nn" class="lang-not-chosen">NYNORSK</button>
-            <button id="lang-en" class="lang-not-chosen">ENGLISH</button>
-        </div>
-
-    </div>
-</header>
+<header class="header" id="header"></header>
 <div class="main">
     <div class="top-section">
         <div class="page-wrapper">            
             <div class="hero" aria-hidden="true">
                 <div class="page-header">
-                    <h1>DOI</h1>
-                    <hr/>
+                    <h1>Artsdatabanken DOI</h1>
                     <p>
-                        <span class="nb lang-show">
-                            DOI (Digital object identifier) er en ID for et elektronisk dokument. 
-                            De vil ikke endres.
+                        <span lang="nb">
+                            DOI (Digital object identifier) er en ID for et elektronisk dokument som er permanent for et datasett.
                         </span>
-                        <span class="nn">
-                            DOI (Digital object identifier) er ein ID for eit elektronisk dokument.
-                            Dei vil ikkje endrast.
+                        <span lang="nn">
+                            DOI (Digital object identifier) er ein ID for eit elektronisk dokument som er permanent for eit datasett.
                         </span>
-                        <span class="en">
-                            DOI (Digital object identifier) is an ID for electronic documents.
-                            They will not change.
+                        <span lang="en">
+                            DOI (Digital object identifier) is a permanent ID for electronic documents.
                         </span>
+
+                        <!-- TODO: ADD LINK-->
                     </p>                    
                 </div>
             </div>
         </div>
     </div>
     <div class="main-content page-wrapper">
-        <div class="mid">
-            <a href="artskart.html">
-               Artskart-DOI>
-            </a>
+        <div class="content flex-wrapper">
+            <a href="artskart.html" class="card">
+                <div class="text">
+                    <span class="title">Artskart DOI</span>
+                    <span class="subtitle">
+                    <span lang="nn">DOI for datasett eksportert frå Artskart</span>
+                    <span lang="nb">DOI for datasett eksportert fra Artskart</span>
+                    <span lang="en">DOI for datasets exported from Artskart</span>
+                    </span>
+                </div><svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.3676 12.5L10.2766 18.591L8.05745 16.3719L11.9293 12.5L8.05745 8.6281L10.2766 6.40897L16.3676 12.5Z" fill="#E55440"/>
+                  </svg>
+             </a>
+             <a href="assessments.html" class="card">
+                <div  class="text">
+                    <span class="title">
+                        <span lang="nb">Vurderingsgrunnlag DOI</span>
+                        <span lang="nn">Vurderingsgrunnlag DOI</span>
+                        <span lang="en">Assessment basis DOI</span>                        
+                    </span>
+                    <span class="subtitle">
+                        <span lang="nb">DOI til rødliste- og fremmedartsvurderinger</span>
+                        <span lang="nn">DOI til raudliste- og framandartsvurderingar</span>
+                        <span lang="en">DOI for redlist and alien species list assessments</span>
+                    </span>
+                </div><svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16.3676 12.5L10.2766 18.591L8.05745 16.3719L11.9293 12.5L8.05745 8.6281L10.2766 6.40897L16.3676 12.5Z" fill="#E55440"/>
+                  </svg>
+             </a>
         </div>
     </div>
 </div>

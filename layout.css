@@ -10,22 +10,31 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');*/
 
 :root {
-    --background-default: #FFFCF7;
-    --border:#F2DFC5;
-    --text-accent: #005A71;
-    --font-default-family:"Chivo", sans-serif;
-    --text-primary: #262f31;
-    --default-size:8px;
-    --max-width:1216px; /* check this one, looks weird */
-    --spacing-xsm: calc(.25rem * 2);
-    --hero-icon-color:#007759;
-    --surface-brand-4b:#F8AE00;
-    --dimensions-base: .25rem;
-    --dimensions-2x: calc(var(--dimensions-base) * 2);
-    --dimensions-3x: calc(var(--dimensions-base) * 3);
-    --spacing-xsm: var(--dimensions-2x);
-    --spacing-sm: var(--dimensions-3x);
-    --font-size-6:18px
+  --white:#FFF;
+  --background-default: #FFFCF7;
+  --border:#F2DFC5;
+  --surface-secondary:#faefdf;
+  --text-accent: #005A71;
+  --font-default-family:"Chivo", sans-serif;
+  --text-primary: #262f31;
+  --default-size:8px;
+  --max-width:1216px; /* check this one, looks weird */
+  --spacing-xsm: calc(.25rem * 2);
+  --hero-icon-color:#007759;
+  --surface-brand-4b:#F8AE00;
+  --dimensions-base: .25rem;
+  --dimensions-2x: calc(var(--dimensions-base) * 2);
+  --dimensions-3x: calc(var(--dimensions-base) * 3);
+  --spacing-xsm: var(--dimensions-2x);
+  --spacing-sm: var(--dimensions-3x);
+  --font-size-6:18px;
+  --spacing-spacing-md:24px;
+  --spacing-spacing-lg:32px;
+  --radius-md:8px;
+  --font-size-7:24px;
+  --font-size-3:14px;
+  --text-base-text-secondary:#616B6D;
+  --border-hover:#004557;
 }
 
 *,::after, ::before {
@@ -59,6 +68,7 @@ a {
     margin-left: auto;
     width:100%;
     max-width:var(--max-width);
+    position: relative;
   }
 
   .breadcrumb{
@@ -95,14 +105,6 @@ a {
           font-weight: 700;
           font-size:36px;
       }
-      & hr{
-        width: 60px;
-        height: 4px;
-        background-color: var(--hero-icon-color,var(--surface-brand-4b));
-        border: none;
-        border-radius: 2px;
-        margin: var(--spacing-sm) 0;
-      }
 
       & p{
         font-weight: 500;
@@ -114,3 +116,12 @@ a {
   }
 
 
+.content{
+  padding:1rem;
+}
+
+.flex-wrapper{
+  display:flex;
+  gap:var(--spacing-spacing-md);
+  flex-wrap:wrap;
+}

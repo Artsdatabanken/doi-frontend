@@ -10,6 +10,7 @@ or replacing the existing text.
 window.addEventListener('load', function() {
     runApiCall();
     languageSupport();
+    appendData("header",appendHeader())
 })
 
 // Change parameter/navigate between pages
@@ -877,7 +878,7 @@ function addData(id,content){
 }
 
 function appendData(id,content){
-
+    console.log(id,content)
     if(content!= undefined && id!= undefined ){
         try{
             document.getElementById(id).appendChild(content);
