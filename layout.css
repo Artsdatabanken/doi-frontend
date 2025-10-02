@@ -3,6 +3,12 @@
 - Vars used in following stylesheets such as header and footer
 */
 
+@import url('https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap');
+/*
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');*/
+
 :root {
     --background-default: #FFFCF7;
     --border:#F2DFC5;
@@ -11,7 +17,15 @@
     --text-primary: #262f31;
     --default-size:8px;
     --max-width:1216px; /* check this one, looks weird */
-    --spacing-xsm: calc(.25rem * 2)
+    --spacing-xsm: calc(.25rem * 2);
+    --hero-icon-color:#007759;
+    --surface-brand-4b:#F8AE00;
+    --dimensions-base: .25rem;
+    --dimensions-2x: calc(var(--dimensions-base) * 2);
+    --dimensions-3x: calc(var(--dimensions-base) * 3);
+    --spacing-xsm: var(--dimensions-2x);
+    --spacing-sm: var(--dimensions-3x);
+    --font-size-6:18px
 }
 
 *,::after, ::before {
@@ -47,7 +61,6 @@ a {
     max-width:var(--max-width);
   }
 
-
   .breadcrumb{
     display: flex;
     align-items: center;
@@ -70,17 +83,34 @@ a {
 
 
   .top-section{
-    background:#e4f6f2;
+    background:#fff1db;
     width:100vw;
     padding: 0 0.75rem;
     padding-bottom:0.75rem;
-  }
 
-  .top-box{
-    padding: 80px;
+    & .hero{
+      padding: 80px;
+  
+      & h1{
+          font-weight: 700;
+          font-size:36px;
+      }
+      & hr{
+        width: 60px;
+        height: 4px;
+        background-color: var(--hero-icon-color,var(--surface-brand-4b));
+        border: none;
+        border-radius: 2px;
+        margin: var(--spacing-sm) 0;
+      }
 
-    & h1{
-        font-weight: bold;
+      & p{
+        font-weight: 500;
+        font-size: var(--font-size-6);
+        line-height: 1.5em;
+      }
     }
 
   }
+
+

@@ -1,24 +1,13 @@
 
 /* Language handling */
 
-.nb,
-.nn,
-.en{
+.lang-hide{
+    background:pink;
     display: none;
 }
 
 .lang-show{
-    display:inline;
-}
-
-.lang-hide{
-    display:none;
-}
-
-/* Language Buttons */
-
-.languageselector .lang-chosen{
-    background:pink
+    color:blue;
 }
 
 

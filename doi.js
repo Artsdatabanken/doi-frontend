@@ -18,31 +18,6 @@ window.onhashchange = function() {
     runApiCall();
 }
 
-function languageSupport(){
-    changeLanguage("nn");
-    changeLanguage("nb");
-    changeLanguage("en");
-}
-
-function changeLanguage(lang){
-    let id = "lang-" + lang;
-    let classselector = "."+ lang;
-    document.getElementById(id).addEventListener('click',function(e){
-        let these = document.querySelectorAll(classselector);
-        let those = document.querySelectorAll('.lang-show');
-        those.forEach(x=>x.classList.replace('lang-show','lang-hide'));
-        these.forEach(x=>x.classList.remove('lang-hide'));
-        these.forEach(x=>x.classList.add('lang-show'));
-
-        let them = document.querySelectorAll('.languageselector button');
-        them.forEach(x=>x.className = "lang-not-chosen");
-
-        let thisone = document.getElementById(id);
-        thisone.className = "lang-chosen";
-    });
-}
-
-
 // If no parameter - show frontpage, otherwise run the doi page
 function runApiCall(){
     let guid = getGuid();
@@ -813,7 +788,8 @@ function getGuid(){
 function detectTest(){
     // Detect if we're running on test or not
     let url = window.location.href;
-    if(url.includes("test") || url.includes("index")){
+    if(url.includes("test") || (url.includes("index")|| url.includes("artskart"))
+    ){
         return "test."
     }
     return "";
