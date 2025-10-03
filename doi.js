@@ -413,20 +413,10 @@ function getCitation(doi){
 
 function addArtskartUrl(desc){
     try{
-        const languages = ['nb', 'en'];
-        for (let key in languages) {
-            if (!languages.hasOwnProperty(key)) {
-                continue;
-            }
-            const lang = languages[key];
-            let artskartelement = desc['ArtskartUrl'][0];
-            let a = document.createElement('div');
-            let launch = "<span class='material-icons'>launch</span>";
-            let label = lang === 'nb' ? "Se oppdatert utvalg" : "Se updated selection";
-            let labelIn = lang === 'nb' ? "i" : "in";
-            a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>"+label+" <br/>"+labelIn+" Artskart </span></a>";
-            appendData('a.appender.'+lang,a);
-        }
+        let artskartelement = desc['ArtskartUrl'][0];
+        let artskartLink = document.getElementById("artskartLink");
+        artskartLink.href = artskartelement;
+        console.info("updated artskarturl")        
     }catch(err){
         console.error("Failed at artskarturl;")
     }
