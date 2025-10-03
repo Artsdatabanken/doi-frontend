@@ -724,7 +724,6 @@ function addTypes(attributes){
 }
 
 function addCitation(attributes){
-
     try{
         let accesseddate = "yyyy-mm-dd";
         let dates = attributes.dates;
@@ -733,18 +732,12 @@ function addCitation(attributes){
                 accesseddate = dates[i].date.split("T")[0];
             }
         }
-
-        attributes.dates
-        let year = "("+attributes.publicationYear+")";
-
-        let citation = attributes.publisher+" "+year+". "
-        +attributes.creators[0].name+". "
-        + attributes.types.resourceTypeGeneral
-        +" "+getDoiUrl(attributes)
-        +" accessed via artsdatabanken.no"
-        +" on "+accesseddate+".";
-
-        addData("citation",citation);
+        addData("citationDate",accesseddate);
+        addData("citationYear",attributes.publicationYear);
+        addData("citationPublisher",attributes.publisher);
+        addData("citationCreator",attributes.creators[0].name);
+        addData("citationURL",attributes.types.resourceTypeGeneral);
+        addData("citationDataset",getDoiUrl(attributes));
     }catch(err){
         console.error("citation failed")
     }
