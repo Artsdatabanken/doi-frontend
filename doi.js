@@ -277,9 +277,8 @@ function addFiles(attributes,desc){
                 image.src  = item.relatedIdentifier;
                 const closebutton = document.createElement('button');
                 closebutton.innerHTML= "<span class='material-icons'>fullscreen</span>";
-                closebutton.id = "fullscreenbutton"
-
-
+                closebutton.id = "fullscreenbutton";
+                closebutton.className = "icon-button";
                 // Make image BIG
                 $("#img.appender").addEventListener('click',function(e){
                     let target = $("#img.appender");

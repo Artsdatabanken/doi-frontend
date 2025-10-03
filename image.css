@@ -90,31 +90,12 @@
 
 /* FULLSCREEN BUTTON */
 
-#fullscreenbutton{
-    border-radius: 5px;
-    width: 32px;
-    height: 32px;
+#fullscreenbutton{   
     position: absolute;
-    right: 5px;
-    font-size: 14pt;
-    border: 1px solid gray;
-    top: 5px;
-    text-align: center;
-    padding: 2px;
+    top:4px;
+    right: 4px;
 }
 
-@media only screen and (max-width: 600px),
-    only screen and (min-width: 740px) and (max-width:1124px ){
-        #fullscreenbutton{
-            right: 5px;
-        }
-}
-
-#fullscreenbutton:hover{
-    background:black;
-    color:white;
-    cursor:pointer;
-}
 
 /* IMAGE AS FULLSCREEN */
 
