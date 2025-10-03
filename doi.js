@@ -334,12 +334,20 @@ function createDownloadButton(url){
 }
 
 function download(url) {
-    const a = document.createElement('a')
-    a.href = url
+    const a = createLink(url);
     a.download = url.split('/').pop()
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
+  }
+
+  function createLink(url,doitext) {
+    const a = document.createElement('a')
+    a.href = url;
+    if(doitext){
+        a.textContent = doitext;
+    }
+    return a;
   }
 
 
@@ -347,37 +355,33 @@ function addDoi(desc){
     // Contains all source datasets. Also those without a doi, but of doi-type data.
     // If a doi is missing, it will instead contain an id.
     try{
-
         let doi = desc['DOI'] || [];
         // Text formatting:
-        let length = doi.length;
         if(doi.length!=1){
             let these = document.getElementsByClassName('contributor-plural');
         for (let element of these){
                 element.style.display="inline";
+                // TODO ANDLE ARIAS FOR THIS
          }
         }
-        addData("Nr.Sources",length);
+        addData("Nr.Sources",doi.length);
+        console.log("<....", doi)
         for (let i in doi){
             let items = doi[i].split("|");
-            let div = document.createElement('div');
-            div.className = "listitem";
+            let contributer = document.createElement('li');
+            contributer.className = "listitem";
+            let numberline = "<span> ("+ items[1]+" element)</span>";
+            let nameline = "<span>"+ items[2]+"</span>";
+            contributer.innerHTML =  nameline + numberline;
 
-            let link = items[0];
-            let linkline = ""; // There is an id here, but what type? what it do?
-
+            let link = items[0];           
             if(link.includes("https")){
                 let doitext = link.replace("https://doi.org/","");
                 getCitation(doitext);
-                div.id = doitext;
-                linkline = "<a href="+link+" class='citationlink'>"+doitext+"</a>";
+                contributer.id = doitext;
+                contributer.appendChild(createLink(link,doitext));
             }
-
-            let numberline = "<span> ("+ items[1]+" element)</span>";
-
-            let nameline = "<span>"+ items[2]+"</span>";
-            div.innerHTML = nameline+numberline+linkline;
-            appendData('doi.appender',div);
+            appendData('doi.appender',contributer);
         }
     }catch(err){
         console.error("Failed in doi")
@@ -862,6 +866,7 @@ function unWrapDescriptions(wrapped,criteria,content){
 
 
 function addData(id,content){
+    console.log(id,content)
     if(content!= undefined && id!= undefined){
         try{
             let object = document.getElementById(id) || id;

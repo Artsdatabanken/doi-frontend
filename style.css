@@ -66,5 +66,22 @@
     
 }
 
+.contributor-list{
+    display: flex;
+    flex-direction: column;
+    gap:4px;
+    padding-left:0;
+    
+
+    & li{
+        display: flex;
+        gap:8px;
+        align-items: center;
+        min-height: 33px;;
+    }
+
+
+}
+
 
 

@@ -82,8 +82,7 @@ body {
 a {
     color: var(--text-accent);
     text-decoration: none;
-
-    display: flex;
+    display: inline-flex;
     padding: 6px 0;
     justify-content: center;
     align-items: center;
