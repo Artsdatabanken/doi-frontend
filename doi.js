@@ -302,18 +302,21 @@ function addFiles(attributes,desc){
                     if (!languages.hasOwnProperty(key)) {
                         continue;
                     }
-                    const lang = languages[key];
-                    let zipurl = item.relatedIdentifier;
-                    let zip = document.createElement('div');
-                    let format = attributes.formats.toString().replace("application/","");//TODO
-                    //console.log(format)
-                    let innerformat = desc['ExportType'];
-                    //console.log(desc['ExportType'])
-                    let label = lang == 'nb' ? "Last ned datasett" : "Download dataset";
+                    const lang = languages[key];                 
+
+                    let format = attributes.formats.toString().replace("application/","");//TODO                    
+                    let innerformat = desc['ExportType'];                    
+                    const label = lang == 'nb' ? "Last ned datasett" : "Download dataset";
+
+                    // Make downloadbutton
                     let buttontext = "<span>" + label + " <br/>"+convertBytes(attributes.sizes)+" ("+format+"/"+innerformat+")</span>";
                     let material = "<span class='material-icons'>download</span>";
-                    zip.innerHTML = "<a href="+zipurl+" class='biglink downloadlink'>"+material+buttontext+"</a>";
-                    appendData('zip.appender.'+lang,zip);
+                    const zipurl = item.relatedIdentifier;
+
+                    const downloadButton = createDownloadButton(zipurl);
+                    downloadButton.innerHTML = material + buttontext;
+                    
+                    appendData('zip.appender.'+lang,downloadButton);
                 }
             }
         }
@@ -321,6 +324,24 @@ function addFiles(attributes,desc){
         console.error("Failed in addFiles")
     }
 }
+
+function createDownloadButton(url){
+    const newButton = document.createElement('button');
+    newButton.className="primary";
+    newButton.addEventListener("click", () => {
+        download(url);
+      });
+    return newButton;
+}
+
+function download(url) {
+    const a = document.createElement('a')
+    a.href = url
+    a.download = url.split('/').pop()
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+  }
 
 
 function addDoi(desc){

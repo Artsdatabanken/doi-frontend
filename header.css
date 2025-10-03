@@ -30,6 +30,7 @@ Requires variables from layout stylesheet
       & a{
         color:var(--text-primary);
         border:0;
+        padding:0;
       }  
       
       &  .header-elements{

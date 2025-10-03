@@ -55,7 +55,6 @@ function createLanguageButtons(language,code){
     const newButton = document.createElement('button');
     newButton.textContent = language;
     newButton.addEventListener("click", () => {
-        console.log(language, code);
         changeLanguage(code);
         toggleLanguages();
       });
