@@ -57,7 +57,7 @@ function createLanguageButtons(language,code){
     newButton.addEventListener("click", () => {
         console.log(language, code);
         changeLanguage(code);
-       
+        toggleLanguages();
       });
     return newButton;
 }
@@ -68,7 +68,7 @@ function toggleLanguages(){
         langDiv.classList.remove('lang-hide');
     }else{
         langDiv.classList.add('lang-hide');
-    }   
+    } 
 
 }
 

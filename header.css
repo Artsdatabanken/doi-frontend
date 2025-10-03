@@ -29,6 +29,7 @@ Requires variables from layout stylesheet
 
       & a{
         color:var(--text-primary);
+        border:0;
       }  
       
       &  .header-elements{
@@ -44,6 +45,7 @@ Requires variables from layout stylesheet
     display: inline-block;
     display: flex;
     align-items: center;
+    border:0;
 
     & svg{
         margin:0 var(--default-size);

@@ -665,9 +665,9 @@ function addGeneralData(attributes){
     try{
         // DOI URL
         // URL is always the non-test version as it's from api.
-        let doilink = "<li class='in-breadcrumb'><a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a></li>";
+        let shortcutLink = "<li class='in-breadcrumb'>"+attributes.doi+"</li>";
         updateStyle($('Attributes.doi'),"display","inline-block");
-        addData('Attributes.doi',doilink);
+        addData('Attributes.doi',shortcutLink);
         let headerdoi = "DOI: "+ attributes.doi;
         addData('header-doi',headerdoi);
         //addData("Attributes.url",attributes.url);

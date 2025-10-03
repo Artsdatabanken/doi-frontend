@@ -1,8 +1,6 @@
 
 function languageSupport(){
-    changeLanguage("nb");
-    
-    
+    changeLanguage("nb");       
 }
 
 function changeLanguage(newLang) {    
