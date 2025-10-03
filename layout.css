@@ -157,11 +157,6 @@ a {
   & li:empty{
     display: none;
   }
-  & li:last-child a{
-    color:var(--text-primary);
-    border:none;
-    pointer-events: none;
-  }
 
 }
 

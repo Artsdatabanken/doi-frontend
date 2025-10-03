@@ -23,7 +23,7 @@ window.onhashchange = function() {
 function runApiCall(){
     let guid = getGuid();
     if(guid == "" || guid == "#" || guid == "undefined"){
-        console.log("NO GUID - show default page");
+        console.info("NO GUID - show default page");
         try{
             hideAndShow("none");
             showFrontPage();
@@ -153,7 +153,7 @@ function getTimeUpdate(submitted,created,updated,valid){
             })
         }, timeout);
     }catch(err){
-        console.log("error in timechecker")
+        console.error("error in timechecker")
     }
 }
 
@@ -365,14 +365,13 @@ function addDoi(desc){
          }
         }
         addData("Nr.Sources",doi.length);
-        console.log("<....", doi)
         for (let i in doi){
             let items = doi[i].split("|");
             let contributer = document.createElement('li');
             contributer.className = "listitem";
-            let numberline = "<span> ("+ items[1]+" element)</span>";
+            let numberline = "(<span> "+ items[1]+" element)</span>";
             let nameline = "<span>"+ items[2]+"</span>";
-            contributer.innerHTML =  nameline + numberline;
+            contributer.innerHTML =  + " " +nameline;
 
             let link = items[0];           
             if(link.includes("https")){
@@ -390,7 +389,7 @@ function addDoi(desc){
 
 function getCitation(doi){
     let url = 'https://doiapi.artsdatabanken.no/api/Doi/getcitation/'+doi;
-    console.log("running fetch ",url)
+    console.info("running fetch ",url)
     fetch(url)
     .then((response) => {
         return response.text();
@@ -479,7 +478,6 @@ function addDescriptions(desc){
         let descriptioncontent = desc['Description'] || null;
         if(descriptioncontent){
             descriptioncontent = JSON.parse(descriptioncontent);
-            console.log(descriptioncontent)
             // TODO: ADD MORE THINGS THAT LIMIT. Need list and example data
             // TODO: FIlter is currently not displayed, due to changing structure.
             for(let i in descriptioncontent){
@@ -513,7 +511,6 @@ function addTags(tags){
     try{
 
         // TODO: AWAIT API CORRECTIONS
-        console.log(tags)
 
         // USE CASE: NOT RECOVERED AND ABSENT ("Ikke gjenfunnet" og "Ikke funnet");
         // Cases are hardcoded, so using their ID.
@@ -572,7 +569,7 @@ function addAreas(what,where){
                     updateStyle($('tags_'+where),"display","inline-block");
                     addDescriptionItems(what,"Descriptions."+where);
                 } else{
-                    console.log("nope")
+                    console.error("nope to areas")
                 }
             }
 
@@ -679,9 +676,11 @@ function addGeneralData(attributes){
     try{
         // DOI URL
         // URL is always the non-test version as it's from api.
-        let shortcutLink = "<li class='in-breadcrumb'>"+attributes.doi+"</li>";
-        updateStyle($('Attributes.doi'),"display","inline-block");
-        addData('Attributes.doi',shortcutLink);
+        let shortcutLink = document.createElement('li');
+        shortcutLink.textContent=attributes.doi;
+        appendData('Attributes.doi',shortcutLink);   
+
+        reLink(true)
         let headerdoi = "DOI: "+ attributes.doi;
         addData('header-doi',headerdoi);
         //addData("Attributes.url",attributes.url);
@@ -692,6 +691,27 @@ function addGeneralData(attributes){
         //addData("Attributes.identifiers",attributes.identifiers);
     }catch(err){
         console.error("General data failed")
+    }
+}
+
+function reLink(addLink){
+    // activate and deactivate element in breadcrumb
+    try{        
+        const reLinked = document.getElementById("reLinked");
+        const unLinked = document.getElementById("unLinked");
+        let activate = reLinked;
+        let unactivate = unLinked;
+        if(!addLink){   
+            activate = unLinked;
+            unactivate =  reLinked;
+        }
+        activate.classList.remove('hidden');
+        activate.ariaHidden = "false";
+        activate.innerHTML = unactivate.innerHTML;
+        unactivate.ariaHidden = "true";
+        unactivate.classList.add('hidden');        
+    }catch(err){
+        console.error("unLink failed")
     }
 }
 
@@ -866,7 +886,6 @@ function unWrapDescriptions(wrapped,criteria,content){
 
 
 function addData(id,content){
-    console.log(id,content)
     if(content!= undefined && id!= undefined){
         try{
             let object = document.getElementById(id) || id;
@@ -886,7 +905,6 @@ function addData(id,content){
 }
 
 function appendData(id,content){
-    console.log(id,content)
     if(content!= undefined && id!= undefined ){
         try{
             document.getElementById(id).appendChild(content);
@@ -908,7 +926,6 @@ function hideAndShowActions(param,otherparam){
 
         for (let el of document.getElementsByClassName("inlinesection")){
             updateStyle(el,"display","inline");
-            console.log("inlining")
         }
 
 

@@ -22,10 +22,10 @@
 </head>
 <body>
 <header class="header" id="header"></header>
-<div class="main">   
-    <div class="page-wrapper">
+<div class="main ">   
+    <div class="main-content page-wrapper">
         <nav>
-            <ol class="breadcrumb">
+            <ol class="breadcrumb" id="Attributes.doi">
                 <li class="first">
                     <a href="index.html">
                         <span lang="nb">Artsdatabanken DOI</span>
@@ -33,36 +33,29 @@
                         <span lang="en">Artsdatabanken DOI</span>
                     </a>
                 </li>
-                <li > <!-- TODO: make not link when not loaded-->
-                    <a href="artskart.html">
+                <li> 
+                    <span id="unLinked">
                         <span lang="nb">Datasett fra Artskart</span>
                         <span lang="nn">Datasett frå Artskart</span>
                         <span lang="en">Dataset from Artskart</span>
-                    </a>
+                    </span>
+                    <a href="artskart.html" id="reLinked" class="hidden" aria-hidden="true"></a>
                 </li>
-                <!-- ADD ARTSKART HERE IF NOT-->
-                <span id="Attributes.doi" >
-                </span>
             </ol>
         </nav>
                         
-        <h1>DOI fra Artskart</h1>           
+        <h1 id="header-doi">
+            <span lang="nb">Datasett fra Artskart</span>
+            <span lang="nn">Datasett frå Artskart</span>
+            <span lang="en">Dataset from Artskart</span>
+        </h1>           
         
-        <h2 id="header-doi"></h2>
         <span id="timedetails">
             <span lang="nn">Opprettet </span>
             <span lang="nb">Opprettet </span>
             <span lang="en">Created </span>
             <span class="timestamp" id="Time.Created">-</span>
-            <!--
-            <span lang="nb nn">Registrert </span>
-            <span lang="en">Registred </span>
-            <span class="timestamp" id="Time.Valid">-</span>
-                -->
         </span>          
-    </div>
-    
-    <div class="main-content page-wrapper">
         <div class="mid">
             <div id="nodata">
                 <h2>
