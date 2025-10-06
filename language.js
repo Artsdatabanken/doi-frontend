@@ -11,7 +11,6 @@ function languageSupport(){
 
 function changeLanguage(newLang) {    
     lang = newLang;
-    console.log(lang)
 
     // show selected elements by new language
     const selector = '[lang="'+newLang+'"]:not(html)';
@@ -48,7 +47,6 @@ function changeLanguage(newLang) {
 
 
   function translate(key, node){
-    console.log(lang)
     try{
     if(translations[key]){
         languages.forEach(language => {
@@ -56,20 +54,21 @@ function changeLanguage(newLang) {
         newElement.setAttribute('lang', language);
         const text = translations[key][language];
         if(text){             
-            newElement.innerText = translations[key][language];  
-           
+            newElement.innerText = translations[key][language];             
         }else{
+            console.info("translate missing for ", key, language )
             newElement.innerText = key;
         }
         showLang(newElement, lang === language)
         node.appendChild(newElement);     
     });    
     }else{
+        console.info("translate missing for: ", key)
         node.innerText = key;
     }
     return node; 
     }catch(err){
-        console.log("failed at translations")
+        console.error("failed at translations")
     }
 }
   
@@ -88,10 +87,25 @@ const translations = {
         "nn": "Andre filtere",
         "nb": "Andre filtere",
         "en": "Tags"
-    }        ,
+    },
     Year:{
         "nn": "År",
         "nb": "År",
         "en": "Year"
+    },
+    NotRecovered:{
+        "nn": "ikkje gjenfunnet",
+        "nb": "ikke gjenfunnet",
+        "en": "not recovered"
+    },
+    Absent:{
+        "nn": "ikkjefunnet",
+        "nb": "ikke funnet",
+        "en": "absent"
+    },
+    Inverted:{
+        "nn": "uten ",
+        "nb": "uten ",
+        "en": "without "
     }
 }

@@ -541,20 +541,24 @@ function addDescriptionItems(descriptionElement,title){
         }       
         const decriptionList = Object.keys(descriptionElement);       
         for(let i in decriptionList){
-            let key = decriptionList[i];
-            let item = descriptionElement[key];
+            const key = decriptionList[i];
+            const item = descriptionElement[key];
             // Here we may need specific things for different fields
-            let content = item.name || item;
-            if(item.code){
-                content = item.code += " - "+ content;
-            }
-            if(item.inverted){
-                content = "- " + content;
-            }
+            const text = item.name || item;  
+     
+                  
             // make tag 
             const span = document.createElement('span');
             span.className="tag";
-            span.innerText = content;
+            if(item.code){
+                const innerText = item.code += " - ";
+                span.innerText = innerText;
+            }      
+            
+            if(item.inverted){
+                translate("Inverted", span);
+            }
+            translate(text, span);
             dd.appendChild(span);           
         }      
 
