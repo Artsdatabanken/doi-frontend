@@ -5,17 +5,6 @@
     display: none;
 }
 
-
-/* Hide before content load */
-
-.contributor-plural,
-#tags_other,
-#tags_geometry,
-#tags_area,
-.tags_absence{
-    display:none;
-}
-
 /* NEW STUFF */
 
 .shortcut-link{

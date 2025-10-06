@@ -14,7 +14,7 @@ function $(id){
         }else if(id[0]=="#"){
             return document.getElementById(id.substring(1));
         }else{
-            console.error("code was missing '#' or '.' in $ shorthand. try matching anyways");
+            console.error("code was missing '#' or '.' in $ shorthand. try matching anyways", id);
             try{
                 if(document.getElementById(id)){
                     return document.getElementById(id);
@@ -22,12 +22,12 @@ function $(id){
                     return document.getElementsByClassName(id);
                 }
             }catch(err){
-                console.log(err, "could not find html object", $)
+                console.log(err, "could not find html object", id)
             }
         
         }
     }catch(err){
-        console.log(err, "could not find html object", $)
+        console.log(err, "could not find html object", id)
     }
 }
 
@@ -521,9 +521,10 @@ function addDescriptions(desc){
                     if(descriptioncontent[i] != ""){
                         let span = document.createElement('span');
                         span.id = "Descriptions."+i;
-                        addDescriptionItems(descriptioncontent[i],span,i);
-                        appendData("Descriptions.other",span)
-                        updateStyle($('#tags_other'),"display","inline-block");
+                        addDescriptionItems(descriptioncontent[i],span,i);                        
+                        showElement($('#tags_other'),true);
+                        appendData("Descriptions.other",span);
+                        console.log("updated this ye")
                     }
                 }
             }
@@ -571,17 +572,15 @@ function addTags(tags){
         for (let element of absence_items){
             casenumber = "tags_case_" + casenumber;
             if(element.className.includes(casenumber)){
-                element.style.display="inline";
+                showElement(element,true);
             }
          }
-
-
-/*
-        console.log(tags[5].name)
-        console.log(tags[5].inverted)
-        console.log(tags[6].name)
-        console.log(tags[6].inverted)
-*/
+        /*
+                console.log(tags[5].name)
+                console.log(tags[5].inverted)
+                console.log(tags[6].name)
+                console.log(tags[6].inverted)
+        */
 
     }catch(err){
         console.error("failed at tags")
@@ -592,7 +591,9 @@ function addAreas(what,where){
         try{
             if(what){
                 if(Object.keys(what).length>0){
-                    updateStyle($('tags_'+where),"display","inline-block");
+                    const id = '#tags_'+where;
+                    console.log("id",id )
+                    showElement($('#tags_'+where),true);
                     addDescriptionItems(what,"Descriptions."+where);
                 } else{
                     console.error("nope to areas")
@@ -732,9 +733,9 @@ function reLink(addLink){
             activate = unLinked;
             unactivate =  reLinked;
         }
-        showOrHide(activate,true);
+        showElement(activate,true);
         activate.innerHTML = unactivate.innerHTML;
-        showOrHide(unactivate,false);         
+        showElement(unactivate,false);         
     }catch(err){
         console.error("unLink failed")
     }
@@ -943,6 +944,15 @@ function resetPage(){
         $("#doi.appender").innerHTML = "";
         $("#Descriptions.other").innerHTML = "";
         //$("#Api.link").innerHTML = "";
+
+        /* Hide before content load */        
+        showElement($("#tags_other"),false);
+        showElement($("#tags_geometry"),false);
+        showElement($("#tags_area"),false);
+      
+        document.querySelectorAll('.contributor-plural').forEach(x => showElement(x,false));
+        document.querySelectorAll('.tags_absence').forEach(x => showElement(x,false));
+        
     }catch(err){
         console.error("failed at emptying appenders")
     }
@@ -950,34 +960,37 @@ function resetPage(){
 
 function pageSetup(activate){
     try{
-        showOrHide($("#nodata"),!activate);
+        showElement($("#nodata"),!activate);
         for (let el of $(".section")){
-            showOrHide(el,activate);
+            showElement(el,activate);
         }
         for (let el of $(".inlinesection")){
-            showOrHide(el,activate);
+            showElement(el,activate);
         }
 
         for (let el of $(".ingress")){
-            showOrHide(el,activate);
+            showElement(el,activate);
         }        
-        showOrHide($("#timedetails"),activate);        
+        showElement($("#timedetails"),activate);        
     }catch(err){
         console.error("failed at pageSetup")
     }
 }
 
-function showOrHide(element,activate){
+function showElement(element,activate){
+    //console.log("el", element)
     // activate = boolean
     try{        
         if(activate){
+           //console.log("activate ", element)
             element.classList.remove('hidden');
             element.ariaHidden = "false";
         }else{
+            //console.log("inactivate ", element)
             element.ariaHidden = "true";
             element.classList.add('hidden');        
         }               
     }catch(err){
-        console.error("showOrHide failed for element:", element)
+        console.error("showElement failed for element:", element)
     }
 }
