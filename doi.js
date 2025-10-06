@@ -25,7 +25,7 @@ function runApiCall(){
     if(guid == "" || guid == "#" || guid == "undefined"){
         console.info("NO GUID - show default page");
         try{
-            hideAndShow("none");
+            pageSetup(false);
             showFrontPage();
         }catch(err){
             console.error("Show frontpage failed")
@@ -50,7 +50,7 @@ function getDoiData(isRerun){
         handleDoiData(data,isRerun);
     })
     .catch((err) => {
-        hideAndShow("none");
+        pageSetup(false);
         showFrontPage();
     })
 
@@ -62,7 +62,7 @@ function handleDoiData(data,isRerun){
     emptyAppenders();
     let attributes = data.data.attributes;
 
-    hideAndShow("show");
+    pageSetup(true);
     if(!isRerun){
         // If the function is a rerun (update), dont hide the progressbar
         // Users will then be interested to know it reached finished state.
@@ -694,6 +694,7 @@ function addGeneralData(attributes){
     }
 }
 
+
 function reLink(addLink){
     // activate and deactivate element in breadcrumb
     try{        
@@ -705,11 +706,9 @@ function reLink(addLink){
             activate = unLinked;
             unactivate =  reLinked;
         }
-        activate.classList.remove('hidden');
-        activate.ariaHidden = "false";
+        showOrHide(activate,true);
         activate.innerHTML = unactivate.innerHTML;
-        unactivate.ariaHidden = "true";
-        unactivate.classList.add('hidden');        
+        showOrHide(unactivate,false);         
     }catch(err){
         console.error("unLink failed")
     }
@@ -884,7 +883,6 @@ function unWrapDescriptions(wrapped,criteria,content){
     return unWrap(wrapped,criteria,"TechnicalInfo");
 }
 
-
 function addData(id,content){
     if(content!= undefined && id!= undefined){
         try{
@@ -918,34 +916,13 @@ function appendData(id,content){
     }
 }
 
-function hideAndShowActions(param,otherparam){
-    try{
-        for (let el of document.getElementsByClassName("section")){
-            updateStyle(el,"display",param)
-        }
-
-        for (let el of document.getElementsByClassName("inlinesection")){
-            updateStyle(el,"display","inline");
-        }
-
-
-        for (let el of document.getElementsByClassName("ingress")){
-            updateStyle(el,"display",param)
-        }
-        updateStyle(document.getElementById("nodata"),"display",otherparam);
-        updateStyle(document.getElementById("timedetails"),"display",param);
-    }catch(err){
-        console.error("failed at hideandshowactions")
-    }
-}
-
 function emptyAppenders(){
     try{
-        // Empty appenders:
+        // Empty appenders: 
         document.getElementById("img.appender").innerHTML = "";
         document.getElementById("zip.appender.nb").innerHTML = "";
-        document.getElementById("zip.appender.en").innerHTML = "";
-        document.getElementById("a.appender").innerHTML = "";
+        document.getElementById("zip.appender.en").innerHTML = "";        
+        document.getElementById("artskartLink").href = "";        
         document.getElementById("doi.appender").innerHTML = "";
         document.getElementById("Descriptions.other").innerHTML = "";
         //document.getElementById("Api.link").innerHTML = "";
@@ -954,11 +931,37 @@ function emptyAppenders(){
     }
 }
 
-function hideAndShow(which){
-    if(which == "show"){
-        hideAndShowActions("inline-block","none");
-    }else{
-        hideAndShowActions("none","inline-block");
+function pageSetup(activate){
+    try{
+        showOrHide(document.getElementById("nodata"),!activate);
+        for (let el of document.getElementsByClassName("section")){
+            showOrHide(el,activate);
+        }
+        for (let el of document.getElementsByClassName("inlinesection")){
+            showOrHide(el,activate);
+        }
 
+        for (let el of document.getElementsByClassName("ingress")){
+            showOrHide(el,activate);
+        }        
+        showOrHide(document.getElementById("timedetails"),activate);        
+    }catch(err){
+        console.error("failed at pageSetup")
     }
+}
+
+function showOrHide(element,activate){
+    // activate = boolean
+    try{        
+        if(activate){
+            element.classList.remove('hidden');
+            element.ariaHidden = "false";
+        }else{
+            element.ariaHidden = "true";
+            element.classList.add('hidden');        
+        }               
+    }catch(err){
+        console.error("showOrHide failed for element:", element)
+    }
+
 }
