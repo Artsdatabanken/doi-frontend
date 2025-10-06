@@ -1,15 +1,23 @@
 
+
+
+const languages = ["nn", "nb", "en"];
+
+var lang = "nb";
+
 function languageSupport(){
     changeLanguage("nb");       
 }
 
 function changeLanguage(newLang) {    
+    lang = newLang;
+    console.log(lang)
 
     // show selected elements by new language
     const selector = '[lang="'+newLang+'"]:not(html)';
     const toShow = document.querySelectorAll(selector);
-    toShow.forEach(x=>x.classList.remove('lang-hide'));
-    toShow.forEach(x=>x.ariaHidden = "false");
+    toShow.forEach(x=>showLang(x,true));
+    toShow.forEach(x=>showLang(x,true));
 
     // selectors for the supported languages (excluding top html element) 
     const allSupported = ['[lang="nn"]:not(html)', '[lang="nb"]:not(html)', '[lang="en"]:not(html)'];
@@ -21,10 +29,69 @@ function changeLanguage(newLang) {
 
     // Hide the objects :)
     const toHide = document.querySelectorAll(allSupported);
-    toHide.forEach(x=>x.classList.add('lang-hide'));
-    toHide.forEach(x=>x.ariaHidden = "true");
+    toHide.forEach(x=>showLang(x,false));
+    toHide.forEach(x=>showLang(x,false));
    
     // update language of body
     document.documentElement.setAttribute('lang', newLang);
-
   }
+
+  function showLang(node, show){
+    if(show){
+        node.classList.remove('lang-hide');
+        node.ariaHidden = "false";
+    }else{
+        node.classList.add('lang-hide');
+        node.ariaHidden = "true";
+    }
+  }
+
+
+  function translate(key, node){
+    console.log(lang)
+    try{
+    if(translations[key]){
+        languages.forEach(language => {
+        const newElement = document.createElement('span');
+        newElement.setAttribute('lang', language);
+        const text = translations[key][language];
+        if(text){             
+            newElement.innerText = translations[key][language];  
+           
+        }else{
+            newElement.innerText = key;
+        }
+        showLang(newElement, lang === language)
+        node.appendChild(newElement);     
+    });    
+    }else{
+        node.innerText = key;
+    }
+    return node; 
+    }catch(err){
+        console.log("failed at translations")
+    }
+}
+  
+const translations = {
+    Taxons:{
+        "nn": "Takson",
+        "nb": "Takson",
+        "en": "Taxons"
+    },
+    Areas:{
+        "nn": "Områder",
+        "nb": "Områder",
+        "en": "Areas"
+    },
+    Tags:{
+        "nn": "Andre filtere",
+        "nb": "Andre filtere",
+        "en": "Tags"
+    }        ,
+    Year:{
+        "nn": "År",
+        "nb": "År",
+        "en": "Year"
+    }
+}

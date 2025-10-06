@@ -494,7 +494,6 @@ function addImageSources(desc){
     }catch(err){
         console.error("failed at img source")
     }
-
 }
 
 function addDescriptions(desc){
@@ -502,31 +501,12 @@ function addDescriptions(desc){
         let count = desc['Count'] || 0;
         addData("Descriptions.count",count);
         let descriptioncontent = desc['Description'] || null;
-        if(descriptioncontent){
+        if(descriptioncontent){            
             descriptioncontent = JSON.parse(descriptioncontent);
-            // TODO: ADD MORE THINGS THAT LIMIT. Need list and example data
-            // TODO: FIlter is currently not displayed, due to changing structure.
-            for(let i in descriptioncontent){
-                if (i== "Areas"){
-                    addAreas(descriptioncontent[i],"area");
-                }else if(i == "Geometry"){
-                    addAreas(descriptioncontent[i],"geometry");
-                }else if(i == "Tags"){
-                    //addTags(descriptioncontent.Tags); TODO FIX THIS FILTERS
-                }else if(i == "Taxons"){
-                    addTaxons(descriptioncontent.Taxons); // INTO INGRESS = ADDITIONS
-                    // IF MORE THAN 3, add to the filterlist
-                }
-                else{
-                    if(descriptioncontent[i] != ""){
-                        let span = document.createElement('span');
-                        span.id = "Descriptions."+i;
-                        addDescriptionItems(descriptioncontent[i],span,i);                        
-                        showElement($('#tags_other'),true);
-                        appendData("Descriptions.other",span);
-                        console.log("updated this ye")
-                    }
-                }
+            for(let title in descriptioncontent){
+                if(descriptioncontent[title] != ""){
+                    addDescriptionItems(descriptioncontent[title],title);   
+                }                
             }
         }
     }catch(err){
@@ -534,135 +514,69 @@ function addDescriptions(desc){
     }
 }
 
-function addTags(tags){
-    try{
 
-        // TODO: AWAIT API CORRECTIONS
+function addDescriptionItems(descriptionElement,title){
+    try{        
+        // NODE
+        showElement($('#tags_other'),true);
+        const div = document.createElement('div');
+        div.id = "Descriptions."+title;
 
-        // USE CASE: NOT RECOVERED AND ABSENT ("Ikke gjenfunnet" og "Ikke funnet");
-        // Cases are hardcoded, so using their ID.
-        // 5 = Absent, 6 = not recovered
-
-        let speciesdata = true;
-        let absent = !tags[5].inverted;
-        let notrecovered = !tags[6].inverted
-        let casenumber = 0;
-
-        if(!absent && !notrecovered && speciesdata){
-            casenumber = 1;
-        }else if(absent && !notrecovered && speciesdata){
-            casenumber = 2;
-        }else if(!absent && notrecovered && speciesdata){
-            casenumber = 3;
-        }
-        else if(absent && notrecovered && speciesdata){
-            casenumber = 4;
-        }else if(absent && notrecovered && !speciesdata){
-            casenumber = 5;
-        }else if(absent && !notrecovered && !speciesdata){
-            casenumber = 5;
-        }else if(!absent && notrecovered && !speciesdata){
-            casenumber = 5;
-        }
-
-
-        //console.log(absent, notrecovered, casenumber)
-
-        let absence_items = $(".tags_absence");
-        for (let element of absence_items){
-            casenumber = "tags_case_" + casenumber;
-            if(element.className.includes(casenumber)){
-                showElement(element,true);
-            }
-         }
-        /*
-                console.log(tags[5].name)
-                console.log(tags[5].inverted)
-                console.log(tags[6].name)
-                console.log(tags[6].inverted)
-        */
-
-    }catch(err){
-        console.error("failed at tags")
-    }
-}
-
-function addAreas(what,where){
-        try{
-            if(what){
-                if(Object.keys(what).length>0){
-                    const id = '#tags_'+where;
-                    console.log("id",id )
-                    showElement($('#tags_'+where),true);
-                    addDescriptionItems(what,"Descriptions."+where);
-                } else{
-                    console.error("nope to areas")
-                }
-            }
-
-        }catch(err){
-            console.error("failed at add"+where)
-        }
-}
-
-function addDescriptionItems(what,where,title){
-    try{
-
-        if( typeof what === 'string' ) {
-            what = [ what ];
-        }
-        let whatarray = Object.keys(what);
-        let endresult = "";
-
+        // TITLE
+        let key = title;   
         if(title){
-            let link = " http://rs.tdwg.org/dwc/terms/";
-            let formattedtitle = title.replace(/([A-Z])/g, ' $1').trim()
-            link += title.charAt(0).toLowerCase() + title.slice(1);
-            let lastletter = link.substring(link.length - 1,link.length);
-            if(lastletter == "s"){
-                link = link.substring(0, link.length - 1);
-            }
+            let formattedtitle = title.replace(/([A-Z])/g, ' $1').trim()                        
+            key = formattedtitle;
+            // const link = generateTagLink(title);
+        }               
+        const dt = document.createElement('dt');
+        // LANGUAGE
 
-            endresult += "<a href="+link+" class='contenttitle'>"+formattedtitle+":</a> ";
-        }
+        translate(title, dt);
 
-        for(let i in whatarray){
-            let key = whatarray[i];
-            let item = what[key];
+        // CONTENT
+        const dd = document.createElement('dd');
+        if( typeof descriptionElement === 'string' ) {
+            descriptionElement = [ descriptionElement ];
+        }       
+        const decriptionList = Object.keys(descriptionElement);       
+        for(let i in decriptionList){
+            let key = decriptionList[i];
+            let item = descriptionElement[key];
             // Here we may need specific things for different fields
             let content = item.name || item;
             if(item.code){
                 content = item.code += " - "+ content;
             }
             if(item.inverted){
-                content = "not " + content;
+                content = "- " + content;
             }
+            // make tag 
+            const span = document.createElement('span');
+            span.className="tag";
+            span.innerText = content;
+            dd.appendChild(span);           
+        }      
 
-            let writestring = "<span>"+content+"</span>";
-
-            // Handle different lengths of lists (plurality)
-            if(whatarray.length > 2 && i < whatarray.length - 2){
-                writestring += ", ";
-            }
-            if(i == whatarray.length - 2 && whatarray.length > 1){
-                // -2 because 0 index vs 2nd last item in length
-                let lang_nn_nb = "<span class='nb nn lang-show'> og </span>";
-                let lang_eng = "<span class='en'> and </span>";
-                writestring += lang_nn_nb + lang_eng;
-            }
-            endresult += writestring;
-
-        }
-
-        endresult += ". ";
-            if(title){
-                endresult += "</br>";
-            }
-        addData(where,endresult)
+        div.appendChild(dt)
+        div.appendChild(dd)
+        appendData("Descriptions.other",div);
+        
 
     }catch(err){
         console.error("failed at addDescriptionItems")
     }
+}
+
+function generateTagLink(title){
+    // NO IDEA WHEN THIS SHOULD BE USED
+    let link = " http://rs.tdwg.org/dwc/terms/"
+        + title.charAt(0).toLowerCase() + title.slice(1);            
+        let lastletter = link.substring(link.length - 1,link.length);
+        if(lastletter == "s"){
+            link = link.substring(0, link.length - 1);
+        }           
+        return " <a href="+link+" class='contenttitle'> (link) :</a> ";
 }
 
 function addTaxons(taxons){
@@ -947,12 +861,12 @@ function resetPage(){
 
         /* Hide before content load */        
         showElement($("#tags_other"),false);
-        showElement($("#tags_geometry"),false);
-        showElement($("#tags_area"),false);
+        //showElement($("#tags_geometry"),false);
+        //showElement($("#tags_area"),false);
       
         document.querySelectorAll('.contributor-plural').forEach(x => showElement(x,false));
-        document.querySelectorAll('.tags_absence').forEach(x => showElement(x,false));
-        
+        //document.querySelectorAll('.tags_absence').forEach(x => showElement(x,false));
+
     }catch(err){
         console.error("failed at emptying appenders")
     }

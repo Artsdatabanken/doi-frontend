@@ -74,3 +74,17 @@
 
 
 
+dl div{
+    display: flex;
+    padding:var(  --spacing-xsm);
+    & dt{
+        font-weight:bold;
+    }
+}
+
+.tag{
+    padding:2px 4px;
+    border-radius: 4px;
+    margin:4px;
+    border: 2px solid var(--text-base-text-secondary);
+}
