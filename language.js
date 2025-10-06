@@ -108,4 +108,10 @@ const translations = {
         "nb": "uten ",
         "en": "without "
     }
+    ,
+    HasImage:{
+        "nn": "har bilde",
+        "nb": "har bilde ",
+        "en": "has image"
+    }
 }

@@ -530,8 +530,6 @@ function addDescriptionItems(descriptionElement,title){
             // const link = generateTagLink(title);
         }               
         const dt = document.createElement('dt');
-        // LANGUAGE
-
         translate(title, dt);
 
         // CONTENT
@@ -544,9 +542,7 @@ function addDescriptionItems(descriptionElement,title){
             const key = decriptionList[i];
             const item = descriptionElement[key];
             // Here we may need specific things for different fields
-            const text = item.name || item;  
-     
-                  
+            const text = item.name || item;       
             // make tag 
             const span = document.createElement('span');
             span.className="tag";
@@ -583,40 +579,6 @@ function generateTagLink(title){
         return " <a href="+link+" class='contenttitle'> (link) :</a> ";
 }
 
-function addTaxons(taxons){
-    try{
-        if(taxons){
-             // TAXONS
-        let lang_nn_nb = "<span class='nb nn lang-show'>av </span>";
-        let lang_eng = "<span class='en'> of </span>";
-        let ingresstaxons = lang_nn_nb + lang_eng;
-        let taxonarray = Object.keys(taxons);
-        if(taxonarray.length < 3){
-            for(let i in taxonarray){
-                let key = taxonarray[i];
-                let taxon = taxons[key];
-                let name = "<span class='nb nn lang-show'>"+taxon.name +" </span>" || "";
-                let taxonformat = name+"<i>"+taxon.scientificname+"</i> "+taxon.author;
-                if(i == 0 && taxonarray.length > 2){
-                    taxonformat += ", ";
-                }
-                if(i == taxonarray.length - 2 && taxonarray.length > 1){
-                    // -2 because 0 index vs 2nd last item in length
-                    let lang_nn_nb = "<span class='nb nn lang-show'> og </span>";
-                    let lang_eng = "<span class='en'> and </span>";
-                    taxonformat += lang_nn_nb + lang_eng;
-                }
-                ingresstaxons += taxonformat;
-            }
-            addData("ingress.taxons",ingresstaxons)
-        }
-        }
-    }catch(err){
-        console.error("failed at taxons")
-    }
-}
-
-
 function addGeneralData(attributes){
     try{
         // DOI URL
@@ -638,7 +600,6 @@ function addGeneralData(attributes){
         console.error("General data failed")
     }
 }
-
 
 function reLink(addLink){
     // activate and deactivate element in breadcrumb
@@ -753,7 +714,7 @@ function detectTest(){
     let url = window.location.href;
     if(
         url.includes("test") || // test environment
-        (url.includes("doi-frontend")) // localhost
+        url.includes("doi-frontend") // localhost
     ){
         return "test."
     }
@@ -861,15 +822,12 @@ function resetPage(){
         $("#artskartLink").href = "";        
         $("#doi.appender").innerHTML = "";
         $("#Descriptions.other").innerHTML = "";
-        //$("#Api.link").innerHTML = "";
 
         /* Hide before content load */        
         showElement($("#tags_other"),false);
-        //showElement($("#tags_geometry"),false);
-        //showElement($("#tags_area"),false);
       
+        /* text formatting */
         document.querySelectorAll('.contributor-plural').forEach(x => showElement(x,false));
-        //document.querySelectorAll('.tags_absence').forEach(x => showElement(x,false));
 
     }catch(err){
         console.error("failed at emptying appenders")
@@ -896,15 +854,13 @@ function pageSetup(activate){
 }
 
 function showElement(element,activate){
-    //console.log("el", element)
-    // activate = boolean
+    // Use this to hide/and show elements that are not language based.
+    // To toggle lanuage, use showLang() instead 
     try{        
         if(activate){
-           //console.log("activate ", element)
             element.classList.remove('hidden');
             element.ariaHidden = "false";
         }else{
-            //console.log("inactivate ", element)
             element.ariaHidden = "true";
             element.classList.add('hidden');        
         }               

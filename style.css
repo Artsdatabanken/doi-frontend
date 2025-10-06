@@ -68,8 +68,6 @@
         align-items: center;
         min-height: 33px;;
     }
-
-
 }
 
 
@@ -79,6 +77,14 @@ dl div{
     padding:var(  --spacing-xsm);
     & dt{
         font-weight:bold;
+        flex:1;
+        min-width: 100px;
+    }
+
+    & dd{
+        display: flex;
+        flex-wrap: wrap;
+        flex:5
     }
 }
 
