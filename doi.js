@@ -395,9 +395,9 @@ function addDoi(desc){
             let items = doi[i].split("|");
             let contributer = document.createElement('li');
             contributer.className = "listitem";
-            let numberline = "(<span> "+ items[1]+" element)</span>";
+            let numberline = "<span> ("+ items[1]+" element)</span>";
             let nameline = "<span>"+ items[2]+"</span>";
-            contributer.innerHTML =  + " " +nameline;
+            contributer.innerHTML = nameline + numberline;
 
             let link = items[0];           
             if(link.includes("https")){
