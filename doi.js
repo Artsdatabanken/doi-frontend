@@ -6,6 +6,32 @@ or replacing the existing text.
 
 */
 
+// No jquery, BUT apparently we use the shorthand anyways. Movet to top so we actually know this.
+function $(id){
+    try{
+        if(id[0]=="."){
+            return document.getElementsByClassName(id.substring(1));
+        }else if(id[0]=="#"){
+            return document.getElementById(id.substring(1));
+        }else{
+            console.error("code was missing '#' or '.' in $ shorthand. try matching anyways");
+            try{
+                if(document.getElementById(id)){
+                    return document.getElementById(id);
+                }else{
+                    return document.getElementsByClassName(id);
+                }
+            }catch(err){
+                console.log(err, "could not find html object", $)
+            }
+        
+        }
+    }catch(err){
+        console.log(err, "could not find html object", $)
+    }
+}
+
+
 // Startup
 window.addEventListener('load', function() {
     runApiCall();
@@ -59,7 +85,7 @@ function getDoiData(isRerun){
 // Start presenting the DOI-page
 function handleDoiData(data,isRerun){
     // Prep the page
-    emptyAppenders();
+    resetPage();
     let attributes = data.data.attributes;
 
     pageSetup(true);
@@ -167,7 +193,7 @@ function hideProgressbar(attributes){
         for(let i in dates){
             if(dates[i].dateType == "Valid"){
                 // PROGRESSBAR HIDE
-                updateStyle(document.getElementById("notyetvalid"),"display","none");
+                updateStyle($("#notyetvalid"),"display","none");
             }
         }
     }catch(err){
@@ -209,32 +235,32 @@ function addTimeDetails(attributes){
         // PROGRESS BAR
         if(dates.Submitted){
             addData("Progress.Submitted",formatDate(dates.Submitted));
-            changeClass($("Progress.Submitted").parentElement,"done");
+            changeClass($("#Progress.Submitted").parentElement,"done");
             updateStyle($("#progressindicator"),"width","20%");
             text = "Dette datasettet har blitt bestilt. Det vil si at eksporten står i kø for å opprettes. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
         }else{
-            changeClass($("Progress.Submitted").parentElement,"next");
+            changeClass($("#Progress.Submitted").parentElement,"next");
             addData("Progress.Submitted","-");
         }
 
         if(dates.Created){
-            addData("Progress.Created",formatDate(dates.Created));
-            changeClass($("Progress.Created").parentElement,"done");
+            addData("#Progress.Created",formatDate(dates.Created));
+            changeClass($("#Progress.Created").parentElement,"done");
             updateStyle($("#progressindicator"),"width","50%");
             text = "Dette datasettet er ikke helt ferdig generert ennå, så det kan mangle data nedenfor. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
         }else{
-            changeClass($("Progress.Created").parentElement,"next");
-            addData("Progress.Created","-");
+            changeClass($("#Progress.Created").parentElement,"next");
+            addData("#Progress.Created","-");
         }
 
         if(dates.Valid){
             addData("Progress.Valid",formatDate(dates.Valid));
-            changeClass($("Progress.Valid").parentElement,"done");
+            changeClass($("#Progress.Valid").parentElement,"done");
             updateStyle($("#progressindicator"),"width","100%");
             text = "Dette datasettet er ferdigeksportert.";
         }else{
             changeClass($("Progress.Valid").parentElement,"next");
-            addData("Progress.Valid","-");
+            addData("#Progress.Valid","-");
             getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Updated||false,dates.Valid||false);
         }
         addData("progresstext",text);
@@ -358,7 +384,7 @@ function addDoi(desc){
         let doi = desc['DOI'] || [];
         // Text formatting:
         if(doi.length!=1){
-            let these = document.getElementsByClassName('contributor-plural');
+            let these = $('.contributor-plural');
         for (let element of these){
                 element.style.display="inline";
                 // TODO ANDLE ARIAS FOR THIS
@@ -417,7 +443,7 @@ function getCitation(doi){
 function addArtskartUrl(desc){
     try{
         let artskartelement = desc['ArtskartUrl'][0];
-        let artskartLink = document.getElementById("artskartLink");
+        let artskartLink = $("#artskartLink");
         artskartLink.href = artskartelement;
         console.info("updated artskarturl")        
     }catch(err){
@@ -497,7 +523,7 @@ function addDescriptions(desc){
                         span.id = "Descriptions."+i;
                         addDescriptionItems(descriptioncontent[i],span,i);
                         appendData("Descriptions.other",span)
-                        updateStyle($('tags_other'),"display","inline-block");
+                        updateStyle($('#tags_other'),"display","inline-block");
                     }
                 }
             }
@@ -541,7 +567,7 @@ function addTags(tags){
 
         //console.log(absent, notrecovered, casenumber)
 
-        let absence_items = document.getElementsByClassName("tags_absence");
+        let absence_items = $(".tags_absence");
         for (let element of absence_items){
             casenumber = "tags_case_" + casenumber;
             if(element.className.includes(casenumber)){
@@ -698,8 +724,8 @@ function addGeneralData(attributes){
 function reLink(addLink){
     // activate and deactivate element in breadcrumb
     try{        
-        const reLinked = document.getElementById("reLinked");
-        const unLinked = document.getElementById("unLinked");
+        const reLinked = $("#reLinked");
+        const unLinked = $("#unLinked");
         let activate = reLinked;
         let unactivate = unLinked;
         if(!addLink){   
@@ -798,15 +824,6 @@ function addGeoLocation(attributes){
 
 // Help Functions
 
-function $(id){
-    if(id[0]=="."){
-        return document.getElementsByClassName(id.substring(1));
-    }else if(id[0]=="#"){
-        return document.getElementById(id.substring(1));
-    }
-    return document.getElementById(id);
-}
-
 function getGuid(){
     let guid = window.location.hash;
     return guid.replace("#","");
@@ -815,7 +832,9 @@ function getGuid(){
 function detectTest(){
     // Detect if we're running on test or not
     let url = window.location.href;
-    if(url.includes("test") || (url.includes("index")|| url.includes("artskart"))
+    if(
+        url.includes("test") || // test environment
+        (url.includes("doi-frontend")) // localhost
     ){
         return "test."
     }
@@ -875,7 +894,6 @@ function unWrap(wrapped,criteria,content){
     }catch(err){
         console.error("unwrap failed")
     }
-
 }
 
 function unWrapDescriptions(wrapped,criteria,content){
@@ -886,7 +904,7 @@ function unWrapDescriptions(wrapped,criteria,content){
 function addData(id,content){
     if(content!= undefined && id!= undefined){
         try{
-            let object = document.getElementById(id) || id;
+            let object = $("#"+id) || id;
             object.innerHTML = content;
         }
         catch(err){
@@ -895,7 +913,7 @@ function addData(id,content){
     }else{
         // To avoid entire page breaking down if one error occurs
         try{
-            document.getElementById(id).innerHTML = "Ikke oppgitt";}
+            $("#"+id).innerHTML = "Ikke oppgitt";}
         catch(err){
             console.error("failed for id: ",id,"and content:" ,content)
         }
@@ -905,27 +923,26 @@ function addData(id,content){
 function appendData(id,content){
     if(content!= undefined && id!= undefined ){
         try{
-            document.getElementById(id).appendChild(content);
+            $("#"+id).appendChild(content);
         } catch(err){
             console.error("failed for id: ",id,"and content:" ,content);
         }
-
     }else{
         // To avoid entire page breaking down if one error occurs
         console.error("no such content ", id,content);
     }
 }
 
-function emptyAppenders(){
+function resetPage(){
     try{
         // Empty appenders: 
-        document.getElementById("img.appender").innerHTML = "";
-        document.getElementById("zip.appender.nb").innerHTML = "";
-        document.getElementById("zip.appender.en").innerHTML = "";        
-        document.getElementById("artskartLink").href = "";        
-        document.getElementById("doi.appender").innerHTML = "";
-        document.getElementById("Descriptions.other").innerHTML = "";
-        //document.getElementById("Api.link").innerHTML = "";
+        $("#img.appender").innerHTML = "";
+        $("#zip.appender.nb").innerHTML = "";
+        $("#zip.appender.en").innerHTML = "";        
+        $("#artskartLink").href = "";        
+        $("#doi.appender").innerHTML = "";
+        $("#Descriptions.other").innerHTML = "";
+        //$("#Api.link").innerHTML = "";
     }catch(err){
         console.error("failed at emptying appenders")
     }
@@ -933,18 +950,18 @@ function emptyAppenders(){
 
 function pageSetup(activate){
     try{
-        showOrHide(document.getElementById("nodata"),!activate);
-        for (let el of document.getElementsByClassName("section")){
+        showOrHide($("#nodata"),!activate);
+        for (let el of $(".section")){
             showOrHide(el,activate);
         }
-        for (let el of document.getElementsByClassName("inlinesection")){
+        for (let el of $(".inlinesection")){
             showOrHide(el,activate);
         }
 
-        for (let el of document.getElementsByClassName("ingress")){
+        for (let el of $(".ingress")){
             showOrHide(el,activate);
         }        
-        showOrHide(document.getElementById("timedetails"),activate);        
+        showOrHide($("#timedetails"),activate);        
     }catch(err){
         console.error("failed at pageSetup")
     }
@@ -963,5 +980,4 @@ function showOrHide(element,activate){
     }catch(err){
         console.error("showOrHide failed for element:", element)
     }
-
 }
