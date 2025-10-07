@@ -24,7 +24,7 @@ function $(id){
             }catch(err){
                 console.log(err, "could not find html object", id)
             }
-        
+
         }
     }catch(err){
         console.log(err, "could not find html object", id)
@@ -101,7 +101,7 @@ function handleDoiData(data,isRerun){
 
     addTimeDetails(attributes);
     addIngressData(attributes,desc);
-    //addGeoLocation(attributes);
+    addGeoLocation(attributes);
     addFiles(attributes,desc); // Download dataset is a part of addFiles, and lives in the sidebar.
     addDoi(desc);
     addDescriptions(desc);
@@ -327,10 +327,10 @@ function addFiles(attributes,desc){
                     if (!languages.hasOwnProperty(key)) {
                         continue;
                     }
-                    const lang = languages[key];                 
+                    const lang = languages[key];
 
-                    let format = attributes.formats.toString().replace("application/","");//TODO                    
-                    let innerformat = desc['ExportType'];                    
+                    let format = attributes.formats.toString().replace("application/","");//TODO
+                    let innerformat = desc['ExportType'];
                     const label = lang == 'nb' ? "Last ned datasett" : "Download dataset";
 
                     // Make downloadbutton
@@ -340,7 +340,7 @@ function addFiles(attributes,desc){
 
                     const downloadButton = createDownloadButton(zipurl);
                     downloadButton.innerHTML = material + buttontext;
-                    
+
                     appendData('zip.appender.'+lang,downloadButton);
                 }
             }
@@ -399,7 +399,7 @@ function addDoi(desc){
             let nameline = "<span>"+ items[2]+"</span>";
             contributer.innerHTML = nameline + numberline;
 
-            let link = items[0];           
+            let link = items[0];
             if(link.includes("https")){
                 let doitext = link.replace("https://doi.org/","");
                 getCitation(doitext);
@@ -445,7 +445,7 @@ function addArtskartUrl(desc){
         let artskartelement = desc['ArtskartUrl'][0];
         let artskartLink = $("#artskartLink");
         artskartLink.href = artskartelement;
-        console.info("updated artskarturl")        
+        console.info("updated artskarturl")
     }catch(err){
         console.error("Failed at artskarturl;")
     }
@@ -501,12 +501,12 @@ function addDescriptions(desc){
         let count = desc['Count'] || 0;
         addData("Descriptions.count",count);
         let descriptioncontent = desc['Description'] || null;
-        if(descriptioncontent){            
+        if(descriptioncontent){
             descriptioncontent = JSON.parse(descriptioncontent);
             for(let title in descriptioncontent){
                 if(descriptioncontent[title] != ""){
-                    addDescriptionItems(descriptioncontent[title],title);   
-                }                
+                    addDescriptionItems(descriptioncontent[title],title);
+                }
             }
         }
     }catch(err){
@@ -514,54 +514,75 @@ function addDescriptions(desc){
     }
 }
 
+function makeDataPairObjects(containerId,title,dd){
+  // CONTENT has to be a created dt-object.
+  try{
+    // Make outer container
+    const div = document.createElement('div');
+    div.id = containerId;
+
+    // Make key
+    const dt = document.createElement('dt');
+    translate(title, dt);
+    // attach stuff
+    div.appendChild(dt)
+    div.appendChild(dd)
+    return div;
+
+  }catch(err){
+    console.error("failed at make data pair objects")
+  }
+}
+
+function makeTags(containerId,title,dd){
+  // CONTENT has to be a created dt-object.
+  try{
+    showElement($('#tags_other'),true); // only used in tags so far
+    const data = makeDataPairObjects(containerId,title,dd);
+    appendData("Descriptions.other",data);
+
+  }catch(err){
+    console.error("failed at make makeTags")
+  }
+}
 
 function addDescriptionItems(descriptionElement,title){
-    try{        
-        // NODE
-        showElement($('#tags_other'),true);
-        const div = document.createElement('div');
-        div.id = "Descriptions."+title;
-
+    try{
         // TITLE
-        let key = title;   
+        let key = title;
         if(title){
-            let formattedtitle = title.replace(/([A-Z])/g, ' $1').trim()                        
+            let formattedtitle = title.replace(/([A-Z])/g, ' $1').trim()
             key = formattedtitle;
             // const link = generateTagLink(title);
-        }               
-        const dt = document.createElement('dt');
-        translate(title, dt);
-
+        }
         // CONTENT
         const dd = document.createElement('dd');
         if( typeof descriptionElement === 'string' ) {
             descriptionElement = [ descriptionElement ];
-        }       
-        const decriptionList = Object.keys(descriptionElement);       
+        }
+        const decriptionList = Object.keys(descriptionElement);
         for(let i in decriptionList){
             const key = decriptionList[i];
             const item = descriptionElement[key];
             // Here we may need specific things for different fields
-            const text = item.name || item;       
-            // make tag 
+            const text = item.name || item;
+            // make tag
             const span = document.createElement('span');
             span.className="tag";
             if(item.code){
                 const innerText = item.code += " - ";
                 span.innerText = innerText;
-            }      
-            
+            }
+
             if(item.inverted){
                 translate("Inverted", span);
             }
             translate(text, span);
-            dd.appendChild(span);           
-        }      
+            dd.appendChild(span);
+        }
 
-        div.appendChild(dt)
-        div.appendChild(dd)
-        appendData("Descriptions.other",div);
-        
+        makeTags("Descriptions."+title,title,dd);
+
 
     }catch(err){
         console.error("failed at addDescriptionItems")
@@ -571,11 +592,11 @@ function addDescriptionItems(descriptionElement,title){
 function generateTagLink(title){
     // NO IDEA WHEN THIS SHOULD BE USED
     let link = " http://rs.tdwg.org/dwc/terms/"
-        + title.charAt(0).toLowerCase() + title.slice(1);            
+        + title.charAt(0).toLowerCase() + title.slice(1);
         let lastletter = link.substring(link.length - 1,link.length);
         if(lastletter == "s"){
             link = link.substring(0, link.length - 1);
-        }           
+        }
         return " <a href="+link+" class='contenttitle'> (link) :</a> ";
 }
 
@@ -585,7 +606,7 @@ function addGeneralData(attributes){
         // URL is always the non-test version as it's from api.
         let shortcutLink = document.createElement('li');
         shortcutLink.textContent=attributes.doi;
-        appendData('Attributes.doi',shortcutLink);   
+        appendData('Attributes.doi',shortcutLink);
 
         reLink(true)
         let headerdoi = "DOI: "+ attributes.doi;
@@ -603,18 +624,18 @@ function addGeneralData(attributes){
 
 function reLink(addLink){
     // activate and deactivate element in breadcrumb
-    try{        
+    try{
         const reLinked = $("#reLinked");
         const unLinked = $("#unLinked");
         let activate = reLinked;
         let unactivate = unLinked;
-        if(!addLink){   
+        if(!addLink){
             activate = unLinked;
             unactivate =  reLinked;
         }
         showElement(activate,true);
         activate.innerHTML = unactivate.innerHTML;
-        showElement(unactivate,false);         
+        showElement(unactivate,false);
     }catch(err){
         console.error("unLink failed")
     }
@@ -689,20 +710,35 @@ function addStats(attributes){
 
 }
 
+function makeLocationSpan(title,content,source){
+  try{
+    const outerDiv = document.createElement('div');
+    translate(title, outerDiv);
+    outerDiv.className = "tag";
+    const contentSpan = document.createElement('span');
+    contentSpan.innerText = content;
+    contentSpan.className = "add-space";
+    outerDiv.appendChild(contentSpan);
+    source.appendChild(outerDiv);
+  }catch(err){
+    console.error(err, "failed at makeLocationSpan")
+  }
+}
+
 function addGeoLocation(attributes){
     try{
         let geoLocations = attributes.geoLocations[0];
-        addData("geoLocationBox.eastBoundLongitude",geoLocations.geoLocationBox.eastBoundLongitude);
-        addData("geoLocationBox.northBoundLatitude",geoLocations.geoLocationBox.northBoundLatitude);
-        addData("geoLocationBox.southBoundLatitude",geoLocations.geoLocationBox.southBoundLatitude);
-        addData("geoLocationBox.westBoundLongitude",geoLocations.geoLocationBox.westBoundLongitude);
+        const dd = document.createElement('dd');
+        makeLocationSpan("eastBoundLongitude", geoLocations.geoLocationBox.eastBoundLongitude,dd);
+        makeLocationSpan("northBoundLatitude", geoLocations.geoLocationBox.northBoundLatitude,dd);
+        makeLocationSpan("southBoundLatitude", geoLocations.geoLocationBox.southBoundLatitude,dd);
+        makeLocationSpan("westBoundLongitude", geoLocations.geoLocationBox.westBoundLongitude,dd);
+        makeTags("geoLocations","geoLocations",dd);
+
     }catch(err){
         console.error("geolocations failed")
     }
 }
-
-
-// Help Functions
 
 function getGuid(){
     let guid = window.location.hash;
@@ -815,17 +851,17 @@ function appendData(id,content){
 
 function resetPage(){
     try{
-        // Empty appenders: 
+        // Empty appenders:
         $("#img.appender").innerHTML = "";
         $("#zip.appender.nb").innerHTML = "";
-        $("#zip.appender.en").innerHTML = "";        
-        $("#artskartLink").href = "";        
+        $("#zip.appender.en").innerHTML = "";
+        $("#artskartLink").href = "";
         $("#doi.appender").innerHTML = "";
         $("#Descriptions.other").innerHTML = "";
 
-        /* Hide before content load */        
+        /* Hide before content load */
         showElement($("#tags_other"),false);
-      
+
         /* text formatting */
         document.querySelectorAll('.contributor-plural').forEach(x => showElement(x,false));
 
@@ -846,8 +882,8 @@ function pageSetup(activate){
 
         for (let el of $(".ingress")){
             showElement(el,activate);
-        }        
-        showElement($("#timedetails"),activate);        
+        }
+        showElement($("#timedetails"),activate);
     }catch(err){
         console.error("failed at pageSetup")
     }
@@ -855,15 +891,15 @@ function pageSetup(activate){
 
 function showElement(element,activate){
     // Use this to hide/and show elements that are not language based.
-    // To toggle lanuage, use showLang() instead 
-    try{        
+    // To toggle lanuage, use showLang() instead
+    try{
         if(activate){
             element.classList.remove('hidden');
             element.ariaHidden = "false";
         }else{
             element.ariaHidden = "true";
-            element.classList.add('hidden');        
-        }               
+            element.classList.add('hidden');
+        }
     }catch(err){
         console.error("showElement failed for element:", element)
     }

@@ -6,10 +6,10 @@ const languages = ["nn", "nb", "en"];
 var lang = "nb";
 
 function languageSupport(){
-    changeLanguage("nb");       
+    changeLanguage("nb");
 }
 
-function changeLanguage(newLang) {    
+function changeLanguage(newLang) {
     lang = newLang;
 
     // show selected elements by new language
@@ -18,7 +18,7 @@ function changeLanguage(newLang) {
     toShow.forEach(x=>showLang(x,true));
     toShow.forEach(x=>showLang(x,true));
 
-    // selectors for the supported languages (excluding top html element) 
+    // selectors for the supported languages (excluding top html element)
     const allSupported = ['[lang="nn"]:not(html)', '[lang="nb"]:not(html)', '[lang="en"]:not(html)'];
 
     // remove the one we want to show from list of elements to hide
@@ -30,7 +30,7 @@ function changeLanguage(newLang) {
     const toHide = document.querySelectorAll(allSupported);
     toHide.forEach(x=>showLang(x,false));
     toHide.forEach(x=>showLang(x,false));
-   
+
     // update language of body
     document.documentElement.setAttribute('lang', newLang);
   }
@@ -53,25 +53,25 @@ function changeLanguage(newLang) {
         const newElement = document.createElement('span');
         newElement.setAttribute('lang', language);
         const text = translations[key][language];
-        if(text){             
-            newElement.innerText = translations[key][language];             
+        if(text){
+            newElement.innerText = translations[key][language];
         }else{
             console.info("translate missing for ", key, language )
             newElement.innerText = key;
         }
         showLang(newElement, lang === language)
-        node.appendChild(newElement);     
-    });    
+        node.appendChild(newElement);
+    });
     }else{
         console.info("translate missing for: ", key)
         node.innerText = key;
     }
-    return node; 
+    return node;
     }catch(err){
         console.error("failed at translations")
     }
 }
-  
+
 const translations = {
     Taxons:{
         "nn": "Takson",
@@ -107,11 +107,30 @@ const translations = {
         "nn": "uten ",
         "nb": "uten ",
         "en": "without "
-    }
-    ,
+    },
     HasImage:{
         "nn": "har bilde",
         "nb": "har bilde ",
         "en": "has image"
+      },
+    eastBoundLongitude:{
+        "nn": "austlig lengdegrad",
+        "nb": "østlig lengdegrad",
+        "en": "east bound Longitude"
+    },
+    northBoundLatitude:{
+        "nn": "nordlig breddegrad",
+        "nb": "nordlig breddegrad",
+        "en": "north bound latitude"
+    },
+    southBoundLatitude:{
+        "nn": "sørlig breddegrad",
+        "nb": "sørlig breddegrad",
+        "en": "south bound latitude"
+    },
+    westBoundLongitude:{
+        "nn": "vestlig lengdegrad",
+        "nb": "vestlig lengdegrad",
+        "en": "west bound Longitude"
     }
 }
