@@ -6,6 +6,8 @@ or replacing the existing text.
 
 */
 
+var testing = true;
+
 // No jquery, BUT apparently we use the shorthand anyways. Movet to top so we actually know this.
 function $(id){
     try{
@@ -62,7 +64,6 @@ function runApiCall(){
     }
 }
 
-
 // Fetch DOI data from api.
 function getDoiData(isRerun){
     // Obtaining the relevant doi to look up.
@@ -79,16 +80,15 @@ function getDoiData(isRerun){
         pageSetup(false);
         showFrontPage();
     })
-
-}
+  }
 
 // Start presenting the DOI-page
 function handleDoiData(data,isRerun){
     // Prep the page
     resetPage();
     let attributes = data.data.attributes;
-
     pageSetup(true);
+
     if(!isRerun){
         // If the function is a rerun (update), dont hide the progressbar
         // Users will then be interested to know it reached finished state.
@@ -97,8 +97,6 @@ function handleDoiData(data,isRerun){
 
     let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");
     // Main Content
-
-
     addTimeDetails(attributes);
     addIngressData(attributes,desc);
     addGeoLocation(attributes);
@@ -106,15 +104,13 @@ function handleDoiData(data,isRerun){
     addDoi(desc);
     addDescriptions(desc);
     addImageSources(desc);
-
-
     // Sidebar
     addGeneralData(attributes);
-    //addFileInfo(attributes,desc);
+    addFileInfo(attributes,desc);
     addCitation(attributes);
     addArtskartUrl(desc);
-    // addStats(attributes);
-    // addTypes(attributes);
+    addStats(attributes);
+    addTypes(attributes);
 
     //console.log("All data loaded")
 }
@@ -191,9 +187,9 @@ function hideProgressbar(attributes){
     try{
         let dates = attributes.dates;
         for(let i in dates){
-            if(dates[i].dateType == "Valid"){
+            if(dates[i].dateType == "Valid" || testing){
                 // PROGRESSBAR HIDE
-                updateStyle($("#notyetvalid"),"display","none");
+                showElement($('#notyetvalid'),false);
             }
         }
     }catch(err){
@@ -223,9 +219,9 @@ function changeClass(selector,className){
 }
 
 function addTimeDetails(attributes){
+  // TODO: Obviously handle this better
     try{
         let dates = unWrap(attributes.dates,"dateType","date");
-
         // HEADER TEXT
         addData("Time.Created",formatDate(dates.Created));
         //addData("Time.Updated",formatDate(dates.Updated));
@@ -272,19 +268,11 @@ function addTimeDetails(attributes){
 
 function addIngressData(attributes,desc){
     try{
-
         addData("Ingress.count",desc['Count']||0);
-        /*
-        addData("Titles.type",attributes.titles[0].title);
-        addData("Creators.sourcename",attributes.creators[0].name);
-        addData("publisher",attributes.publisher);
-        addData("Time.year",attributes.publicationYear);
-        */
     }catch(err){
         console.error("Failed at Ingress")
     }
 }
-
 
 function addFiles(attributes,desc){
     // Also contains doi-sources which are duplicated in descriptions.doi
@@ -301,8 +289,12 @@ function addFiles(attributes,desc){
             if(item.resourceTypeGeneral=="Image"){
                 const image = document.createElement('img');
                 image.src  = item.relatedIdentifier;
+
                 const closebutton = document.createElement('button');
-                closebutton.innerHTML= "<span class='material-icons'>fullscreen</span>";
+                const material = document.createElement('span');
+                material.className = "material-icons";
+                material.textContent = "fullscreen";
+                closebutton.appendChild(material);
                 closebutton.id = "fullscreenbutton";
                 closebutton.className = "icon-button";
                 // Make image BIG
@@ -328,7 +320,6 @@ function addFiles(attributes,desc){
                         continue;
                     }
                     const lang = languages[key];
-
                     let format = attributes.formats.toString().replace("application/","");//TODO
                     let innerformat = desc['ExportType'];
                     const label = lang == 'nb' ? "Last ned datasett" : "Download dataset";
@@ -340,7 +331,7 @@ function addFiles(attributes,desc){
 
                     const downloadButton = createDownloadButton(zipurl);
                     downloadButton.innerHTML = material + buttontext;
-
+                    console.log("make downloadbutts")
                     appendData('zip.appender.'+lang,downloadButton);
                 }
             }
@@ -367,15 +358,14 @@ function download(url) {
     document.body.removeChild(a)
   }
 
-  function createLink(url,doitext) {
-    const a = document.createElement('a')
-    a.href = url;
-    if(doitext){
-        a.textContent = doitext;
-    }
-    return a;
+function createLink(url,text) {
+  const a = document.createElement('a')
+  a.href = url;
+  if(text){
+      a.textContent = text;
   }
-
+  return a;
+}
 
 function addDoi(desc){
     // Contains all source datasets. Also those without a doi, but of doi-type data.
@@ -409,7 +399,7 @@ function addDoi(desc){
             appendData('doi.appender',contributer);
         }
     }catch(err){
-        console.error("Failed in doi")
+        console.error("Failed in doi",err)
     }
 }
 
@@ -515,7 +505,7 @@ function addDescriptions(desc){
 }
 
 function makeDataPairObjects(containerId,title,dd){
-  // CONTENT has to be a created dt-object.
+  // CONTENT has to be a created dd-object.
   try{
     // Make outer container
     const div = document.createElement('div');
@@ -537,7 +527,7 @@ function makeDataPairObjects(containerId,title,dd){
 function makeTags(containerId,title,dd){
   // CONTENT has to be a created dt-object.
   try{
-    showElement($('#tags_other'),true); // only used in tags so far
+    showElement($('#tags_other'),true);
     const data = makeDataPairObjects(containerId,title,dd);
     appendData("Descriptions.other",data);
 
@@ -611,16 +601,27 @@ function addGeneralData(attributes){
         reLink(true)
         let headerdoi = "DOI: "+ attributes.doi;
         addData('header-doi',headerdoi);
-        //addData("Attributes.url",attributes.url);
-        //addData("data.Id",data.data.id);
-        //addData("data.Type",data.data.type);
-        //addData("Attributes.prefix",attributes.prefix);
-        //addData("Attributes.suffix",attributes.suffix);
-        //addData("Attributes.identifiers",attributes.identifiers);
     }catch(err){
         console.error("General data failed")
     }
 }
+
+function addMiscData(attributes){
+    // removed html for this one as data is m ostly duplicate of other things
+    try{
+        //showElement($('#General'),true);
+        appendData("GeneralData",makePairElements("Url",attributes.url));
+        appendData("GeneralData",makePairElements("identifiers",attributes.identifiers));
+        appendData("GeneralData",makePairElements("id",data.data.id));
+        appendData("GeneralData",makePairElements("type",data.data.type));
+        //addData("Attributes.prefix",attributes.prefix);
+        //addData("Attributes.suffix",attributes.suffix);
+    }catch(err){
+        console.error("addMiscData data failed",err)
+    }
+}
+
+
 
 function reLink(addLink){
     // activate and deactivate element in breadcrumb
@@ -643,33 +644,38 @@ function reLink(addLink){
 
 function addFileInfo(attributes,desc){
     try{
-        addData("Descriptions.ExportType",desc['ExportType']);
-        addData("Size",convertBytes(attributes.sizes));
-        addData("Attributes.formats",attributes.formats); // TODO: OMPLASSER
-        let apiurl = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
-        let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";
-        addData('Api.link',apilink);
-        addData("Titles.lang",attributes.titles[0].lang);
-        addData("Attributes.state",attributes.state);
-        //addData("Creators.sourcetype",attributes.creators[0].nameType);
-        //addData("Attributes.version",attributes.version);
-        //addData("Attributes.metadataVersion",attributes.metadataVersion);
-        //addData("Attributes.schemaVersion",attributes.schemaVersion);
+        showElement($('#File'),true);
+        appendData("FileInfo",makePairElements("ExportType",desc['ExportType']));
+        appendData("FileInfo",makePairElements("Size",convertBytes(attributes.sizes)));
+        appendData("FileInfo",makePairElements("Format",attributes.formats));
+        appendData("FileInfo",makePairElements("Language",attributes.titles[0].lang)); //Titles.lang
+        appendData("FileInfo",makePairElements("Title",attributes.titles[0].title)); //Titles.lang
+        appendData("FileInfo",makePairElements("State",attributes.state));
+        appendData("FileInfo",makePairElements("CreatorsSourceType",attributes.creators[0].nameType));
+        appendData("FileInfo",makePairElements("CreatorsSourceName",attributes.creators[0].name));
+        appendData("FileInfo",makePairElements("Publisher",attributes.publisher));
+        appendData("FileInfo",makePairElements("PublicationYear",attributes.publicationYear));
+
+        // THOSE BELOW, What are they
+        //appendData("FileInfo",makePairElements("version",attributes.version));
+        //appendData("FileInfo",makePairElements("metadataVersion",attributes.metadataVersion));
+        //appendData("FileInfo",makePairElements("schemaVersion",attributes.schemaVersion));
     }catch(err){
-        console.error("File info failed")
+        console.error("File info failed",err)
     }
 
 }
 
 function addTypes(attributes){
     try{
-        addData("Attributes.types.resourceTypeGeneral",attributes.types.resourceTypeGeneral);
-        addData("Attributes.types.schemaOrg",attributes.types.schemaOrg);
-        addData("Attributes.types.bibtex",attributes.types.bibtex);
-        addData("Attributes.types.citeproc",attributes.types.citeproc);
-        addData("Attributes.types.ris",attributes.types.ris);
+      showElement($('#Types'),true);
+      for(let el in attributes.types){
+        console.log(el),
+        console.log(attributes.types[el])
+        appendData("Types.appender",makePairElements(el,attributes.types[el]));
+      }
     }catch(err){
-        console.error("Types failed")
+        console.error("Types failed",err)
     }
 }
 
@@ -694,18 +700,26 @@ function addCitation(attributes){
 
 }
 
+function makePairElements(title,content){
+  let dd = document.createElement('dd');
+  dd.textContent=content;
+  return makeDataPairObjects(title,title,dd);
+}
+
 function addStats(attributes){
     try{
-        addData("Attributes.viewCount",attributes.viewCount);
-        addData("Attributes.downloadCount",attributes.downloadCount);
-        addData("Attributes.referenceCount",attributes.referenceCount);
-        addData("Attributes.citationCount",attributes.citationCount);
-        addData("Attributes.partCount",attributes.partCount);
-        addData("Attributes.partOfCount",attributes.partOfCount);
-        addData("Attributes.versionCount",attributes.versionCount);
-        addData("Attributes.versionOfCount",attributes.versionOfCount);
+      showElement($('#Stats'),true); // only used in tags so far
+      appendData("Statistics",makePairElements("viewCount",attributes.viewCount));
+      appendData("Statistics",makePairElements("downloadCount",attributes.downloadCount));
+      appendData("Statistics",makePairElements("referenceCount",attributes.referenceCount));
+      appendData("Statistics",makePairElements("citationCount",attributes.citationCount));
+      appendData("Statistics",makePairElements("partCount",attributes.partCount));
+      appendData("Statistics",makePairElements("partOfCount",attributes.partOfCount));
+      appendData("Statistics",makePairElements("versionCount",attributes.versionCount));
+      appendData("Statistics",makePairElements("versionOfCount",attributes.versionOfCount));
+
     }catch(err){
-        console.error("Satistics failed")
+        console.error("Satistics failed", err)
     }
 
 }
