@@ -132,5 +132,10 @@ const translations = {
         "nn": "vestlig lengdegrad",
         "nb": "vestlig lengdegrad",
         "en": "west bound Longitude"
+    },
+    geoLocations:{
+        "nn": "Geolokasjoner",
+        "nb": "Geolokasjoner",
+        "en": "Geo locations"
     }
 }

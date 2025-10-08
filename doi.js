@@ -82,41 +82,49 @@ function getDoiData(isRerun){
     })
   }
 
+function showProgressBar(attributes,isRerun){
+    if(!isRerun){
+        // If the function is a rerun (update), dont hide the progressbar
+        // Users will then be interested to know it reached finished state.
+        const testProgressBar = false;
+        try{
+            let dates = attributes.dates;           
+            const valid =  dates.find(date => date.dateType === 'Valid');
+            showElement($('#notyetvalid'),!valid||testProgressBar);
+        }catch(err){
+            console.error("Failed at hideProgressbar",err)
+        }      
+    }
+}
+
 // Start presenting the DOI-page
 function handleDoiData(data,isRerun){
     // Prep the page
     resetPage();
     let attributes = data.data.attributes;
     pageSetup(true);
-
-    if(!isRerun){
-        // If the function is a rerun (update), dont hide the progressbar
-        // Users will then be interested to know it reached finished state.
-        hideProgressbar(attributes);
-    }
+    showProgressBar(attributes,isRerun);   
 
     let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");
     // Main Content
     addTimeDetails(attributes);
-    addIngressData(attributes,desc);
+    addIngressData(desc);
     addGeoLocation(attributes);
     addFiles(attributes,desc); // Download dataset is a part of addFiles, and lives in the sidebar.
     addDoi(desc);
     addDescriptions(desc);
     addImageSources(desc);
-    // Sidebar
     addGeneralData(attributes);
     addFileInfo(attributes,desc);
     addCitation(attributes);
     addArtskartUrl(desc);
     addStats(attributes);
     addTypes(attributes);
-
-    //console.log("All data loaded")
 }
 
 // During dataset generation this checks for more data and updated progress
 function getTimeUpdate(submitted,created,updated,valid){
+    console.info("check for updates");
     let timeout = 30000;
     try{
         setTimeout(function(){
@@ -127,6 +135,7 @@ function getTimeUpdate(submitted,created,updated,valid){
                 return response.json()
             })
             .then((data) => {
+                resetPage();
                 // UPDATE THESE WHEN NEW API
                 let newsubmitted = data.Submitted || false;
                 let newcreated = data.Created || false;
@@ -171,31 +180,15 @@ function getTimeUpdate(submitted,created,updated,valid){
                 }
             })
             .catch((err) => {
-                console.error("failed at fetch valid")
+                console.error("failed at fetch valid",err)
             })
         }, timeout);
     }catch(err){
-        console.error("error in timechecker")
+        console.error("error in timechecker",err)
     }
 }
 
 // Data formatters
-
-
-
-function hideProgressbar(attributes){
-    try{
-        let dates = attributes.dates;
-        for(let i in dates){
-            if(dates[i].dateType == "Valid" || testing){
-                // PROGRESSBAR HIDE
-                showElement($('#notyetvalid'),false);
-            }
-        }
-    }catch(err){
-        console.error("Failed at hideProgressbar")
-    }
-}
 
 function formatDate(date){
     return new Date(date).toLocaleDateString("nb-no", {hour: '2-digit', minute: '2-digit'});
@@ -206,7 +199,7 @@ function updateStyle(selector,styleselector,style){
         //console.log("styleselector",selector,styleselector,style)
         selector.style[styleselector] = style;
     }catch(err){
-        console.error("error in changing style for", selector, styleselector,style);
+        console.error("error in changing style for", selector, styleselector,style, err);
     }
 }
 
@@ -218,59 +211,42 @@ function changeClass(selector,className){
     }
 }
 
+function updateProgress(type,dateObject){
+    try{    
+        if(dateObject){
+            const width = type === "Submitted"?"20%":(type === "Created"?"50%":"100%");
+            addData("Progress."+type,formatDate(dateObject)); 
+            changeClass($("#Progress."+type).parentElement,"done");
+            updateStyle($("#progressindicator"),"width",width);
+            showElement($('#Progress.status.'+type),true);  
+        }
+    }catch(err){
+        console.error("failed at update progress", err)
+    }
+}
+
 function addTimeDetails(attributes){
-  // TODO: Obviously handle this better
     try{
         let dates = unWrap(attributes.dates,"dateType","date");
         // HEADER TEXT
         addData("Time.Created",formatDate(dates.Created));
-        //addData("Time.Updated",formatDate(dates.Updated));
         addData("Time.Valid",formatDate(dates.Valid));
-
-        let text = "loading";
-        // PROGRESS BAR
-        if(dates.Submitted){
-            addData("Progress.Submitted",formatDate(dates.Submitted));
-            changeClass($("#Progress.Submitted").parentElement,"done");
-            updateStyle($("#progressindicator"),"width","20%");
-            text = "Dette datasettet har blitt bestilt. Det vil si at eksporten står i kø for å opprettes. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
-        }else{
-            changeClass($("#Progress.Submitted").parentElement,"next");
-            addData("Progress.Submitted","-");
+        updateProgress("Submitted",dates.Submitted);
+        updateProgress("Created",dates.Created);
+        updateProgress("Valid",dates.Valid);
+        if(!dates.Valid){
+            getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Updated||false,valid||false);
         }
-
-        if(dates.Created){
-            addData("#Progress.Created",formatDate(dates.Created));
-            changeClass($("#Progress.Created").parentElement,"done");
-            updateStyle($("#progressindicator"),"width","50%");
-            text = "Dette datasettet er ikke helt ferdig generert ennå, så det kan mangle data nedenfor. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
-        }else{
-            changeClass($("#Progress.Created").parentElement,"next");
-            addData("#Progress.Created","-");
-        }
-
-        if(dates.Valid){
-            addData("Progress.Valid",formatDate(dates.Valid));
-            changeClass($("#Progress.Valid").parentElement,"done");
-            updateStyle($("#progressindicator"),"width","100%");
-            text = "Dette datasettet er ferdigeksportert.";
-        }else{
-            changeClass($("Progress.Valid").parentElement,"next");
-            addData("#Progress.Valid","-");
-            getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Updated||false,dates.Valid||false);
-        }
-        addData("progresstext",text);
-
     }catch(err){
-        console.error("Failed at times")
+        console.error("Failed at times", err)
     }
 }
 
-function addIngressData(attributes,desc){
+function addIngressData(desc){
     try{
         addData("Ingress.count",desc['Count']||0);
     }catch(err){
-        console.error("Failed at Ingress")
+        console.error("Failed at Ingress",err)
     }
 }
 
@@ -331,7 +307,6 @@ function addFiles(attributes,desc){
 
                     const downloadButton = createDownloadButton(zipurl);
                     downloadButton.innerHTML = material + buttontext;
-                    console.log("make downloadbutts")
                     appendData('zip.appender.'+lang,downloadButton);
                 }
             }
@@ -670,8 +645,6 @@ function addTypes(attributes){
     try{
       showElement($('#Types'),true);
       for(let el in attributes.types){
-        console.log(el),
-        console.log(attributes.types[el])
         appendData("Types.appender",makePairElements(el,attributes.types[el]));
       }
     }catch(err){
@@ -707,16 +680,22 @@ function makePairElements(title,content){
 }
 
 function addStats(attributes){
-    try{
-      showElement($('#Stats'),true); // only used in tags so far
-      appendData("Statistics",makePairElements("viewCount",attributes.viewCount));
-      appendData("Statistics",makePairElements("downloadCount",attributes.downloadCount));
-      appendData("Statistics",makePairElements("referenceCount",attributes.referenceCount));
-      appendData("Statistics",makePairElements("citationCount",attributes.citationCount));
-      appendData("Statistics",makePairElements("partCount",attributes.partCount));
-      appendData("Statistics",makePairElements("partOfCount",attributes.partOfCount));
-      appendData("Statistics",makePairElements("versionCount",attributes.versionCount));
-      appendData("Statistics",makePairElements("versionOfCount",attributes.versionOfCount));
+    try{      
+      console.info("Swap showStats to true to re-add statistics. They seem not to be tracked.")
+      const showStats = false;
+      if(showStats){      
+        showElement($('#Stats'),true); 
+        appendData("Statistics",makePairElements("viewCount",attributes.viewCount));
+        appendData("Statistics",makePairElements("downloadCount",attributes.downloadCount));
+        appendData("Statistics",makePairElements("referenceCount",attributes.referenceCount));
+        appendData("Statistics",makePairElements("citationCount",attributes.citationCount));
+        appendData("Statistics",makePairElements("partCount",attributes.partCount));
+        appendData("Statistics",makePairElements("partOfCount",attributes.partOfCount));
+        appendData("Statistics",makePairElements("versionCount",attributes.versionCount));
+        appendData("Statistics",makePairElements("versionOfCount",attributes.versionOfCount));
+        }else{
+            showElement($('#Stats'),false); 
+        }
 
     }catch(err){
         console.error("Satistics failed", err)
@@ -864,6 +843,7 @@ function appendData(id,content){
 }
 
 function resetPage(){
+    console.log("reset")
     try{
         // Empty appenders:
         $("#img.appender").innerHTML = "";
@@ -872,6 +852,9 @@ function resetPage(){
         $("#artskartLink").href = "";
         $("#doi.appender").innerHTML = "";
         $("#Descriptions.other").innerHTML = "";
+        $("#FileInfo").innerHTML = "";
+        $("#Statistics").innerHTML = "";
+        $("#Types.appender").innerHTML = "";
 
         /* Hide before content load */
         showElement($("#tags_other"),false);

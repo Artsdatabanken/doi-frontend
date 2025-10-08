@@ -81,11 +81,32 @@
                 </p>
             </div>
 
-            <div class="section"  id="notyetvalid">
-                <h2>Laster inn</h2>
-                <p id="progresstext">
-                    ?
-                </p>
+            <div class="section info-box hidden"  id="notyetvalid" aria-hidden="true">
+                <h2>
+                    <span lang="nb">Laster inn... </span>
+                    <span lang="nn">Laster inn... </span>
+                    <span lang="en">Loading... </span>
+                </h2>
+                <p role="status">
+                    <span id="Progress.status.Submitted">
+                        <span lang="nb">Bestilt: eksporten står i kø for å opprettes. Noe data kan likevel vises nedenfor.</span>
+                        <span lang="nn">Bestilt: eksporten står i kø for å opprettes. Noe data kan likevel vises nedenfor.</span>
+                        <span lang="en">Ordered: This dataset is waiting in queue. Below you find a sneek peek of what is currently visible.</span>
+                    </p>
+
+                    <span id="Progress.status.Created">
+                        <span lang="nb">Under arbeid: Eksport pågår, så det kan mangle data nedenfor inntil den er helt ferdig.</span>
+                        <span lang="nn">Under arbeid: Eksport pågår, så det kan mangle data nedenfor inntil den er helt ferdig.</span>
+                        <span lang="en">In progress: export currently in progress, data may be missing below.</span>
+                    </span>
+
+                    <span id="Progress.status.Valid">
+                        <span lang="nb">Publisert: Datasettet er ferdigeksportert.</span>
+                        <span lang="nn">Publisert: Datasettet er ferdigeksportert.</span>
+                        <span lang="en">Published: Data export is finished.</span>
+                    </span>
+                 </p>
+
                 <div class="progressbar">
                     <hr id="progressindicator" />
                     <ul>
@@ -132,7 +153,7 @@
                     <span id="img.source" class="img-source-container"></span>
                 </div>
 
-                <div id="tags_other">
+                <div id="tags_other" class="hidden" aria-hidden="true">
                     <h2 >
                         <span lang="nb"> Filtere </span>
                         <span lang="nn"> Filtere </span>
@@ -174,35 +195,32 @@
             </div>
         </div>
 
-        <div class="section">
-            <div id="Stats">
-                <h2>
-                    <span lang="nb"> Statistikk </span>
-                    <span lang="nn"> Statistikk </span>
-                    <span lang="en"> Statistics </span>
-                </h2>
-                <dl id="Statistics"></dl>
+        <div class="section" id="Stats">            
+            <h2>
+                <span lang="nb"> Statistikk </span>
+                <span lang="nn"> Statistikk </span>
+                <span lang="en"> Statistics </span>
+            </h2>
+            <dl id="Statistics"></dl>
         </div>
 
-        <div class="section">
-            <div id="Types">
-                <h2>
-                    <span lang="nb"> Typer </span>
-                    <span lang="nn"> Typer </span>
-                    <span lang="en"> Types </span>
-                </h2>
-                <dl id="Types.appender"></dl>
+        <div class="section" id="Types">
+            <h2>
+                <span lang="nb"> Typer </span>
+                <span lang="nn"> Typer </span>
+                <span lang="en"> Types </span>
+            </h2>
+            <dl id="Types.appender"></dl>
         </div>
 
-        <div class="section">
-            <div id="File">
-                <h2>
-                    <span lang="nb"> Fildata </span>
-                    <span lang="nn"> Fildata </span>
-                    <span lang="en"> Files </span>
-                </h2>
-                <dl id="FileInfo"></dl>
-                <!--<dl id="GeneralData"></dl> Not really in use-->
+        <div class="section" id="File">
+            <h2>
+                <span lang="nb"> Fildata </span>
+                <span lang="nn"> Fildata </span>
+                <span lang="en"> Files </span>
+            </h2>
+            <dl id="FileInfo"></dl>
+            <!--<dl id="GeneralData"></dl> Not really in use-->
         </div>
 
 

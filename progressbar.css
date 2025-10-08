@@ -1,10 +1,9 @@
 
-#notyetvalid{
-    background: #fff6e4;
-    padding: 20px;
-    padding-top: 20px;
-    padding-top: 0px;
-    border: 1px solid #d7cdba;
+.info-box{
+    padding: var(--spacing-spacing-lg);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    background: var(--white);
 }
 
 .progressbar{
@@ -12,62 +11,66 @@
     margin-bottom:90px;
     height:10px;
     position:relative;
-    background:#d0d0cf;
+    background:var(--white);
+    border:1px solid  var(  --text-base-text-secondary);
     width:100%;
     font-size: 0;
-}
+    border-radius: var(--radius-md);
 
-#progressindicator{
-    height:10px;
-    top:0;
-    left:0;
-    width:0;
-    background:#777368;
-    position:absolute;
-    margin:0;
-    border:0;
-}
-
-.progressbar ul{
-    position:absolute;
-    width:100%;
-    left:0;
-    top:-32px;
-    margin:0;
-    padding:0;
-}
-
-.progressbar li{    
-    padding:10px;
-    display:inline-block;
-    text-align: center;
-    box-sizing: border-box;
-    margin:0px;
-    width:calc(33% - 4px);
-    font-size:10pt;
+    & #progressindicator{
+        border-radius: var(--radius-md);
+        height:10px;
+        top:0;
+        left:0;
+        width:0;
+        background:var(--primary-color-hover);
+        position:absolute;
+        margin:0;
+    }
     
-    vertical-align: top;
+    & ul{
+        position:absolute;
+        width:100%;
+        left:0;
+        top:-32px;
+        margin:0;
+        padding:0;
+    }
+
+    & li{    
+        padding:10px;
+        display:inline-block;
+        text-align: center;
+        box-sizing: border-box;
+        margin:0px;
+        width:calc(33% - 4px);
+        font-size:10pt;        
+        vertical-align: top;
+    }
+
+    & div{
+        display:block;
+        padding:10px;
+        border-radius:50%;
+        background: var(--white);
+        width:50px;
+        height:50px;
+        margin:auto;
+        font-size: 18pt;
+        border:1px solid var(  --text-base-text-secondary);
+        color:var(  --text-base-text-secondary);
+    }
+
+    & .active div,
+    & .done div{
+        background:var(--primary-color);
+        color:var(--white);
+        border:1px solid var(--primary-color);
 }
 
-.progressbar div{
-    display:block;
-    padding:10px;
-    border-radius:50%;
-    background:white;
-    width:50px;
-    height:50px;
-    margin:auto;
-    font-size: 18pt;
-    border:1px solid #777368;
-    color:#777368;
 }
 
-.progressbar .active div,
-.progressbar .done div{
-    background:#777368;
-    color:white;
-    border:1px solid black;
-}
+
 
 @media only screen and (max-width: 270px) {
 
@@ -103,11 +106,4 @@
 
 #notyetvalid{
     width:100%;
-}
-
-#submittedtext,
-#createdtext,
-#publiserttext,
-#notyetvalid{
-    display:none;
 }

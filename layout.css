@@ -35,7 +35,7 @@
   --dimensions-3x: calc(var(--dimensions-base) * 3);
 
   --spacing-2xsm:.25rem;
-  --spacing-xsm: var(--dimensions-2x);
+  --spacing-xsm: var(--dimensions-2x); /*8px*/
   --spacing-sm: var(--dimensions-3x);  
   --spacing-spacing-md:24px;
   --spacing-spacing-lg:32px;
@@ -115,6 +115,7 @@ a {
 .shortcut-group{
   display: flex;
   flex-direction: column;
+  width:fit-content;
 
   & .shortcut-link{
     width: 100%;
