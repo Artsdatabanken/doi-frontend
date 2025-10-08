@@ -39,6 +39,7 @@
   --spacing-sm: var(--dimensions-3x);  
   --spacing-spacing-md:24px;
   --spacing-spacing-lg:32px;
+  --spacing-xl:calc(.25rem * 10);
 
   --max-width:1216px; /* check this one, looks weird */ 
   --radius-md:8px;
@@ -56,6 +57,9 @@
   --padding-vertical: 14px;
   --button-border-width: 2px;
   --icon-button-size:40px;
+
+  /*Links */
+  --text-visited: var(--text-base-text-secondary);
 
 }
 
@@ -90,6 +94,12 @@ a {
     align-self: stretch;    
     border-bottom: 2px solid currentColor;
   
+    &:hover{
+      border-bottom-width: 4px;
+      padding-bottom: 4px;
+    }
+
+
     &.shortcut-link{
       align-items: center;
       gap: var(--spacing-2xsm);
@@ -109,8 +119,28 @@ a {
         background-position: 50%;
         background-size: cover;
       } 
+
+      &:visited{
+        color: var(--text-accent);
+      }
+    }
+
+    & .material-icons{
+      font-size: inherit;
+      margin-right: 4px;
     }
 }
+
+/*visited*/
+a:visited{
+  color: var(--text-visited);
+}
+
+.breadcrumb a:visited{
+  color: var(--text-accent)
+}
+
+
 
 .shortcut-group{
   display: flex;
@@ -181,9 +211,11 @@ a {
       line-height: 1.5em;
     }
   }
-
 }
 
+.section{
+  margin-bottom: var( --spacing-spacing-md);
+}
 
 .content{
   padding:1rem;
@@ -206,6 +238,8 @@ button{
   display: flex;
   justify-content: center;
   align-items: center;
+  gap:4px;
+  font-size: var(--font-size-3);
 
   /*secondary aka. default*/
   background:var(--white);
@@ -246,4 +280,15 @@ button{
     }
   }
 
+}
+
+.ingress{
+  font-size: var(--font-size-6);
+}
+
+hr{
+  background-color: var( --border);
+  height: 4px;
+  margin: var(--spacing-xl) 0;
+  border: 0;
 }

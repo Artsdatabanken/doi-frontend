@@ -137,5 +137,35 @@ const translations = {
         "nn": "Geolokasjoner",
         "nb": "Geolokasjoner",
         "en": "Geo locations"
+    },
+    CreatorsSourceType:{
+        "nn": "Opphav kilde type",
+        "nb": "Opphav kilde type",
+        "en": "Creators Source Type"
+    },
+    CreatorsSourceName:{
+        "nn": "Opphav kilde namn",
+        "nb": "Opphav kilde navn",
+        "en": "Creators Source Name"
+    },
+    ExportType:{
+        "nn": "Eksporttype",
+        "nb": "Eksporttype",
+        "en": "Export type"
+    }    ,
+    Langugae:{
+        "nn": "Språk",
+        "nb": "Språk",
+        "en": "Language"
+    } ,
+    resourceTypeGeneral:{
+        "nn": "Datatype",
+        "nb": "Datatype",
+        "en": "Data type"
     }
+
+    
+
+
+    
 }

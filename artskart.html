@@ -134,17 +134,13 @@
             </div>
 
             <div class="section">
-                <h2>
-                    <span lang="nn">Last ned datasettet</span>
-                    <span lang="nb">Last ned datasettet</span>
-                    <span lang="en">Download dataset</span>
-                </h2>
-
-                <p>
-                    <span id="zip.appender.nb" lang="nb"></span>
-                    <span id="zip.appender.nb" lang="nn"></span>
-                    <span id="zip.appender.en" lang="en"></span>
-                </p>
+                <button class="primary" id="downloadButton">
+                    <span class="material-icons">download</span>
+                    <span lang="nn">Last ned datasettet </span>
+                    <span lang="nb">Last ned datasettet </span>
+                    <span lang="en">Download dataset </span>
+                    <span id="zip.appender"></span>
+                </button>
             </div>
 
             <div class="section inlinesection">
@@ -219,23 +215,45 @@
                 <span lang="nn"> Fildata </span>
                 <span lang="en"> Files </span>
             </h2>
-            <dl id="FileInfo"></dl>
+            <dl id="FileInfo">
+                <div id="noReset">
+                    <dt>
+                        <span lang="nb">Lisens</span>
+                        <span lang="nn">Lisens</span>
+                        <span lang="en">License</span>
+                    </dt>
+                    <dd>
+                        <span lang="nb">Datasett fra Artskart blir delt under vilkårene som er gitt i
+                            <a href="https://data.norge.no/nlod/no/">
+                                <span class='material-icons'>launch</span>
+                                <span lang="nb">Norsk lisens for offentlige data (NLOD)</span>
+                            </a>
+                        </span>
+                        <span lang="nn">
+                            Datasett frå Artskart vert delt under vilkåra som er gitt i
+                            <a  href="https://data.norge.no/nlod/no/" lang="nn">
+                                <span class='material-icons'>launch</span>
+                                <span>Norsk lisens for offentlige data (NLOD)</span>
+                                </a>
+                        </span>
+                        <span lang="en">
+                            Data from NBIC Species Map Service are made available under the conditions in
+                            <a  href="https://data.norge.no/nlod/en/" lang="en">
+                                <span class='material-icons'>launch</span>
+                                <span>Norwegian Licence for Open Government Data (NLOD)</span>
+                            </a>
+                        </span>
+                    </dd>
+                </div>
+            </dl>
+            <dl>
+                
+            </dl>
             <!--<dl id="GeneralData"></dl> Not really in use-->
         </div>
 
 
-        <div class="section">
-            <h2>
-                <span lang="nn">Siter datasettet</span>
-                <span lang="nb">Siter datasettet</span>
-                <span lang="en">Cite dataset</span>
-            </h2>
-            <p>
-                <span id="citationPublisher"></span> (<span id="citationYear"></span>). <span id="citationCreator"></span>.
-                <span id="citationDataset"></span> <span id="citationURL"></span>
-                accessed via artsdatabanken.no on <span id="citationDate"></span>.
-            </p>
-        </div>
+        
 
         <!-- // Midlertidig kommentert ut i påvente av konklusjoner om lisens.
         <div class="section">
@@ -289,35 +307,20 @@
             </p>
         </div>
 
+        
+
         <div class="section">
+            <hr/>
             <h2>
-                <span lang="nb">Lisens</span>
-                <span lang="nn">Lisens</span>
-                <span lang="en">License</span>
+                <span lang="nn">Siter datasettet</span>
+                <span lang="nb">Siter datasettet</span>
+                <span lang="en">Cite dataset</span>
             </h2>
             <p>
-            <span lang="nb">Datasett fra Artskart blir delt under vilkårene som er gitt i
-                <a class="shortcut-link" href="https://data.norge.no/nlod/no/">
-                    <span class='material-icons'>launch</span>
-                    <span lang="nb">Norsk lisens for offentlige data (NLOD)</span>
-                </a>
-            </span>
-            <span lang="nn">
-                Datasett frå Artskart vert delt under vilkåra som er gitt i
-                <a  class="shortcut-link" href="https://data.norge.no/nlod/no/" lang="nn">
-                    <span class='material-icons'>launch</span>
-                    <span>Norsk lisens for offentlige data (NLOD)</span>
-                    </a>
-            </span>
-            <span lang="en">
-                Data from NBIC Species Map Service are made available under the conditions in
-                <a class="shortcut-link" href="https://data.norge.no/nlod/en/" lang="en">
-                    <span class='material-icons'>launch</span>
-                    <span>Norwegian Licence for Open Government Data (NLOD)</span>
-                </a>
-            </span>
-        </p>
-        <br/>
+                <span id="citationPublisher"></span> (<span id="citationYear"></span>). <span id="citationCreator"></span>.
+                <span id="citationDataset"></span> <span id="citationURL"></span>
+                accessed via artsdatabanken.no on <span id="citationDate"></span>.
+            </p>
         </div>
 
     </div>

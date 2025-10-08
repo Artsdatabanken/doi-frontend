@@ -51,12 +51,11 @@ window.onhashchange = function() {
 function runApiCall(){
     let guid = getGuid();
     if(guid == "" || guid == "#" || guid == "undefined"){
-        console.info("NO GUID - show default page");
         try{
             pageSetup(false);
             showFrontPage();
         }catch(err){
-            console.error("Show frontpage failed")
+            console.error("Show frontpage failed",err)
         }
 
     }else{
@@ -77,6 +76,7 @@ function getDoiData(isRerun){
         handleDoiData(data,isRerun);
     })
     .catch((err) => {
+        console.error(err);
         pageSetup(false);
         showFrontPage();
     })
@@ -101,11 +101,11 @@ function showProgressBar(attributes,isRerun){
 function handleDoiData(data,isRerun){
     // Prep the page
     resetPage();
-    let attributes = data.data.attributes;
+    const attributes = data.data.attributes;
     pageSetup(true);
     showProgressBar(attributes,isRerun);   
 
-    let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");
+    const desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");
     // Main Content
     addTimeDetails(attributes);
     addIngressData(desc);
@@ -196,7 +196,6 @@ function formatDate(date){
 
 function updateStyle(selector,styleselector,style){
     try{
-        //console.log("styleselector",selector,styleselector,style)
         selector.style[styleselector] = style;
     }catch(err){
         console.error("error in changing style for", selector, styleselector,style, err);
@@ -261,68 +260,62 @@ function addFiles(attributes,desc){
         let relatedurls = unwrappedRelatedIdentifiers["URL"];
 
         for (let i in relatedurls){
-            let item = relatedurls[i];
+            const item = relatedurls[i];
+            const url = item.relatedIdentifier;
             if(item.resourceTypeGeneral=="Image"){
-                const image = document.createElement('img');
-                image.src  = item.relatedIdentifier;
-
-                const closebutton = document.createElement('button');
-                const material = document.createElement('span');
-                material.className = "material-icons";
-                material.textContent = "fullscreen";
-                closebutton.appendChild(material);
-                closebutton.id = "fullscreenbutton";
-                closebutton.className = "icon-button";
-                // Make image BIG
-                $("#img.appender").addEventListener('click',function(e){
-                    let target = $("#img.appender");
-                    let body = document.getElementsByTagName("BODY")[0];
-                    if(target.className == "fullscreen"){
-                        target.className = "sectionimage"
-                        body.className = "";
-                        closebutton.innerHTML = "<span class='material-icons'>fullscreen</span>";
-                    }else{
-                        target.className = "fullscreen";
-                        body.className = "freeze-scroll";
-                        closebutton.innerHTML = "<span class='material-icons'>fullscreen_exit</span>";
-                    }
-                });
-                appendData('img.appender',closebutton);
-                appendData('img.appender',image);
+                updateImage(url);
+                
             }else if(item.resourceTypeGeneral=="Dataset"){
-                const languages = ['nb', 'en'];
-                for (let key in languages) {
-                    if (!languages.hasOwnProperty(key)) {
-                        continue;
-                    }
-                    const lang = languages[key];
-                    let format = attributes.formats.toString().replace("application/","");//TODO
-                    let innerformat = desc['ExportType'];
-                    const label = lang == 'nb' ? "Last ned datasett" : "Download dataset";
-
-                    // Make downloadbutton
-                    let buttontext = "<span>" + label + " <br/>"+convertBytes(attributes.sizes)+" ("+format+"/"+innerformat+")</span>";
-                    let material = "<span class='material-icons'>download</span>";
-                    const zipurl = item.relatedIdentifier;
-
-                    const downloadButton = createDownloadButton(zipurl);
-                    downloadButton.innerHTML = material + buttontext;
-                    appendData('zip.appender.'+lang,downloadButton);
-                }
+                updateDownloadButton(attributes,desc,url);               
             }
         }
     }catch(err){
-        console.error("Failed in addFiles")
+        console.error("Failed in addFiles",err)
     }
 }
 
-function createDownloadButton(url){
-    const newButton = document.createElement('button');
-    newButton.className="primary";
-    newButton.addEventListener("click", () => {
+function updateImage(url){
+    const image = document.createElement('img');
+    image.src  = url;
+    // make button
+    const closebutton = document.createElement('button');
+    const material = document.createElement('span');
+    material.className = "material-icons";
+    material.textContent = "fullscreen";
+    closebutton.appendChild(material);    
+    closebutton.id = "fullscreenbutton";
+    closebutton.className = "icon-button";
+
+    // Make image BIG
+    $("#img.appender").addEventListener('click',function(e){
+        let target = $("#img.appender");
+        let body = document.getElementsByTagName("BODY")[0];
+        if(target.className == "fullscreen"){
+            target.className = "sectionimage"
+            body.className = "";
+            closebutton.innerHTML = "<span class='material-icons'>fullscreen</span>";
+        }else{
+            target.className = "fullscreen";
+            body.className = "freeze-scroll";
+            closebutton.innerHTML = "<span class='material-icons'>fullscreen_exit</span>";
+        }
+    });
+    appendData('img.appender',closebutton);
+    appendData('img.appender',image);
+}
+
+function updateDownloadButton(attributes,desc,url){
+    let format = attributes.formats.toString().replace("application/","");//TODO
+    let innerformat = desc['ExportType'];
+    
+    // Update downloadbutton
+    let buttontext = " (" +convertBytes(attributes.sizes)+", "+format+"/"+innerformat+")";
+    addData('zip.appender',buttontext);
+
+    const downloadButton = $("#downloadButton");
+    downloadButton.addEventListener("click", () => {
         download(url);
-      });
-    return newButton;
+        });                
 }
 
 function download(url) {
@@ -847,12 +840,15 @@ function resetPage(){
     try{
         // Empty appenders:
         $("#img.appender").innerHTML = "";
-        $("#zip.appender.nb").innerHTML = "";
-        $("#zip.appender.en").innerHTML = "";
+        $("#zip.appender").innerHTML = "";
         $("#artskartLink").href = "";
         $("#doi.appender").innerHTML = "";
         $("#Descriptions.other").innerHTML = "";
+
+        const child = $("#noReset");
+
         $("#FileInfo").innerHTML = "";
+        $("#FileInfo").appendChild(child);
         $("#Statistics").innerHTML = "";
         $("#Types.appender").innerHTML = "";
 
