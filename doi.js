@@ -6,10 +6,39 @@ or replacing the existing text.
 
 */
 
+var testing = true;
+
+// No jquery, BUT apparently we use the shorthand anyways. Movet to top so we actually know this.
+function $(id){
+    try{
+        if(id[0]=="."){
+            return document.getElementsByClassName(id.substring(1));
+        }else if(id[0]=="#"){
+            return document.getElementById(id.substring(1));
+        }else{
+            console.error("code was missing '#' or '.' in $ shorthand. try matching anyways", id);
+            try{
+                if(document.getElementById(id)){
+                    return document.getElementById(id);
+                }else{
+                    return document.getElementsByClassName(id);
+                }
+            }catch(err){
+                console.log(err, "could not find html object", id)
+            }
+
+        }
+    }catch(err){
+        console.log(err, "could not find html object", id)
+    }
+}
+
+
 // Startup
 window.addEventListener('load', function() {
     runApiCall();
     languageSupport();
+    appendData("header",appendHeader())
 })
 
 // Change parameter/navigate between pages
@@ -18,48 +47,21 @@ window.onhashchange = function() {
     runApiCall();
 }
 
-function languageSupport(){
-    changeLanguage("nn");
-    changeLanguage("nb");
-    changeLanguage("en");
-}
-
-function changeLanguage(lang){
-    let id = "lang-" + lang;
-    let classselector = "."+ lang;
-    document.getElementById(id).addEventListener('click',function(e){
-        let these = document.querySelectorAll(classselector);
-        let those = document.querySelectorAll('.lang-show');
-        those.forEach(x=>x.classList.replace('lang-show','lang-hide'));
-        these.forEach(x=>x.classList.remove('lang-hide'));
-        these.forEach(x=>x.classList.add('lang-show'));
-
-        let them = document.querySelectorAll('.languageselector button');
-        them.forEach(x=>x.className = "lang-not-chosen");
-
-        let thisone = document.getElementById(id);
-        thisone.className = "lang-chosen";
-    });
-}
-
-
 // If no parameter - show frontpage, otherwise run the doi page
 function runApiCall(){
     let guid = getGuid();
     if(guid == "" || guid == "#" || guid == "undefined"){
-        console.log("NO GUID - show default page");
         try{
-            hideAndShow("none");
+            pageSetup(false);
             showFrontPage();
         }catch(err){
-            console.error("Show frontpage failed")
+            console.error("Show frontpage failed",err)
         }
 
     }else{
         getDoiData();
     }
 }
-
 
 // Fetch DOI data from api.
 function getDoiData(isRerun){
@@ -74,51 +76,55 @@ function getDoiData(isRerun){
         handleDoiData(data,isRerun);
     })
     .catch((err) => {
-        hideAndShow("none");
+        console.error(err);
+        pageSetup(false);
         showFrontPage();
     })
+  }
 
+function showProgressBar(attributes,isRerun){
+    if(!isRerun){
+        // If the function is a rerun (update), dont hide the progressbar
+        // Users will then be interested to know it reached finished state.
+        const testProgressBar = false;
+        try{
+            let dates = attributes.dates;           
+            const valid =  dates.find(date => date.dateType === 'Valid');
+            showElement($('#notyetvalid'),!valid||testProgressBar);
+        }catch(err){
+            console.error("Failed at hideProgressbar",err)
+        }      
+    }
 }
 
 // Start presenting the DOI-page
 function handleDoiData(data,isRerun){
     // Prep the page
-    emptyAppenders();
-    let attributes = data.data.attributes;
+    resetPage();
+    const attributes = data.data.attributes;
+    pageSetup(true);
+    showProgressBar(attributes,isRerun);   
 
-    hideAndShow("show");
-    if(!isRerun){
-        // If the function is a rerun (update), dont hide the progressbar
-        // Users will then be interested to know it reached finished state.
-        hideProgressbar(attributes);
-    }
-
-    let desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");
+    const desc = unWrapDescriptions(attributes.descriptions,"descriptionType","description");
     // Main Content
-
-
     addTimeDetails(attributes);
-    addIngressData(attributes,desc);
-    //addGeoLocation(attributes);
+    addIngressData(desc);
+    addGeoLocation(attributes);
     addFiles(attributes,desc); // Download dataset is a part of addFiles, and lives in the sidebar.
     addDoi(desc);
     addDescriptions(desc);
     addImageSources(desc);
-
-
-    // Sidebar
     addGeneralData(attributes);
-    //addFileInfo(attributes,desc);
+    addFileInfo(attributes,desc);
     addCitation(attributes);
     addArtskartUrl(desc);
-    // addStats(attributes);
-    // addTypes(attributes);
-
-    //console.log("All data loaded")
+    addStats(attributes);
+    addTypes(attributes);
 }
 
 // During dataset generation this checks for more data and updated progress
 function getTimeUpdate(submitted,created,updated,valid){
+    console.info("check for updates");
     let timeout = 30000;
     try{
         setTimeout(function(){
@@ -129,6 +135,7 @@ function getTimeUpdate(submitted,created,updated,valid){
                 return response.json()
             })
             .then((data) => {
+                resetPage();
                 // UPDATE THESE WHEN NEW API
                 let newsubmitted = data.Submitted || false;
                 let newcreated = data.Created || false;
@@ -173,31 +180,15 @@ function getTimeUpdate(submitted,created,updated,valid){
                 }
             })
             .catch((err) => {
-                console.error("failed at fetch valid")
+                console.error("failed at fetch valid",err)
             })
         }, timeout);
     }catch(err){
-        console.log("error in timechecker")
+        console.error("error in timechecker",err)
     }
 }
 
 // Data formatters
-
-
-
-function hideProgressbar(attributes){
-    try{
-        let dates = attributes.dates;
-        for(let i in dates){
-            if(dates[i].dateType == "Valid"){
-                // PROGRESSBAR HIDE
-                updateStyle(document.getElementById("notyetvalid"),"display","none");
-            }
-        }
-    }catch(err){
-        console.error("Failed at hideProgressbar")
-    }
-}
 
 function formatDate(date){
     return new Date(date).toLocaleDateString("nb-no", {hour: '2-digit', minute: '2-digit'});
@@ -205,10 +196,9 @@ function formatDate(date){
 
 function updateStyle(selector,styleselector,style){
     try{
-        //console.log("styleselector",selector,styleselector,style)
         selector.style[styleselector] = style;
     }catch(err){
-        console.error("error in changing style for", selector, styleselector,style);
+        console.error("error in changing style for", selector, styleselector,style, err);
     }
 }
 
@@ -220,69 +210,44 @@ function changeClass(selector,className){
     }
 }
 
+function updateProgress(type,dateObject){
+    try{    
+        if(dateObject){
+            const width = type === "Submitted"?"20%":(type === "Created"?"50%":"100%");
+            addData("Progress."+type,formatDate(dateObject)); 
+            changeClass($("#Progress."+type).parentElement,"done");
+            updateStyle($("#progressindicator"),"width",width);
+            showElement($('#Progress.status.'+type),true);  
+        }
+    }catch(err){
+        console.error("failed at update progress", err)
+    }
+}
+
 function addTimeDetails(attributes){
     try{
         let dates = unWrap(attributes.dates,"dateType","date");
-
         // HEADER TEXT
         addData("Time.Created",formatDate(dates.Created));
-        //addData("Time.Updated",formatDate(dates.Updated));
         addData("Time.Valid",formatDate(dates.Valid));
-
-        let text = "loading";
-        // PROGRESS BAR
-        if(dates.Submitted){
-            addData("Progress.Submitted",formatDate(dates.Submitted));
-            changeClass($("Progress.Submitted").parentElement,"done");
-            updateStyle($("#progressindicator"),"width","20%");
-            text = "Dette datasettet har blitt bestilt. Det vil si at eksporten står i kø for å opprettes. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
-        }else{
-            changeClass($("Progress.Submitted").parentElement,"next");
-            addData("Progress.Submitted","-");
+        updateProgress("Submitted",dates.Submitted);
+        updateProgress("Created",dates.Created);
+        updateProgress("Valid",dates.Valid);
+        if(!dates.Valid){
+            getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Updated||false,valid||false);
         }
-
-        if(dates.Created){
-            addData("Progress.Created",formatDate(dates.Created));
-            changeClass($("Progress.Created").parentElement,"done");
-            updateStyle($("#progressindicator"),"width","50%");
-            text = "Dette datasettet er ikke helt ferdig generert ennå, så det kan mangle data nedenfor. Men du kan likevel sniktitte på datane som er tilgjengelige så langt.";
-        }else{
-            changeClass($("Progress.Created").parentElement,"next");
-            addData("Progress.Created","-");
-        }
-
-        if(dates.Valid){
-            addData("Progress.Valid",formatDate(dates.Valid));
-            changeClass($("Progress.Valid").parentElement,"done");
-            updateStyle($("#progressindicator"),"width","100%");
-            text = "Dette datasettet er ferdigeksportert.";
-        }else{
-            changeClass($("Progress.Valid").parentElement,"next");
-            addData("Progress.Valid","-");
-            getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Updated||false,dates.Valid||false);
-        }
-        addData("progresstext",text);
-
     }catch(err){
-        console.error("Failed at times")
+        console.error("Failed at times", err)
     }
 }
 
-function addIngressData(attributes,desc){
+function addIngressData(desc){
     try{
-
         addData("Ingress.count",desc['Count']||0);
-        /*
-        addData("Titles.type",attributes.titles[0].title);
-        addData("Creators.sourcename",attributes.creators[0].name);
-        addData("publisher",attributes.publisher);
-        addData("Time.year",attributes.publicationYear);
-        */
     }catch(err){
-        console.error("Failed at Ingress")
+        console.error("Failed at Ingress",err)
     }
 }
-
 
 function addFiles(attributes,desc){
     // Also contains doi-sources which are duplicated in descriptions.doi
@@ -295,102 +260,120 @@ function addFiles(attributes,desc){
         let relatedurls = unwrappedRelatedIdentifiers["URL"];
 
         for (let i in relatedurls){
-            let item = relatedurls[i];
+            const item = relatedurls[i];
+            const url = item.relatedIdentifier;
             if(item.resourceTypeGeneral=="Image"){
-                const image = document.createElement('img');
-                image.src  = item.relatedIdentifier;
-                const closebutton = document.createElement('button');
-                closebutton.innerHTML= "<span class='material-icons'>fullscreen</span>";
-                closebutton.id = "fullscreenbutton"
-
-
-                // Make image BIG
-                $("#img.appender").addEventListener('click',function(e){
-                    let target = $("#img.appender");
-                    let body = document.getElementsByTagName("BODY")[0];
-                    if(target.className == "fullscreen"){
-                        target.className = "sectionimage"
-                        body.className = "";
-                        closebutton.innerHTML = "<span class='material-icons'>fullscreen</span>";
-                    }else{
-                        target.className = "fullscreen";
-                        body.className = "freeze-scroll";
-                        closebutton.innerHTML = "<span class='material-icons'>fullscreen_exit</span>";
-                    }
-                });
-                appendData('img.appender',closebutton);
-                appendData('img.appender',image);
+                updateImage(url);
+                
             }else if(item.resourceTypeGeneral=="Dataset"){
-                const languages = ['nb', 'en'];
-                for (let key in languages) {
-                    if (!languages.hasOwnProperty(key)) {
-                        continue;
-                    }
-                    const lang = languages[key];
-                    let zipurl = item.relatedIdentifier;
-                    let zip = document.createElement('div');
-                    let format = attributes.formats.toString().replace("application/","");//TODO
-                    //console.log(format)
-                    let innerformat = desc['ExportType'];
-                    //console.log(desc['ExportType'])
-                    let label = lang == 'nb' ? "Last ned datasett" : "Download dataset";
-                    let buttontext = "<span>" + label + " <br/>"+convertBytes(attributes.sizes)+" ("+format+"/"+innerformat+")</span>";
-                    let material = "<span class='material-icons'>download</span>";
-                    zip.innerHTML = "<a href="+zipurl+" class='biglink downloadlink'>"+material+buttontext+"</a>";
-                    appendData('zip.appender.'+lang,zip);
-                }
+                updateDownloadButton(attributes,desc,url);               
             }
         }
     }catch(err){
-        console.error("Failed in addFiles")
+        console.error("Failed in addFiles",err)
     }
 }
 
+function updateImage(url){
+    const image = document.createElement('img');
+    image.src  = url;
+    // make button
+    const closebutton = document.createElement('button');
+    const material = document.createElement('span');
+    material.className = "material-icons";
+    material.textContent = "fullscreen";
+    closebutton.appendChild(material);    
+    closebutton.id = "fullscreenbutton";
+    closebutton.className = "icon-button";
+
+    // Make image BIG
+    $("#img.appender").addEventListener('click',function(e){
+        let target = $("#img.appender");
+        let body = document.getElementsByTagName("BODY")[0];
+        if(target.className == "fullscreen"){
+            target.className = "sectionimage"
+            body.className = "";
+            closebutton.innerHTML = "<span class='material-icons'>fullscreen</span>";
+        }else{
+            target.className = "fullscreen";
+            body.className = "freeze-scroll";
+            closebutton.innerHTML = "<span class='material-icons'>fullscreen_exit</span>";
+        }
+    });
+    appendData('img.appender',closebutton);
+    appendData('img.appender',image);
+}
+
+function updateDownloadButton(attributes,desc,url){
+    let format = attributes.formats.toString().replace("application/","");//TODO
+    let innerformat = desc['ExportType'];
+    
+    // Update downloadbutton
+    let buttontext = " (" +convertBytes(attributes.sizes)+", "+format+"/"+innerformat+")";
+    addData('zip.appender',buttontext);
+
+    const downloadButton = $("#downloadButton");
+    downloadButton.addEventListener("click", () => {
+        download(url);
+        });                
+}
+
+function download(url) {
+    const a = createLink(url);
+    a.download = url.split('/').pop()
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+  }
+
+function createLink(url,text) {
+  const a = document.createElement('a')
+  a.href = url;
+  if(text){
+      a.textContent = text;
+  }
+  return a;
+}
 
 function addDoi(desc){
     // Contains all source datasets. Also those without a doi, but of doi-type data.
     // If a doi is missing, it will instead contain an id.
     try{
-
         let doi = desc['DOI'] || [];
         // Text formatting:
-        let length = doi.length;
         if(doi.length!=1){
-            let these = document.getElementsByClassName('contributor-plural');
+            let these = $('.contributor-plural');
         for (let element of these){
                 element.style.display="inline";
+                // TODO ANDLE ARIAS FOR THIS
          }
         }
-        addData("Nr.Sources",length);
+        addData("Nr.Sources",doi.length);
         for (let i in doi){
             let items = doi[i].split("|");
-            let div = document.createElement('div');
-            div.className = "listitem";
+            let contributer = document.createElement('li');
+            contributer.className = "listitem";
+            let numberline = "<span> ("+ items[1]+" element)</span>";
+            let nameline = "<span>"+ items[2]+"</span>";
+            contributer.innerHTML = nameline + numberline;
 
             let link = items[0];
-            let linkline = ""; // There is an id here, but what type? what it do?
-
             if(link.includes("https")){
                 let doitext = link.replace("https://doi.org/","");
                 getCitation(doitext);
-                div.id = doitext;
-                linkline = "<a href="+link+" class='citationlink'>"+doitext+"</a>";
+                contributer.id = doitext;
+                contributer.appendChild(createLink(link,doitext));
             }
-
-            let numberline = "<span> ("+ items[1]+" element)</span>";
-
-            let nameline = "<span>"+ items[2]+"</span>";
-            div.innerHTML = nameline+numberline+linkline;
-            appendData('doi.appender',div);
+            appendData('doi.appender',contributer);
         }
     }catch(err){
-        console.error("Failed in doi")
+        console.error("Failed in doi",err)
     }
 }
 
 function getCitation(doi){
     let url = 'https://doiapi.artsdatabanken.no/api/Doi/getcitation/'+doi;
-    console.log("running fetch ",url)
+    console.info("running fetch ",url)
     fetch(url)
     .then((response) => {
         return response.text();
@@ -417,20 +400,10 @@ function getCitation(doi){
 
 function addArtskartUrl(desc){
     try{
-        const languages = ['nb', 'en'];
-        for (let key in languages) {
-            if (!languages.hasOwnProperty(key)) {
-                continue;
-            }
-            const lang = languages[key];
-            let artskartelement = desc['ArtskartUrl'][0];
-            let a = document.createElement('div');
-            let launch = "<span class='material-icons'>launch</span>";
-            let label = lang === 'nb' ? "Se oppdatert utvalg" : "Se updated selection";
-            let labelIn = lang === 'nb' ? "i" : "in";
-            a.innerHTML = "<a href="+artskartelement+" class='biglink artskartlink'>"+launch+"<span>"+label+" <br/>"+labelIn+" Artskart </span></a>";
-            appendData('a.appender.'+lang,a);
-        }
+        let artskartelement = desc['ArtskartUrl'][0];
+        let artskartLink = $("#artskartLink");
+        artskartLink.href = artskartelement;
+        console.info("updated artskarturl")
     }catch(err){
         console.error("Failed at artskarturl;")
     }
@@ -479,7 +452,6 @@ function addImageSources(desc){
     }catch(err){
         console.error("failed at img source")
     }
-
 }
 
 function addDescriptions(desc){
@@ -489,28 +461,9 @@ function addDescriptions(desc){
         let descriptioncontent = desc['Description'] || null;
         if(descriptioncontent){
             descriptioncontent = JSON.parse(descriptioncontent);
-            console.log(descriptioncontent)
-            // TODO: ADD MORE THINGS THAT LIMIT. Need list and example data
-            // TODO: FIlter is currently not displayed, due to changing structure.
-            for(let i in descriptioncontent){
-                if (i== "Areas"){
-                    addAreas(descriptioncontent[i],"area");
-                }else if(i == "Geometry"){
-                    addAreas(descriptioncontent[i],"geometry");
-                }else if(i == "Tags"){
-                    //addTags(descriptioncontent.Tags); TODO FIX THIS FILTERS
-                }else if(i == "Taxons"){
-                    addTaxons(descriptioncontent.Taxons); // INTO INGRESS = ADDITIONS
-                    // IF MORE THAN 3, add to the filterlist
-                }
-                else{
-                    if(descriptioncontent[i] != ""){
-                        let span = document.createElement('span');
-                        span.id = "Descriptions."+i;
-                        addDescriptionItems(descriptioncontent[i],span,i);
-                        appendData("Descriptions.other",span)
-                        updateStyle($('tags_other'),"display","inline-block");
-                    }
+            for(let title in descriptioncontent){
+                if(descriptioncontent[title] != ""){
+                    addDescriptionItems(descriptioncontent[title],title);
                 }
             }
         }
@@ -519,230 +472,180 @@ function addDescriptions(desc){
     }
 }
 
-function addTags(tags){
-    try{
+function makeDataPairObjects(containerId,title,dd){
+  // CONTENT has to be a created dd-object.
+  try{
+    // Make outer container
+    const div = document.createElement('div');
+    div.id = containerId;
 
-        // TODO: AWAIT API CORRECTIONS
-        console.log(tags)
+    // Make key
+    const dt = document.createElement('dt');
+    translate(title, dt);
+    // attach stuff
+    div.appendChild(dt)
+    div.appendChild(dd)
+    return div;
 
-        // USE CASE: NOT RECOVERED AND ABSENT ("Ikke gjenfunnet" og "Ikke funnet");
-        // Cases are hardcoded, so using their ID.
-        // 5 = Absent, 6 = not recovered
-
-        let speciesdata = true;
-        let absent = !tags[5].inverted;
-        let notrecovered = !tags[6].inverted
-        let casenumber = 0;
-
-        if(!absent && !notrecovered && speciesdata){
-            casenumber = 1;
-        }else if(absent && !notrecovered && speciesdata){
-            casenumber = 2;
-        }else if(!absent && notrecovered && speciesdata){
-            casenumber = 3;
-        }
-        else if(absent && notrecovered && speciesdata){
-            casenumber = 4;
-        }else if(absent && notrecovered && !speciesdata){
-            casenumber = 5;
-        }else if(absent && !notrecovered && !speciesdata){
-            casenumber = 5;
-        }else if(!absent && notrecovered && !speciesdata){
-            casenumber = 5;
-        }
-
-
-        //console.log(absent, notrecovered, casenumber)
-
-        let absence_items = document.getElementsByClassName("tags_absence");
-        for (let element of absence_items){
-            casenumber = "tags_case_" + casenumber;
-            if(element.className.includes(casenumber)){
-                element.style.display="inline";
-            }
-         }
-
-
-/*
-        console.log(tags[5].name)
-        console.log(tags[5].inverted)
-        console.log(tags[6].name)
-        console.log(tags[6].inverted)
-*/
-
-    }catch(err){
-        console.error("failed at tags")
-    }
+  }catch(err){
+    console.error("failed at make data pair objects")
+  }
 }
 
-function addAreas(what,where){
-        try{
-            if(what){
-                if(Object.keys(what).length>0){
-                    updateStyle($('tags_'+where),"display","inline-block");
-                    addDescriptionItems(what,"Descriptions."+where);
-                } else{
-                    console.log("nope")
-                }
-            }
+function makeTags(containerId,title,dd){
+  // CONTENT has to be a created dt-object.
+  try{
+    showElement($('#tags_other'),true);
+    const data = makeDataPairObjects(containerId,title,dd);
+    appendData("Descriptions.other",data);
 
-        }catch(err){
-            console.error("failed at add"+where)
-        }
+  }catch(err){
+    console.error("failed at make makeTags")
+  }
 }
 
-function addDescriptionItems(what,where,title){
+function addDescriptionItems(descriptionElement,title){
     try{
-
-        if( typeof what === 'string' ) {
-            what = [ what ];
-        }
-        let whatarray = Object.keys(what);
-        let endresult = "";
-
+        // TITLE
+        let key = title;
         if(title){
-            let link = " http://rs.tdwg.org/dwc/terms/";
             let formattedtitle = title.replace(/([A-Z])/g, ' $1').trim()
-            link += title.charAt(0).toLowerCase() + title.slice(1);
-            let lastletter = link.substring(link.length - 1,link.length);
-            if(lastletter == "s"){
-                link = link.substring(0, link.length - 1);
-            }
-
-            endresult += "<a href="+link+" class='contenttitle'>"+formattedtitle+":</a> ";
+            key = formattedtitle;
+            // const link = generateTagLink(title);
         }
-
-        for(let i in whatarray){
-            let key = whatarray[i];
-            let item = what[key];
+        // CONTENT
+        const dd = document.createElement('dd');
+        if( typeof descriptionElement === 'string' ) {
+            descriptionElement = [ descriptionElement ];
+        }
+        const decriptionList = Object.keys(descriptionElement);
+        for(let i in decriptionList){
+            const key = decriptionList[i];
+            const item = descriptionElement[key];
             // Here we may need specific things for different fields
-            let content = item.name || item;
+            const text = item.name || item;
+            // make tag
+            const span = document.createElement('span');
+            span.className="tag";
             if(item.code){
-                content = item.code += " - "+ content;
+                const innerText = item.code += " - ";
+                span.innerText = innerText;
             }
+
             if(item.inverted){
-                content = "not " + content;
+                translate("Inverted", span);
             }
-
-            let writestring = "<span>"+content+"</span>";
-
-            // Handle different lengths of lists (plurality)
-            if(whatarray.length > 2 && i < whatarray.length - 2){
-                writestring += ", ";
-            }
-            if(i == whatarray.length - 2 && whatarray.length > 1){
-                // -2 because 0 index vs 2nd last item in length
-                let lang_nn_nb = "<span class='nb nn lang-show'> og </span>";
-                let lang_eng = "<span class='en'> and </span>";
-                writestring += lang_nn_nb + lang_eng;
-            }
-            endresult += writestring;
-
+            translate(text, span);
+            dd.appendChild(span);
         }
 
-        endresult += ". ";
-            if(title){
-                endresult += "</br>";
-            }
-        addData(where,endresult)
+        makeTags("Descriptions."+title,title,dd);
+
 
     }catch(err){
         console.error("failed at addDescriptionItems")
     }
 }
 
-function addTaxons(taxons){
-    try{
-        if(taxons){
-             // TAXONS
-        let lang_nn_nb = "<span class='nb nn lang-show'>av </span>";
-        let lang_eng = "<span class='en'> of </span>";
-        let ingresstaxons = lang_nn_nb + lang_eng;
-        let taxonarray = Object.keys(taxons);
-        if(taxonarray.length < 3){
-            for(let i in taxonarray){
-                let key = taxonarray[i];
-                let taxon = taxons[key];
-                let name = "<span class='nb nn lang-show'>"+taxon.name +" </span>" || "";
-                let taxonformat = name+"<i>"+taxon.scientificname+"</i> "+taxon.author;
-                if(i == 0 && taxonarray.length > 2){
-                    taxonformat += ", ";
-                }
-                if(i == taxonarray.length - 2 && taxonarray.length > 1){
-                    // -2 because 0 index vs 2nd last item in length
-                    let lang_nn_nb = "<span class='nb nn lang-show'> og </span>";
-                    let lang_eng = "<span class='en'> and </span>";
-                    taxonformat += lang_nn_nb + lang_eng;
-                }
-                ingresstaxons += taxonformat;
-            }
-            addData("ingress.taxons",ingresstaxons)
+function generateTagLink(title){
+    // NO IDEA WHEN THIS SHOULD BE USED
+    let link = " http://rs.tdwg.org/dwc/terms/"
+        + title.charAt(0).toLowerCase() + title.slice(1);
+        let lastletter = link.substring(link.length - 1,link.length);
+        if(lastletter == "s"){
+            link = link.substring(0, link.length - 1);
         }
-        }
-
-
-    }catch(err){
-        console.error("failed at taxons")
-    }
+        return " <a href="+link+" class='contenttitle'> (link) :</a> ";
 }
-
-
 
 function addGeneralData(attributes){
     try{
         // DOI URL
         // URL is always the non-test version as it's from api.
-        let crumbdivider = "<span class='breadcrumbdivider'>> </span>"
-        let doilink = crumbdivider+"<li class='in-breadcrumb'><a href="+getDoiUrl(attributes)+" >"+attributes.doi+"</a></li>";
-        updateStyle($('Attributes.doi'),"display","inline-block");
-        addData('Attributes.doi',doilink);
+        let shortcutLink = document.createElement('li');
+        shortcutLink.textContent=attributes.doi;
+        appendData('Attributes.doi',shortcutLink);
+
+        reLink(true)
         let headerdoi = "DOI: "+ attributes.doi;
         addData('header-doi',headerdoi);
-        //addData("Attributes.url",attributes.url);
-        //addData("data.Id",data.data.id);
-        //addData("data.Type",data.data.type);
-        //addData("Attributes.prefix",attributes.prefix);
-        //addData("Attributes.suffix",attributes.suffix);
-        //addData("Attributes.identifiers",attributes.identifiers);
     }catch(err){
         console.error("General data failed")
     }
 }
 
+function addMiscData(attributes){
+    // removed html for this one as data is m ostly duplicate of other things
+    try{
+        //showElement($('#General'),true);
+        appendData("GeneralData",makePairElements("Url",attributes.url));
+        appendData("GeneralData",makePairElements("identifiers",attributes.identifiers));
+        appendData("GeneralData",makePairElements("id",data.data.id));
+        appendData("GeneralData",makePairElements("type",data.data.type));
+        //addData("Attributes.prefix",attributes.prefix);
+        //addData("Attributes.suffix",attributes.suffix);
+    }catch(err){
+        console.error("addMiscData data failed",err)
+    }
+}
+
+
+
+function reLink(addLink){
+    // activate and deactivate element in breadcrumb
+    try{
+        const reLinked = $("#reLinked");
+        const unLinked = $("#unLinked");
+        let activate = reLinked;
+        let unactivate = unLinked;
+        if(!addLink){
+            activate = unLinked;
+            unactivate =  reLinked;
+        }
+        showElement(activate,true);
+        activate.innerHTML = unactivate.innerHTML;
+        showElement(unactivate,false);
+    }catch(err){
+        console.error("unLink failed")
+    }
+}
+
 function addFileInfo(attributes,desc){
     try{
-        addData("Descriptions.ExportType",desc['ExportType']);
-        addData("Size",convertBytes(attributes.sizes));
-        addData("Attributes.formats",attributes.formats); // TODO: OMPLASSER
-        let apiurl = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
-        let apilink = "<a href="+apiurl+" >"+attributes.source+"</a>";
-        addData('Api.link',apilink);
-        addData("Titles.lang",attributes.titles[0].lang);
-        addData("Attributes.state",attributes.state);
-        //addData("Creators.sourcetype",attributes.creators[0].nameType);
-        //addData("Attributes.version",attributes.version);
-        //addData("Attributes.metadataVersion",attributes.metadataVersion);
-        //addData("Attributes.schemaVersion",attributes.schemaVersion);
+        showElement($('#File'),true);
+        appendData("FileInfo",makePairElements("ExportType",desc['ExportType']));
+        appendData("FileInfo",makePairElements("Size",convertBytes(attributes.sizes)));
+        appendData("FileInfo",makePairElements("Format",attributes.formats));
+        appendData("FileInfo",makePairElements("Language",attributes.titles[0].lang)); //Titles.lang
+        appendData("FileInfo",makePairElements("Title",attributes.titles[0].title)); //Titles.lang
+        appendData("FileInfo",makePairElements("State",attributes.state));
+        appendData("FileInfo",makePairElements("CreatorsSourceType",attributes.creators[0].nameType));
+        appendData("FileInfo",makePairElements("CreatorsSourceName",attributes.creators[0].name));
+        appendData("FileInfo",makePairElements("Publisher",attributes.publisher));
+        appendData("FileInfo",makePairElements("PublicationYear",attributes.publicationYear));
+
+        // THOSE BELOW, What are they
+        //appendData("FileInfo",makePairElements("version",attributes.version));
+        //appendData("FileInfo",makePairElements("metadataVersion",attributes.metadataVersion));
+        //appendData("FileInfo",makePairElements("schemaVersion",attributes.schemaVersion));
     }catch(err){
-        console.error("File info failed")
+        console.error("File info failed",err)
     }
 
 }
 
 function addTypes(attributes){
     try{
-        addData("Attributes.types.resourceTypeGeneral",attributes.types.resourceTypeGeneral);
-        addData("Attributes.types.schemaOrg",attributes.types.schemaOrg);
-        addData("Attributes.types.bibtex",attributes.types.bibtex);
-        addData("Attributes.types.citeproc",attributes.types.citeproc);
-        addData("Attributes.types.ris",attributes.types.ris);
+      showElement($('#Types'),true);
+      for(let el in attributes.types){
+        appendData("Types.appender",makePairElements(el,attributes.types[el]));
+      }
     }catch(err){
-        console.error("Types failed")
+        console.error("Types failed",err)
     }
 }
 
 function addCitation(attributes){
-
     try{
         let accesseddate = "yyyy-mm-dd";
         let dates = attributes.dates;
@@ -751,62 +654,76 @@ function addCitation(attributes){
                 accesseddate = dates[i].date.split("T")[0];
             }
         }
-
-        attributes.dates
-        let year = "("+attributes.publicationYear+")";
-
-        let citation = attributes.publisher+" "+year+". "
-        +attributes.creators[0].name+". "
-        + attributes.types.resourceTypeGeneral
-        +" "+getDoiUrl(attributes)
-        +" accessed via artsdatabanken.no"
-        +" on "+accesseddate+".";
-
-        addData("citation",citation);
+        addData("citationDate",accesseddate);
+        addData("citationYear",attributes.publicationYear);
+        addData("citationPublisher",attributes.publisher);
+        addData("citationCreator",attributes.creators[0].name);
+        addData("citationURL",attributes.types.resourceTypeGeneral);
+        addData("citationDataset",getDoiUrl(attributes));
     }catch(err){
         console.error("citation failed")
     }
 
 }
 
+function makePairElements(title,content){
+  let dd = document.createElement('dd');
+  dd.textContent=content;
+  return makeDataPairObjects(title,title,dd);
+}
+
 function addStats(attributes){
-    try{
-        addData("Attributes.viewCount",attributes.viewCount);
-        addData("Attributes.downloadCount",attributes.downloadCount);
-        addData("Attributes.referenceCount",attributes.referenceCount);
-        addData("Attributes.citationCount",attributes.citationCount);
-        addData("Attributes.partCount",attributes.partCount);
-        addData("Attributes.partOfCount",attributes.partOfCount);
-        addData("Attributes.versionCount",attributes.versionCount);
-        addData("Attributes.versionOfCount",attributes.versionOfCount);
+    try{      
+      console.info("Swap showStats to true to re-add statistics. They seem not to be tracked.")
+      const showStats = false;
+      if(showStats){      
+        showElement($('#Stats'),true); 
+        appendData("Statistics",makePairElements("viewCount",attributes.viewCount));
+        appendData("Statistics",makePairElements("downloadCount",attributes.downloadCount));
+        appendData("Statistics",makePairElements("referenceCount",attributes.referenceCount));
+        appendData("Statistics",makePairElements("citationCount",attributes.citationCount));
+        appendData("Statistics",makePairElements("partCount",attributes.partCount));
+        appendData("Statistics",makePairElements("partOfCount",attributes.partOfCount));
+        appendData("Statistics",makePairElements("versionCount",attributes.versionCount));
+        appendData("Statistics",makePairElements("versionOfCount",attributes.versionOfCount));
+        }else{
+            showElement($('#Stats'),false); 
+        }
+
     }catch(err){
-        console.error("Satistics failed")
+        console.error("Satistics failed", err)
     }
 
+}
+
+function makeLocationSpan(title,content,source){
+  try{
+    const outerDiv = document.createElement('div');
+    translate(title, outerDiv);
+    outerDiv.className = "tag";
+    const contentSpan = document.createElement('span');
+    contentSpan.innerText = content;
+    contentSpan.className = "add-space";
+    outerDiv.appendChild(contentSpan);
+    source.appendChild(outerDiv);
+  }catch(err){
+    console.error(err, "failed at makeLocationSpan")
+  }
 }
 
 function addGeoLocation(attributes){
     try{
         let geoLocations = attributes.geoLocations[0];
-        addData("geoLocationBox.eastBoundLongitude",geoLocations.geoLocationBox.eastBoundLongitude);
-        addData("geoLocationBox.northBoundLatitude",geoLocations.geoLocationBox.northBoundLatitude);
-        addData("geoLocationBox.southBoundLatitude",geoLocations.geoLocationBox.southBoundLatitude);
-        addData("geoLocationBox.westBoundLongitude",geoLocations.geoLocationBox.westBoundLongitude);
+        const dd = document.createElement('dd');
+        makeLocationSpan("eastBoundLongitude", geoLocations.geoLocationBox.eastBoundLongitude,dd);
+        makeLocationSpan("northBoundLatitude", geoLocations.geoLocationBox.northBoundLatitude,dd);
+        makeLocationSpan("southBoundLatitude", geoLocations.geoLocationBox.southBoundLatitude,dd);
+        makeLocationSpan("westBoundLongitude", geoLocations.geoLocationBox.westBoundLongitude,dd);
+        makeTags("geoLocations","geoLocations",dd);
+
     }catch(err){
         console.error("geolocations failed")
     }
-}
-
-
-// Help Functions
-
-function $(id){
-    if(id[0]=="."){
-        return document.getElementsByClassName(id.substring(1));
-    }else if(id[0]=="#"){
-        return document.getElementById(id.substring(1));
-    }
-    return document.getElementById(id);
 }
 
 function getGuid(){
@@ -817,7 +734,10 @@ function getGuid(){
 function detectTest(){
     // Detect if we're running on test or not
     let url = window.location.href;
-    if(url.includes("test") || url.includes("index")){
+    if(
+        url.includes("test") || // test environment
+        url.includes("doi-frontend") // localhost
+    ){
         return "test."
     }
     return "";
@@ -876,7 +796,6 @@ function unWrap(wrapped,criteria,content){
     }catch(err){
         console.error("unwrap failed")
     }
-
 }
 
 function unWrapDescriptions(wrapped,criteria,content){
@@ -884,11 +803,10 @@ function unWrapDescriptions(wrapped,criteria,content){
     return unWrap(wrapped,criteria,"TechnicalInfo");
 }
 
-
 function addData(id,content){
     if(content!= undefined && id!= undefined){
         try{
-            let object = document.getElementById(id) || id;
+            let object = $("#"+id) || id;
             object.innerHTML = content;
         }
         catch(err){
@@ -897,7 +815,7 @@ function addData(id,content){
     }else{
         // To avoid entire page breaking down if one error occurs
         try{
-            document.getElementById(id).innerHTML = "Ikke oppgitt";}
+            $("#"+id).innerHTML = "Ikke oppgitt";}
         catch(err){
             console.error("failed for id: ",id,"and content:" ,content)
         }
@@ -905,62 +823,77 @@ function addData(id,content){
 }
 
 function appendData(id,content){
-
     if(content!= undefined && id!= undefined ){
         try{
-            document.getElementById(id).appendChild(content);
+            $("#"+id).appendChild(content);
         } catch(err){
             console.error("failed for id: ",id,"and content:" ,content);
         }
-
     }else{
         // To avoid entire page breaking down if one error occurs
         console.error("no such content ", id,content);
     }
 }
 
-function hideAndShowActions(param,otherparam){
-    try{
-        for (let el of document.getElementsByClassName("section")){
-            updateStyle(el,"display",param)
-        }
-
-        for (let el of document.getElementsByClassName("inlinesection")){
-            updateStyle(el,"display","inline");
-            console.log("inlining")
-        }
-
-
-        for (let el of document.getElementsByClassName("ingress")){
-            updateStyle(el,"display",param)
-        }
-        updateStyle(document.getElementById("nodata"),"display",otherparam);
-        updateStyle(document.getElementById("timedetails"),"display",param);
-    }catch(err){
-        console.error("failed at hideandshowactions")
-    }
-}
-
-function emptyAppenders(){
+function resetPage(){
+    console.log("reset")
     try{
         // Empty appenders:
-        document.getElementById("img.appender").innerHTML = "";
-        document.getElementById("zip.appender.nb").innerHTML = "";
-        document.getElementById("zip.appender.en").innerHTML = "";
-        document.getElementById("a.appender").innerHTML = "";
-        document.getElementById("doi.appender").innerHTML = "";
-        document.getElementById("Descriptions.other").innerHTML = "";
-        //document.getElementById("Api.link").innerHTML = "";
+        $("#img.appender").innerHTML = "";
+        $("#zip.appender").innerHTML = "";
+        $("#artskartLink").href = "";
+        $("#doi.appender").innerHTML = "";
+        $("#Descriptions.other").innerHTML = "";
+
+        const child = $("#noReset");
+
+        $("#FileInfo").innerHTML = "";
+        $("#FileInfo").appendChild(child);
+        $("#Statistics").innerHTML = "";
+        $("#Types.appender").innerHTML = "";
+
+        /* Hide before content load */
+        showElement($("#tags_other"),false);
+
+        /* text formatting */
+        document.querySelectorAll('.contributor-plural').forEach(x => showElement(x,false));
+
     }catch(err){
         console.error("failed at emptying appenders")
     }
 }
 
-function hideAndShow(which){
-    if(which == "show"){
-        hideAndShowActions("inline-block","none");
-    }else{
-        hideAndShowActions("none","inline-block");
+function pageSetup(activate){
+    try{
+        showElement($("#nodata"),!activate);
+        for (let el of $(".section")){
+            showElement(el,activate);
+        }
+        for (let el of $(".inlinesection")){
+            showElement(el,activate);
+        }
 
+        for (let el of $(".ingress")){
+            showElement(el,activate);
+        }
+        showElement($("#timedetails"),activate);
+    }catch(err){
+        console.error("failed at pageSetup")
+    }
+}
+
+function showElement(element,activate){
+    // Use this to hide/and show elements that are not language based.
+    // To toggle lanuage, use showLang() instead
+    try{
+        if(activate){
+            element.classList.remove('hidden');
+            element.ariaHidden = "false";
+        }else{
+            element.ariaHidden = "true";
+            element.classList.add('hidden');
+        }
+    }catch(err){
+        console.error("showElement failed for element:", element)
     }
 }

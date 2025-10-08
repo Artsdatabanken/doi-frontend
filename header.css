@@ -1,0 +1,72 @@
+
+/* 
+Requires variables from layout stylesheet
+*/
+
+.header {
+    background: var(--background-default);
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);;
+    height: 80px;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-primary);
+
+    & .header-title {
+        text-decoration: none;
+        font-weight: bold;
+        flex: 1;
+        font-size: 21px;
+        line-height: 120%;
+        
+      }
+
+      & nav {
+        display: flex;
+        align-items: center;
+      }
+
+      & a{
+        color:var(--text-primary);
+        border:0;
+        padding:0;
+      }  
+      
+      &  .header-elements{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+      }
+  }
+
+  .logo-container {
+    height: 100%;
+    display: inline-block;
+    display: flex;
+    align-items: center;
+    border:0;
+
+    & svg{
+        margin:0 var(--default-size);
+    }
+  }
+
+  #lang-container{
+    position: absolute;
+    right: 0;
+    top: 80px;
+    width:max-content;
+    z-index: 100;
+    
+
+
+    & button{
+      display: block;
+      width:100%;
+
+    }
+  }
+
+

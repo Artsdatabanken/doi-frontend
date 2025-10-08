@@ -1,0 +1,294 @@
+/* 
+- As minimal as it comes. Just the basics.
+- Vars used in following stylesheets such as header and footer
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;500;700&display=swap');
+/*
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');*/
+
+:root {
+
+  /*colors*/
+  --white:#FFF;
+  --background-default: #FFFCF7;
+  --border:#F2DFC5;
+  --surface-secondary:#faefdf;
+  --text-accent: #005A71; 
+  --text-primary: #262f31;
+  --hero-icon-color:#007759;
+  --surface-brand-4b:#F8AE00;
+  --text-base-text-secondary:#616B6D;
+  --border-hover:#004557;
+
+  --primary-color:#005A71;
+  --primary-color-hover:#004557;
+
+  /*sizes*/
+  
+  --half-size:4px;
+  --default-size:8px;  
+  --dimensions-base: .25rem;
+  --dimensions-2x: calc(var(--dimensions-base) * 2);
+  --dimensions-3x: calc(var(--dimensions-base) * 3);
+
+  --spacing-2xsm:.25rem;
+  --spacing-xsm: var(--dimensions-2x); /*8px*/
+  --spacing-sm: var(--dimensions-3x);  
+  --spacing-spacing-md:24px;
+  --spacing-spacing-lg:32px;
+  --spacing-xl:calc(.25rem * 10);
+
+  --max-width:1216px; /* check this one, looks weird */ 
+  --radius-md:8px;
+  --button-border-radius: 30px;
+
+  /*fonts*/
+  --font-default-family:"Chivo", sans-serif;
+  --font-size-7:1.375rem;
+  --font-size-6:1.25rem;
+  --font-size-5:1.125rem;
+  --font-size-3:.875rem;  
+
+  /*Buttons*/
+  --padding-horisontal: 22px;
+  --padding-vertical: 14px;
+  --button-border-width: 2px;
+  --icon-button-size:40px;
+
+  /*Links */
+  --text-visited: var(--text-base-text-secondary);
+
+}
+
+*,::after, ::before {
+    -webkit-box-sizing: inherit;
+    box-sizing: border-box;
+  }
+
+body {
+    background: var(--background-default);
+    font-family: var(--font-default-family);
+    color: var(--text-primary);
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction: column;
+    min-height:100vh;
+}
+
+.main{
+    flex:1
+}
+
+a {
+    color: var(--text-accent);
+    text-decoration: none;
+    display: inline-flex;
+    padding: 6px 0;
+    justify-content: center;
+    align-items: center;
+    gap: var(--spacing-spacing-2xsm);
+    align-self: stretch;    
+    border-bottom: 2px solid currentColor;
+  
+    &:hover{
+      border-bottom-width: 4px;
+      padding-bottom: 4px;
+    }
+
+
+    &.shortcut-link{
+      align-items: center;
+      gap: var(--spacing-2xsm);
+      padding: var(--spacing-xsm) 0;
+      position: relative;
+      font-size: var(--font-size-5);
+      line-height: 1.7em;
+      display: inline-flex;
+
+      &::after {
+        content: "";
+        height: 1.6em;
+        width: 1.6em;
+        display: block;
+        background-image: url("data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20fill='none'%3e%3cpath%20fill='%23E55440'%20d='m16.368%2012-6.091%206.091-2.22-2.22L11.93%2012%208.057%208.128l2.22-2.219z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: 50%;
+        background-size: cover;
+      } 
+
+      &:visited{
+        color: var(--text-accent);
+      }
+    }
+
+    & .material-icons{
+      font-size: inherit;
+      margin-right: 4px;
+    }
+}
+
+/*visited*/
+a:visited{
+  color: var(--text-visited);
+}
+
+.breadcrumb a:visited{
+  color: var(--text-accent)
+}
+
+
+
+.shortcut-group{
+  display: flex;
+  flex-direction: column;
+  width:fit-content;
+
+  & .shortcut-link{
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.page-wrapper {
+  padding: 0 0.75rem;
+  margin-right: auto;
+  margin-left: auto;
+  width:100%;
+  max-width:var(--max-width);
+  position: relative;
+}
+
+.breadcrumb{
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: var(--spacing-xsm) 0;
+  list-style: none;
+  margin-top:0;
+  font-size:var(--font-size-3);
+  gap:var(--half-size);
+
+  & li{
+    display: flex;
+  }
+
+  & li:not(.first)::before{   
+    content: "";
+    width: 8px;
+    margin-right: var(--half-size);
+    color: var(--text-secondary);
+    background: url("data:image/svg+xml,%3csvg%20width='7'%20height='8'%20viewBox='0%200%207%208'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cpath%20d='M6.0293%204L2.02197%208.00732L0.561992%206.54734L3.10934%204L0.561992%201.45266L2.02197%20-0.00732431L6.0293%204Z'%20fill='%23E55440'%3e%3c/path%3e%3c/svg%3e") no-repeat 50%;
+    
+  }
+
+  & li:empty{
+    display: none;
+  }
+
+}
+
+.top-section{
+  background:#fff1db;
+  width:100vw;
+  padding: 0 0.75rem;
+  padding-bottom:0.75rem;
+
+  & .hero{
+    padding: 80px;
+
+    & h1{
+        font-weight: 700;
+        font-size:36px;
+    }
+
+    & p{
+      font-weight: 500;
+      font-size: var(--font-size-6);
+      line-height: 1.5em;
+    }
+  }
+}
+
+.section{
+  margin-bottom: var( --spacing-spacing-md);
+}
+
+.content{
+  padding:1rem;
+}
+
+.flex-wrapper{
+  display:flex;
+  gap:var(--spacing-spacing-md);
+  flex-wrap:wrap;
+}
+
+button{
+  padding: var(--padding-vertical) var(--padding-horisontal);
+  border-radius: var(--button-border-radius);
+  border-width: var(--button-border-width);
+  border-style: solid;
+  box-sizing: border-box;
+  margin-left: 0;
+  width: max-content;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap:4px;
+  font-size: var(--font-size-3);
+
+  /*secondary aka. default*/
+  background:var(--white);
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  text-decoration: none;
+
+  &:hover,
+  &:active {
+    cursor:pointer;
+    border: 4px solid var(--primary-color);
+    padding: calc(var(--padding-vertical) - 2px) calc(var(--padding-horisontal) - 2px);
+  }
+
+  /* primary for main action on page */
+  &.primary {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white);
+    &:hover,
+    &:active {
+        border-color: var(--primary-color-hover);
+        background: var(--primary-color-hover);        
+    }
+  } 
+
+  &.icon-button{
+    width: var(--icon-button-size);
+    height: var(--icon-button-size);
+    border-radius: 50%;
+    padding: 0;
+    margin: 0;
+    min-width: var(--icon-button-size);
+    min-height: var(--icon-button-size);
+
+    &:hover {
+        padding: 0;
+    }
+  }
+
+}
+
+.ingress{
+  font-size: var(--font-size-6);
+}
+
+hr{
+  background-color: var( --border);
+  height: 4px;
+  margin: var(--spacing-xl) 0;
+  border: 0;
+}

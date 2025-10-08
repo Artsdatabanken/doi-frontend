@@ -1,0 +1,30 @@
+
+/* 
+Requires variables from layout stylesheet
+*/
+
+footer{
+  --surface-brand-5: #1C3840;
+  --text-primary: white;
+  --text-accent: #44AFCB;
+  --border-strong: #8C9799;
+  --border-accent: #44AFCB;
+  --text-vistited: #A3AEB0;
+  --surface-subtle: #394244;
+  background-color: var(--surface-brand-5);
+  font-size: var(--font-size-3);
+  margin-top: var(--spacing-2xl);
+}
+
+
+.footer{
+  background: var(--surface-brand-5);
+  color:var(--text-primary);
+  max-width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  border-top: 1px solid var(--border-strong);
+  margin-top: 16px;
+
+}

@@ -21,7 +21,7 @@ function addListData(){
                 let key = order[i]
                 //onsole.log(data[key]) The list only contains doi and guid
                 let doiurl = '#'+data[key];
-                items += "<a href="+doiurl+" class='doilink'>"+key+"<span></a>";
+                items += "<a href="+doiurl+" class='shortcut-link'>"+key+"<span></a>";
              }
              addData("find.doi",items);
            }catch(err){
