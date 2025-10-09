@@ -242,7 +242,7 @@ function updateImage(url){
         }else{
             target.className = "fullscreen";
             body.className = "freeze-scroll";
-            closebutton.innerHTML = "<span class='material-icons'>fullscreen_exit</span>";
+            closebutton.innerHTML = "<span class='material-icons'>close</span>";
         }
     });
     appendData('img.appender',closebutton);
@@ -263,16 +263,17 @@ function updateDownloadButton(attributes,desc,url){
         });                
 }
 
+
 function updateBreadCrumb(addLink){
     // activate and deactivate element in breadcrumb
     try{
-        const updateBreadCrumbed = $("#updateBreadCrumbed");
+        const reLinked = $("#reLinked");
         const unLinked = $("#unLinked");
-        let activate = updateBreadCrumbed;
+        let activate = reLinked;
         let unactivate = unLinked;
         if(!addLink){
             activate = unLinked;
-            unactivate =  updateBreadCrumbed;
+            unactivate =  reLinked;
         }
         showElement(activate,true);
         activate.innerHTML = unactivate.innerHTML;
@@ -281,7 +282,7 @@ function updateBreadCrumb(addLink){
         console.error("unLink failed")
     }
 }
-
+    
 
 // Format, convert and extract data
 function formatDate(date){
@@ -440,20 +441,25 @@ function makeDescriptionItems(descriptionElement,title){
             descriptionElement = [ descriptionElement ];
         }
         const decriptionList = Object.keys(descriptionElement);
+       // console.log("element",descriptionElement, title)
         for(let i in decriptionList){
             const key = decriptionList[i];
             const item = descriptionElement[key];
+            //console.log(key,item)
             // Here we may need specific things for different fields
-            const text = item.name || item;
+            let text = item.name || item;
             // make tag
             const span = document.createElement('span');
             span.className="tag";
             if(item.code){
-                const innerText = item.code += " - ";
-                span.innerText = innerText;
+                // Redlist/Alienlist uses "code" instead of name
+                text = item.code + " - " + text; 
             }
-            if(item.inverted){
+            if(item.inverted === "true"){
                 translate("Inverted", span);
+            }
+            if(text === ""){
+                text = decriptionList[0];
             }
             translate(text, span);
             dd.appendChild(span);
@@ -593,14 +599,22 @@ function addFileInfo(attributes,desc){
 
 function addGeoLocation(attributes){
     try{
-        let geoLocations = attributes.geoLocations[0];
+        const geoLocations = attributes.geoLocations[0];
+        console.log("geoLocations",geoLocations);
         const dd = document.createElement('dd');
         makeLocationSpan("eastBoundLongitude", geoLocations.geoLocationBox.eastBoundLongitude,dd);
         makeLocationSpan("northBoundLatitude", geoLocations.geoLocationBox.northBoundLatitude,dd);
         makeLocationSpan("southBoundLatitude", geoLocations.geoLocationBox.southBoundLatitude,dd);
         makeLocationSpan("westBoundLongitude", geoLocations.geoLocationBox.westBoundLongitude,dd);
-        makeTags("geoLocations","geoLocations",dd);
+      
+        if( geoLocations.geoLocationPlace !== null){
+            makeLocationSpan("geoLocationPlace", geoLocations.geoLocationPlace,dd);
+        }
+        if( geoLocations.geoLocationPoint !== null){
+            makeLocationSpan("geoLocationPoint", geoLocations.geoLocationPoint,dd);
+        }
 
+        makeTags("geoLocations","geoLocations",dd);
     }catch(err){
         console.error("geolocations failed")
     }
@@ -670,11 +684,11 @@ function addGeneralData(attributes){
         shortcutLink.textContent=attributes.doi;
         appendData('Attributes.doi',shortcutLink);
 
-        updateBreadCrumb(true)
+        updateBreadCrumb(true);
         let headerdoi = "DOI: "+ attributes.doi;
         addData('header-doi',headerdoi);
     }catch(err){
-        console.error("General data failed")
+        console.error("General data failed",err)
     }
 }
 
@@ -758,6 +772,8 @@ function addDescriptions(desc){
             for(let title in descriptioncontent){
                 if(descriptioncontent[title] != ""){
                     makeDescriptionItems(descriptioncontent[title],title);
+                }else{
+                    console.log("empty stuff",descriptioncontent[title], title)
                 }
             }
         }
@@ -805,6 +821,11 @@ function showElement(element,activate){
     // Use this to hide/and show elements that are not language based.
     // To toggle lanuage, use showLang() instead
     try{
+        if(element === null || element === undefined){
+            console.info("Trying to handle empty element")
+            return;
+        }
+
         if(activate){
             element.classList.remove('hidden');
             element.ariaHidden = "false";
