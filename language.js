@@ -153,7 +153,7 @@ const translations = {
         "nb": "Eksporttype",
         "en": "Export type"
     }    ,
-    Langugae:{
+    Language:{
         "nn": "Språk",
         "nb": "Språk",
         "en": "Language"
@@ -162,6 +162,66 @@ const translations = {
         "nn": "Datatype",
         "nb": "Datatype",
         "en": "Data type"
+    },
+    Size:{
+        "nn": "Storleik",
+        "nb": "Størrelse",
+        "en": "Size"
+    },
+    Title:{
+        "nn": "Tittel",
+        "nb": "Tittel",
+        "en": "Title"
+    },
+    PublicationYear:{
+        "nn": "Publiseringsår",
+        "nb": "Publiseringsår",
+        "en": "Publication year"
+    },
+    Publisher:{
+        "nn": "Publisert av",
+        "nb": "Publisert av",
+        "en": "Publisher"
+    },
+    State:{
+        "nn": "Status",
+        "nb": "Status",
+        "en": "State"
+    },
+    resourceType:{
+        "nn": "Ressurstype",
+        "nb": "Ressurstype",
+        "en": "Resource type"
+    },
+    Unspontaneus:{
+        "nn": "uspontan",
+        "nb": "uspontan",
+        "en": "unspontaneus"
+    },
+    UnsureIdentification:{
+        "nn": "usikker bestemming",
+        "nb": "usikker bestemmelse",
+        "en": "unsure identification"
+    },
+    Validated:{
+        "nn": "validert",
+        "nb": "validert",
+        "en": "validated"
+    },
+    Institutions:{
+        "nn": "Institusjoner",
+        "nb": "Institusjoner",
+        "en": "Institutions"
+    },
+    BasisOfRecords:{
+        "nn": "Basis of records (Darwin Core)",
+        "nb": "Basis of records (Darwin Core)",
+        "en": "Basis of records (Darwin Core)"
+    },
+    Months:{
+        "nn": "Måneder",
+        "nb": "Måneder",
+        "en": "Months"
     }
 
     

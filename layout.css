@@ -40,6 +40,7 @@
   --spacing-spacing-md:24px;
   --spacing-spacing-lg:32px;
   --spacing-xl:calc(.25rem * 10);
+  
 
   --max-width:1216px; /* check this one, looks weird */ 
   --radius-md:8px;
@@ -47,6 +48,8 @@
 
   /*fonts*/
   --font-default-family:"Chivo", sans-serif;
+
+  --font-size-10:32px;
   --font-size-7:1.375rem;
   --font-size-6:1.25rem;
   --font-size-5:1.125rem;
@@ -82,6 +85,7 @@ body {
 .main{
     flex:1
 }
+
 
 a {
     color: var(--text-accent);
@@ -136,11 +140,10 @@ a:visited{
   color: var(--text-visited);
 }
 
+a.card:visited,
 .breadcrumb a:visited{
-  color: var(--text-accent)
+  color: var(--text-accent);
 }
-
-
 
 .shortcut-group{
   display: flex;
@@ -151,6 +154,15 @@ a:visited{
     width: 100%;
     justify-content: space-between;
   }
+}
+
+h1{
+  font-weight: 700;
+  font-size: var(--font-size-10);
+  
+  @media screen and (min-width: 80em) {       
+    font-size:36px;
+  } 
 }
 
 .page-wrapper {
@@ -197,20 +209,28 @@ a:visited{
   padding: 0 0.75rem;
   padding-bottom:0.75rem;
 
-  & .hero{
-    padding: 80px;
+  & .hero{    
+    padding: 1rem;
+    padding-top:32px;
+    padding-bottom:32px;
 
-    & h1{
-        font-weight: 700;
-        font-size:36px;
-    }
-
-    & p{
+     & p{
       font-weight: 500;
       font-size: var(--font-size-6);
       line-height: 1.5em;
     }
-  }
+    
+  @media screen and (min-width: 80em) {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    }
+
+    & .ingress{
+      font-size: var(--font-size-6);
+    }
+
+    }
+  
 }
 
 .section{
@@ -284,6 +304,7 @@ button{
 
 .ingress{
   font-size: var(--font-size-6);
+
 }
 
 hr{
@@ -291,4 +312,45 @@ hr{
   height: 4px;
   margin: var(--spacing-xl) 0;
   border: 0;
+}
+
+.card{
+  display: flex;
+  min-width: 240px;
+  align-items: center;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--white);
+  padding-right: var(--spacing-spacing-md);
+  font-style: normal;
+
+  & .text{
+      padding: var(--spacing-spacing-md) ;
+      display: flex;
+      flex-direction: column;
+
+      & .title{
+          font-size: var(--font-size-7);
+          font-weight: 700;
+          line-height: 120%; /* 28.8px */
+      }
+
+      & .subtitle{
+          color: var(--text-base-text-secondary);
+          font-size: var(--font-size-3, 14px);
+          font-weight: 400;
+          line-height: 160%; /* 22.4px */
+      }
+  }
+
+  &:hover{
+      border-color: var(--border-hover);
+      box-shadow: inset 0 0 0 4px var(--border-hover);
+
+  }
+
+  &:active{
+      background-color: var(--surface-secondary);
+  }
+
 }

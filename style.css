@@ -5,54 +5,10 @@
     display: none;
 }
 
-/* NEW STUFF */
+/* Project specific styles */
 
 .shortcut-link{
     display:block
-}
-
-/* CARDS */
-
-
-.card{
-    display: flex;
-    min-width: 240px;
-    align-items: center;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    background: var(--white);
-    padding-right: var(--spacing-spacing-md);
-    font-style: normal;
-
-    & .text{
-        padding: var(--spacing-spacing-md) ;
-        display: flex;
-        flex-direction: column;
-
-        & .title{
-            font-size: var(--font-size-7);
-            font-weight: 700;
-            line-height: 120%; /* 28.8px */
-        }
-
-        & .subtitle{
-            color: var(--text-base-text-secondary);
-            font-size: var(--font-size-3, 14px);
-            font-weight: 400;
-            line-height: 160%; /* 22.4px */
-        }
-    }
-
-    &:hover{
-        border-color: var(--border-hover);
-        box-shadow: inset 0 0 0 4px var(--border-hover);
-
-    }
-
-    &:active{
-        background-color: var(--surface-secondary);
-    }
-
 }
 
 .contributor-list{
@@ -69,8 +25,6 @@
         min-height: 33px;;
     }
 }
-
-
 
 dl div{
     display: flex;
