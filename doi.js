@@ -168,33 +168,35 @@ function runApiCall(){
         }catch(err){
             console.error("Show frontpage failed",err)
         }
-
     }else{
         getDoiData();
     }
 }
 
-function getCitation(doi){
-    let url = 'https://doiapi.artsdatabanken.no/api/Doi/getcitation/'+doi;
-    console.info("running fetch ",url)
+function getCitation(doi,appendTo){   
+    let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getcitation/'+doi;
     fetch(url)
     .then((response) => {
         return response.text();
     })
-    .then((data) => {
-        let object = $("#"+doi);
-        object.classList.add("hascitation");
-        let newelement = document.createElement('span');
-        let splitted = data.split("https");
-        let link = "https"+splitted[1];
-        let citation = splitted[0]+"<a href='"+link+"'>"+link+"</a>";
-        newelement.className = "citation";
-        newelement.innerHTML = "<br/>"+citation;
-        object.appendChild(newelement);
-        return data;
+    .then((data) => {        
+        if(data !== ""){
+            console.log(data)
+            let newelement = document.createElement('span');
+            let splitted = data.split("https");
+            let link = "https"+splitted[1];
+            let citation = splitted[0]+"<a href='"+link+"'>"+link+"</a>";
+            newelement.className = "citation";
+            newelement.innerHTML = "<br/>"+citation;
+            console.log(newelement);
+            appendTo.appendChild(newelement);
+        }else{
+            console.log("empty data")
+        }     
+        
     })
     .catch((err) => {
-        console.error(err)
+        console.error("getCitation: ",err)
         return doi;        
     })
 }
@@ -510,10 +512,11 @@ function addDoi(desc){
 
             let link = items[0];
             if(link.includes("https")){
-                let doitext = link.replace("https://doi.org/","");
-                getCitation(doitext);
+                console.log(link)
+                let doitext = link.replace("https://doi.org/","");                
                 contributer.id = doitext;
                 contributer.appendChild(makeLink(link,doitext));
+                // getCitation was here but it makes a citation which seems.. wrong?          
             }
             appendData('doi.appender',contributer);
         }
@@ -608,7 +611,8 @@ function addGeoLocation(attributes){
             makeLocationSpan("geoLocationPlace", geoLocations.geoLocationPlace,dd);
         }
         if( geoLocations.geoLocationPoint !== null){
-            makeLocationSpan("geoLocationPoint", geoLocations.geoLocationPoint,dd);
+            makeLocationSpan("pointLongitude", geoLocations.geoLocationPoint.pointLongitude,dd);
+            makeLocationSpan("pointLatitude", geoLocations.geoLocationPoint.pointLatitude,dd);
         }
 
         makeTags("geoLocations","geoLocations",dd);
