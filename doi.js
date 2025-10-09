@@ -263,7 +263,6 @@ function updateDownloadButton(attributes,desc,url){
         });                
 }
 
-
 function updateBreadCrumb(addLink){
     // activate and deactivate element in breadcrumb
     try{
@@ -283,7 +282,6 @@ function updateBreadCrumb(addLink){
     }
 }
     
-
 // Format, convert and extract data
 function formatDate(date){
     return new Date(date).toLocaleDateString("nb-no", {hour: '2-digit', minute: '2-digit'});

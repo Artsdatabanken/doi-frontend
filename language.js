@@ -1,8 +1,8 @@
 
 
 
-const languages = ["nn", "nb", "en"];
-
+var languageObjects = {"nb":"Norsk (bokmål)","nn":"Norsk (nynorsk)", "en":"English"};
+var languages = Object.keys(languageObjects);
 var lang = "nb";
 
 function languageSupport(){

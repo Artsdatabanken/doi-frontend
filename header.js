@@ -45,20 +45,40 @@ function createLanguageDropDown(){
     const container = document.createElement('div');
     container.setAttribute("id", "lang-container");
     container.classList.add('lang-hide');
-    container.appendChild(createLanguageButtons("Norsk (bokmål)","nb"));
-    container.appendChild(createLanguageButtons("Norsk (nynorsk)","nn"));
-    container.appendChild(createLanguageButtons("English","en"));
+    languages.forEach(language => {
+        createLanguageButtons(languageObjects[language],language,container);        
+    });
+ 
+    container.addEventListener('change', function(event) {
+        if (event.target.type === 'radio' && event.target.name === 'languageSelector') {
+            changeLanguage(event.target.value);
+            toggleLanguages();
+        }
+    });
+
     return container;
 }
 
-function createLanguageButtons(language,code){
-    const newButton = document.createElement('button');
-    newButton.textContent = language;
-    newButton.addEventListener("click", () => {
+function createLanguageButtons(language,code,container){
+    const div  = document.createElement('div');
+    const radioInput  = document.createElement('input');
+    radioInput.type = "radio";
+    radioInput.name = "languageSelector"; 
+    radioInput.value = code;
+    radioInput.id = code;
+    radioInput.checked = code === lang; 
+    const radioLabel = document.createElement("label");
+    radioLabel.textContent = language;
+    radioLabel.htmlFor = code;     
+    div.appendChild(radioInput);
+    div.appendChild(radioLabel);
+    div.addEventListener('click', function() {
+        // allow detection of clicks outside of the label       
+        radioInput.checked = true;
         changeLanguage(code);
         toggleLanguages();
       });
-    return newButton;
+    container.appendChild(div);
 }
 
 function toggleLanguages(){

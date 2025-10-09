@@ -60,12 +60,18 @@ Requires variables from layout stylesheet
     width:max-content;
     z-index: 100;
     
-
-
-    & button{
+    & div{
       display: block;
       width:100%;
+      border:1px solid var(--border);
+      padding: var(--padding-vertical) var(--padding-horisontal); 
 
+      &:hover,
+      &:active {
+        cursor:pointer;
+        border: 2px solid var(--primary-color);
+        padding: calc(var(--padding-vertical) - 1px) calc(var(--padding-horisontal) - 1px);
+      }
     }
   }
 
