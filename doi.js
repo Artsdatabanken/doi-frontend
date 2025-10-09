@@ -351,12 +351,12 @@ function $(id){
                     return document.getElementsByClassName(id);
                 }
             }catch(err){
-                console.log(err, "could not find html object", id)
+                console.error(err, "could not find html object", id)
             }
 
         }
     }catch(err){
-        console.log(err, "could not find html object", id)
+        console.error(err, "could not find html object", id)
     }
 }
 
@@ -598,7 +598,6 @@ function addFileInfo(attributes,desc){
 function addGeoLocation(attributes){
     try{
         const geoLocations = attributes.geoLocations[0];
-        console.log("geoLocations",geoLocations);
         const dd = document.createElement('dd');
         makeLocationSpan("eastBoundLongitude", geoLocations.geoLocationBox.eastBoundLongitude,dd);
         makeLocationSpan("northBoundLatitude", geoLocations.geoLocationBox.northBoundLatitude,dd);
@@ -770,8 +769,6 @@ function addDescriptions(desc){
             for(let title in descriptioncontent){
                 if(descriptioncontent[title] != ""){
                     makeDescriptionItems(descriptioncontent[title],title);
-                }else{
-                    console.log("empty stuff",descriptioncontent[title], title)
                 }
             }
         }
@@ -855,7 +852,6 @@ function changeClass(selector,className){
 // PAGE SETUP
 
 function resetPage(){
-    console.log("reset")
     try{
         // Empty appenders:
         $("#img.appender").innerHTML = "";

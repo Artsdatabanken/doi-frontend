@@ -88,6 +88,5 @@ function toggleLanguages(){
     }else{
         langDiv.classList.add('lang-hide');
     } 
-
 }
 
