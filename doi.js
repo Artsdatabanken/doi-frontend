@@ -617,7 +617,7 @@ function addGeoLocation(attributes){
 
         makeTags("geoLocations","geoLocations",dd);
     }catch(err){
-        console.error("geolocations failed")
+        console.error("geolocations failed",err)
     }
 }
 
