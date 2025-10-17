@@ -29,7 +29,7 @@ function getTimeUpdate(submitted,created,updated,valid){
     try{
         setTimeout(function(){
             // Obtaining the relevant doi to look up.
-            let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDatesByGuid/'+getGuid();
+            let url = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDatesByGuid/'+getGuid();
             fetch(url)
             .then((response) => {
                 return response.json()
@@ -174,7 +174,7 @@ function runApiCall(){
 }
 
 function getCitation(doi,appendTo){   
-    let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getcitation/'+doi;
+    let url = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getcitation/'+doi;
     fetch(url)
     .then((response) => {
         return response.text();
@@ -204,7 +204,7 @@ function getCitation(doi,appendTo){
 function getDoiData(isRerun){
     // Obtaining the relevant doi to look up.
     // Is its own function as it was called from several places. No longer is tho.
-    let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
+    let url = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getDoiByGuid/'+getGuid();
     fetch(url)
     .then((response) => {
         return response.json()
