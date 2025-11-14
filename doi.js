@@ -710,11 +710,14 @@ function addMiscData(attributes){
 
 function addArtskartUrl(desc){
     try{
-        let artskartelement = desc['ArtskartUrl'][0];
+        let url = desc['ArtskartUrl'][0];
         let artskartLink = $("#artskartLink");
-        artskartLink.href = artskartelement;
+        // While we wait for API to update their url...        
+        url = url.replace("https://test.artsdatabanken.no/artskart2boci/","https://artskart.test.artsdatabanken.no/");
+        url = url.replace("https://artsdatabanken.no/artskart2boci/","https://artskart.artsdatabanken.no/");
+        artskartLink.href = url;
     }catch(err){
-        console.error("Failed at artskarturl;")
+        console.error("Failed at artskarturl;", err)
     }
 }
 

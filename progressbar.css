@@ -6,13 +6,13 @@
     background: var(--white);
 }
 
+
 .progressbar{
     margin-top:50px;
     margin-bottom:90px;
     height:10px;
     position:relative;
-    background:var(--white);
-    border:1px solid  var(  --text-base-text-secondary);
+    background:var(--grey);
     width:100%;
     font-size: 0;
     border-radius: var(--radius-md);
@@ -23,7 +23,7 @@
         top:0;
         left:0;
         width:0;
-        background:var(--primary-color-hover);
+        background:var(--evergreen-60);
         position:absolute;
         margin:0;
     }
@@ -52,20 +52,18 @@
         display:block;
         padding:10px;
         border-radius:50%;
-        background: var(--white);
+        background: var(--grey);
         width:50px;
         height:50px;
         margin:auto;
         font-size: 18pt;
-        border:1px solid var(  --text-base-text-secondary);
-        color:var(  --text-base-text-secondary);
+        color:var(  --text-primary);
     }
 
     & .active div,
     & .done div{
-        background:var(--primary-color);
+        background:var(--evergreen-60);
         color:var(--white);
-        border:1px solid var(--primary-color);
 }
 
 }
