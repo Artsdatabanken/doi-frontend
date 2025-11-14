@@ -26,7 +26,7 @@ https://travis-ci.com/github/Artsdatabanken/doi-frontend/builds/
 Du må logge inn med din github-bruker.
 
 ## Opprette en DOI
-Åpne Artskart med f.eks. denne linken [https://test.artsdatabanken.no/artskart2boci/#map/427864,7623020/3/background/greyMap/filter/{%22TaxonGroupIds%22:[7,23,5,15,14],%22IncludeSubTaxonIds%22:true,%22YearFrom%22:2019,%22YearTo%22:2019,%22Categories%22:[11,12,13,14,15,1,2,3,4,5,6,7,8,10],%22Found%22:[2],%22NotRecovered%22:[2],%22Img%22:[1]}](https://test.artsdatabanken.no/artskart2boci/#map/427864,7623020/3/background/greyMap/filter/{%22TaxonGroupIds%22:[7,23,5,15,14],%22IncludeSubTaxonIds%22:true,%22YearFrom%22:2019,%22YearTo%22:2019,%22Categories%22:[11,12,13,14,15,1,2,3,4,5,6,7,8,10],%22Found%22:[2],%22NotRecovered%22:[2],%22Img%22:[1]})
+Åpne Artskart med f.eks. denne linken [https://artskart.test.artsdatabanken.no/#map/427864,7623020/3/background/greyMap/filter/{%22TaxonGroupIds%22:[7,23,5,15,14],%22IncludeSubTaxonIds%22:true,%22YearFrom%22:2019,%22YearTo%22:2019,%22Categories%22:[11,12,13,14,15,1,2,3,4,5,6,7,8,10],%22Found%22:[2],%22NotRecovered%22:[2],%22Img%22:[1]}](https://artskart.test.artsdatabanken.no/#map/427864,7623020/3/background/greyMap/filter/{%22TaxonGroupIds%22:[7,23,5,15,14],%22IncludeSubTaxonIds%22:true,%22YearFrom%22:2019,%22YearTo%22:2019,%22Categories%22:[11,12,13,14,15,1,2,3,4,5,6,7,8,10],%22Found%22:[2],%22NotRecovered%22:[2],%22Img%22:[1]})
 
 Trykk på _Liste_ -> _Eksport_. Velg eksporttype.
 

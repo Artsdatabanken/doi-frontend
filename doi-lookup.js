@@ -7,7 +7,7 @@ AKA: Front page for doi.
 
 function addListData(){
     try{
-        let url = 'https://doiapi.'+detectTest()+'artsdatabanken.no/api/Doi/getAllIds';
+        let url = 'https://doi.'+detectTest()+'artsdatabanken.no/api/Doi/getAllIds';
         addData("find.doi","Henter inn data ...");   
         fetch(url)
         .then((response) => {

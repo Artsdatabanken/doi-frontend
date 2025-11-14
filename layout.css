@@ -353,4 +353,13 @@ hr{
       background-color: var(--surface-secondary);
   }
 
+  &.small{
+    max-width: max-content;
+  }
+
+  & a{
+    max-width: max-content;
+
+  }
+
 }
