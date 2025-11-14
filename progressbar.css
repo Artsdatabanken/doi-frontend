@@ -1,35 +1,28 @@
 
-.info-box{
-    padding: var(--spacing-spacing-lg);
-    border-radius: var(--radius-md);
-    border: 1px solid var(--border);
-    background: var(--white);
-}
-
-
 .progressbar{
-    margin-top:50px;
-    margin-bottom:90px;
-    height:10px;
-    position:relative;
-    background:var(--grey);
-    width:100%;
-    font-size: 0;
-    border-radius: var(--radius-md);
+    position:relative;    
 
+    & .progress-background,
     & #progressindicator{
         border-radius: var(--radius-md);
         height:10px;
-        top:0;
-        left:0;
-        width:0;
-        background:var(--evergreen-60);
+        top:32px;
+        left:0;                
         position:absolute;
         margin:0;
+        z-index: -1;
+    }
+
+    & .progress-background{        
+        background:var(--grey);
+        width:100%;
+    }
+    & #progressindicator{        
+        background:var(--evergreen-60);
+        width:0;
     }
     
     & ul{
-        position:absolute;
         width:100%;
         left:0;
         top:-32px;
@@ -46,8 +39,14 @@
         width:calc(33% - 4px);
         font-size:10pt;        
         vertical-align: top;
+
+        & b{
+            font-size: 20px;
+            font-weight: bold;
+        }
     }
 
+    /* Bubbles */
     & div{
         display:block;
         padding:10px;
@@ -58,12 +57,14 @@
         margin:auto;
         font-size: 18pt;
         color:var(  --text-primary);
+        font-weight: bold;
     }
 
     & .active div,
     & .done div{
         background:var(--evergreen-60);
         color:var(--white);
+   
 }
 
 }

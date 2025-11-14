@@ -81,56 +81,63 @@
                 </p>
             </div>
 
-            <div class="section info-box hidden"  id="notyetvalid" aria-hidden="true">
+            <div class="section hidden"  id="notyetvalid" aria-hidden="true">
                 <h2>
-                    <span lang="nb">Laster inn... </span>
-                    <span lang="nn">Laster inn... </span>
-                    <span lang="en">Loading... </span>
+                    <span lang="nb">Laster datasett </span>
+                    <span lang="nn">Laster datasett </span>
+                    <span lang="en">Loading dataset </span>
                 </h2>
-                <p role="status">
-                    <span id="Progress.status.Submitted">
-                        <span lang="nb">Bestilt: eksporten står i kø for å opprettes. Noe data kan likevel vises nedenfor.</span>
-                        <span lang="nn">Bestilt: eksporten står i kø for å opprettes. Noe data kan likevel vises nedenfor.</span>
-                        <span lang="en">Ordered: This dataset is waiting in queue. Below you find a sneek peek of what is currently visible.</span>
-                    </p>
-
-                    <span id="Progress.status.Created">
-                        <span lang="nb">Under arbeid: Eksport pågår, så det kan mangle data nedenfor inntil den er helt ferdig.</span>
-                        <span lang="nn">Under arbeid: Eksport pågår, så det kan mangle data nedenfor inntil den er helt ferdig.</span>
-                        <span lang="en">In progress: export currently in progress, data may be missing below.</span>
-                    </span>
-
-                    <span id="Progress.status.Valid">
-                        <span lang="nb">Publisert: Datasettet er ferdigeksportert.</span>
-                        <span lang="nn">Publisert: Datasettet er ferdigeksportert.</span>
-                        <span lang="en">Published: Data export is finished.</span>
-                    </span>
-                 </p>
 
                 <div class="progressbar">
+                    <hr class="progress-background" />
                     <hr id="progressindicator" />
                     <ul>
                         <li class="next"><div>1</div><br/>
-                            <span> </span>
-                            <span lang="nb">Bestilt</span>
-                            <span lang="nn">Bestilt</span>
-                            <span lang="en">Ordered</span>
-                            <br/><b id="Progress.Submitted">-</b>
+                            <span role="status"> 
+                                <b lang="nb">Bestilt</b>
+                                <b lang="nn">Bestilt</b>
+                                <b lang="en">Ordered</b>
+                            </span>
+                            <br/>
+                            <span id="Progress.Submitted">
+                                <span lang="nb">Eksporten står i kø for å opprettes.</span>
+                                <span lang="nn">Eksporten står i kø for å opprettes.</span>
+                                <span lang="en">Dataset is waiting in queue.</span>
+                            </span>
                         </li>
                         <li class="next"><div>2</div><br/>
-                            <span lang="nb">Under arbeid </span>
-                            <span lang="nn">Under arbeid </span>
-                            <span lang="en">In progress </span>
-                            <br/><b id="Progress.Created">-</b>
+                            <span role="status"> 
+                                <b lang="nb">Under arbeid </b>
+                                <b lang="nn">Under arbeid </b>
+                                <b lang="en">In progress </b>
+                            </span>
+                            <br/>
+                            <span id="Progress.Created">
+                                <span lang="nb">Eksport pågår.</span>
+                                <span lang="nn">Eksport pågår.</span>
+                                <span lang="en">Export currently in progress.</span>
+                            </span>
                         </li>
                         <li class="next"><div>3</div><br/>
-                            <span lang="nb">Publisert </span>
-                            <span lang="nn">Publisert </span>
-                            <span lang="en">Published </span>
-                            <br/><b id="Progress.Valid">-</b>
+                            <span role="status"> 
+                                <b lang="nb">Publisert </b>
+                                <b lang="nn">Publisert </b>
+                                <b lang="en">Published </b>
+                            </span>
+                            <br/>
+                            <span id="Progress.Valid">
+                                <span lang="nb">Datasettet ferdigstilles.</span>
+                                <span lang="nn">Datasettet ferdigstilles.</span>
+                                <span lang="en">Data export is finished.</span>
+                             </span>
                         </li>
                     </ul>
                 </div>
+                <p id="Progress.status.Valid">
+                    <span lang="nb">Selv om datasettet ikke er ferdig eksportert, kan noe data kan likevel vises nedenfor.</span>
+                    <span lang="nn">Sjølv om datasettet ikkje er ferdig eksportert kan nokre data sjåast nedanfor.</span>
+                    <span lang="en">The dataset is not yet ready, but you can find a sneek peek of what is already availiable.</span>        
+                 </p>
             </div>
 
             <div class="section">

@@ -91,11 +91,11 @@ function getTimeUpdate(submitted,created,updated,valid){
 function updateProgress(type,dateObject){
     try{    
         if(dateObject){
-            const width = type === "Submitted"?"20%":(type === "Created"?"50%":"100%");
+            const width = type === "Submitted"?"18%":(type === "Created"?"50%":"100%");
             addData("Progress."+type,formatDate(dateObject)); 
             changeClass($("#Progress."+type).parentElement,"done");
             updateStyle($("#progressindicator"),"width",width);
-            showElement($('#Progress.status.'+type),true);  
+            showElement($('#Progress.status.'+type),false);  
         }
     }catch(err){
         console.error("failed at update progress", err)
