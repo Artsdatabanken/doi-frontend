@@ -91,11 +91,11 @@ function getTimeUpdate(submitted,created,updated,valid){
 function updateProgress(type,dateObject){
     try{    
         if(dateObject){
-            const width = type === "Submitted"?"20%":(type === "Created"?"50%":"100%");
+            const width = type === "Submitted"?"18%":(type === "Created"?"50%":"100%");
             addData("Progress."+type,formatDate(dateObject)); 
             changeClass($("#Progress."+type).parentElement,"done");
             updateStyle($("#progressindicator"),"width",width);
-            showElement($('#Progress.status.'+type),true);  
+            showElement($('#Progress.status.'+type),false);  
         }
     }catch(err){
         console.error("failed at update progress", err)
@@ -617,7 +617,7 @@ function addGeoLocation(attributes){
 
         makeTags("geoLocations","geoLocations",dd);
     }catch(err){
-        console.error("geolocations failed")
+        console.error("geolocations failed",err)
     }
 }
 
@@ -710,11 +710,14 @@ function addMiscData(attributes){
 
 function addArtskartUrl(desc){
     try{
-        let artskartelement = desc['ArtskartUrl'][0];
+        let url = desc['ArtskartUrl'][0];
         let artskartLink = $("#artskartLink");
-        artskartLink.href = artskartelement;
+        // While we wait for API to update their url...        
+        url = url.replace("https://test.artsdatabanken.no/artskart2boci/","https://artskart.test.artsdatabanken.no/");
+        url = url.replace("https://artsdatabanken.no/artskart2boci/","https://artskart.artsdatabanken.no/");
+        artskartLink.href = url;
     }catch(err){
-        console.error("Failed at artskarturl;")
+        console.error("Failed at artskarturl;", err)
     }
 }
 
