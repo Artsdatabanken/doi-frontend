@@ -110,7 +110,7 @@ function showProgressBar(attributes,isRerun){
         try{
             let dates = attributes.dates;           
             const valid =  dates.find(date => date.dateType === 'Valid');
-            showElement($('#notyetvalid'),!valid||testProgressBar);
+            //showElement($('#notyetvalid'),!valid||testProgressBar);
         }catch(err){
             console.error("Failed at hideProgressbar",err)
         }      
@@ -227,7 +227,7 @@ function updateImage(url){
     // make button
     const closebutton = document.createElement('button');
     const material = document.createElement('span');
-    material.className = "material-icons";
+    material.className = "material-icons-outlined";
     material.textContent = "open_in_full";
     closebutton.appendChild(material);    
     closebutton.id = "fullscreenbutton";
@@ -240,11 +240,11 @@ function updateImage(url){
         if(target.className == "fullscreen"){
             target.className = "sectionimage"
             body.className = "";
-            closebutton.innerHTML = "<span class='material-icons'>open_in_full</span>";
+            closebutton.innerHTML = "<span class='material-icons-outlined'>open_in_full</span>";
         }else{
             target.className = "fullscreen";
             body.className = "freeze-scroll";
-            closebutton.innerHTML = "<span class='material-icons'>close</span>";
+            closebutton.innerHTML = "<span class='material-icons-outlined'>close</span>";
         }
     });
     appendData('img.appender',closebutton);
@@ -533,7 +533,7 @@ function addTimeDetails(attributes){
         addData("Time.Valid",formatDate(dates.Valid));
         updateProgress("Submitted",dates.Submitted);
         updateProgress("Created",dates.Created);
-        updateProgress("Valid",dates.Valid);
+        //updateProgress("Valid",dates.Valid);
         if(!dates.Valid){
             getTimeUpdate(dates.Submitted||false,dates.Created||false,dates.Updated||false,valid||false);
         }

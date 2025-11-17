@@ -16,8 +16,7 @@
     <script src="header.js"></script>
     <!-- <script src="language.js"></script>  -->
     <script src="doi.js"></script>
-
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
       rel="stylesheet">
 </head>
 <body>
@@ -83,9 +82,9 @@
 
             <div class="section hidden"  id="notyetvalid" aria-hidden="true">
                 <h2>
-                    <span lang="nb">Laster datasett </span>
-                    <span lang="nn">Laster datasett </span>
-                    <span lang="en">Loading dataset </span>
+                    <span lang="nb">Klargjør datasett </span>
+                    <span lang="nn">Klargjør datasett </span>
+                    <span lang="en">Preparing dataset </span>
                 </h2>
 
                 <div class="progressbar">
@@ -133,16 +132,22 @@
                         </li>
                     </ul>
                 </div>
-                <p id="Progress.status.Valid">
-                    <span lang="nb">Selv om datasettet ikke er ferdig eksportert, kan noe data kan likevel vises nedenfor.</span>
-                    <span lang="nn">Sjølv om datasettet ikkje er ferdig eksportert kan nokre data sjåast nedanfor.</span>
-                    <span lang="en">The dataset is not yet ready, but you can find a sneek peek of what is already availiable.</span>        
-                 </p>
+                <div id="Progress.status.Valid" class="alert-box info" role="alert" >
+                    <!-- vises kun hvis datasettet "klargjøres" men ikke er valid -->
+                    <div class="alert-main-container">
+                        <span class="material-icons-outlined info-color">info</span>
+                        <div class="alert-text">
+                            <span lang="nb">Selv om datasettet ikke er ferdig eksportert, kan noe data kan likevel vises nedenfor.</span>
+                            <span lang="nn">Sjølv om datasettet ikkje er ferdig eksportert kan nokre data sjåast nedanfor.</span>
+                            <span lang="en">The dataset is not yet ready, but you can find a sneek peek of what is already availiable.</span>        
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="section">
                 <button class="primary" id="downloadButton">
-                    <span class="material-icons">download</span>
+                    <span class="material-icons-outlined">download</span>
                     <span lang="nn">Last ned datasettet </span>
                     <span lang="nb">Last ned datasettet </span>
                     <span lang="en">Download dataset </span>
@@ -163,6 +168,36 @@
                         <span lang="en"> Filters </span>
                     </h2>
                     <dl id="Descriptions.other"></dl>
+                    <div class="card small">
+                        <div  class="text">
+                            <span class="title">
+                                <span lang="nb">Gjør søket på nytt</span>
+                                <span lang="nn">Gjer søket på nytt</span>
+                                <span lang="en">Search again</span>                 
+                            </span>
+                            <p class="subtitle">
+                                <span lang="nb">
+                                    Artskart oppdateres når nye funndata kommer til,
+                                    korrigeres, eller fjernes om feil oppdages.
+                                </span>
+                                <span lang="nn">
+                                    Artskart oppdateres når nye funndata kjem til,
+                                    korrigerast, eller fjernes om feil oppdages.
+                                </span>
+                                <span lang="en">
+                                    Artskart gets updated when new observations are added,
+                                    corrected or removed should any errors be detected.
+                                </span>
+                            </p>
+                
+                            <a id="artskartLink">
+                                <span class='material-icons-outlined'>launch</span>
+                                <span id="a.appender.nb" lang="nn">Se oppdatert utvalg</span>
+                                <span id="a.appender.nb" lang="nb">Se oppdatert utvalg</span>
+                                <span id="a.appender.en" lang="en">Se updated selection</span>
+                            </a>
+                        </div>
+                    </div>
             </div>
 
             </div>
@@ -232,21 +267,21 @@
                     <dd>
                         <span lang="nb">Datasett fra Artskart blir delt under vilkårene som er gitt i
                             <a href="https://data.norge.no/nlod/no/">
-                                <span class='material-icons'>launch</span>
+                                <span class='material-icons-outlined'>launch</span>
                                 <span lang="nb">Norsk lisens for offentlige data (NLOD)</span>
                             </a>
                         </span>
                         <span lang="nn">
                             Datasett frå Artskart vert delt under vilkåra som er gitt i
                             <a  href="https://data.norge.no/nlod/no/" lang="nn">
-                                <span class='material-icons'>launch</span>
+                                <span class='material-icons-outlined'>launch</span>
                                 <span>Norsk lisens for offentlige data (NLOD)</span>
                                 </a>
                         </span>
                         <span lang="en">
                             Data from NBIC Species Map Service are made available under the conditions in
                             <a  href="https://data.norge.no/nlod/en/" lang="en">
-                                <span class='material-icons'>launch</span>
+                                <span class='material-icons-outlined'>launch</span>
                                 <span>Norwegian Licence for Open Government Data (NLOD)</span>
                             </a>
                         </span>
@@ -254,36 +289,7 @@
                 </div>
             </dl>          
             <!--<dl id="GeneralData"></dl> Not really in use-->
-            <div class="card small">
-                <div  class="text">
-                    <span class="title">
-                        <span lang="nb">Gjør søket på nytt</span>
-                        <span lang="nn">Gjer søket på nytt</span>
-                        <span lang="en">Search again</span>                 
-                    </span>
-                    <p class="subtitle">
-                        <span lang="nb">
-                            Artskart oppdateres når nye funndata kommer til,
-                            korrigeres, eller fjernes om feil oppdages.
-                        </span>
-                        <span lang="nn">
-                            Artskart oppdateres når nye funndata kjem til,
-                            korrigerast, eller fjernes om feil oppdages.
-                        </span>
-                        <span lang="en">
-                            Artskart gets updated when new observations are added,
-                            corrected or removed should any errors be detected.
-                        </span>
-                    </p>
-        
-                    <a id="artskartLink">
-                        <span class='material-icons'>launch</span>
-                        <span id="a.appender.nb" lang="nn">Se oppdatert utvalg</span>
-                        <span id="a.appender.nb" lang="nb">Se oppdatert utvalg</span>
-                        <span id="a.appender.en" lang="en">Se updated selection</span>
-                    </a>
-                </div>
-            </div>
+            
         </div>
 
 

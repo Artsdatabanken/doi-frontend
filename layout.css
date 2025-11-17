@@ -26,6 +26,9 @@
   --grey: #dadada;
   --primary-color:#005A71;
   --primary-color-hover:#004557;
+  --functional-blue-base: #E5FAFD;
+  --functional-blue-80: #00536A;
+  --functional-blue-50: #0099B2;
 
   /*sizes*/
   
@@ -38,6 +41,7 @@
   --spacing-2xsm:.25rem;
   --spacing-xsm: var(--dimensions-2x); /*8px*/
   --spacing-sm: var(--dimensions-3x);  
+  --spacing-md: 16px;
   --spacing-spacing-md:24px;
   --spacing-spacing-lg:32px;
   --spacing-xl:calc(.25rem * 10);
@@ -364,3 +368,65 @@ hr{
   }
 
 }
+
+
+.close-button,
+.alert-icon {
+    display: inline-block;
+}
+
+::ng-deep .alert-icon span {
+    padding: 2px;
+    border-radius: 50%;
+}
+
+.alert-box {
+    text-align: left;
+    border: 2px solid var(--border);
+    border-left-width: var( --default-size) ;
+    background: var(----white);
+    padding: 16pxe 24px 16px 32px;
+    padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) var(--spacing-md) ;
+    display: flex;
+    align-items: baseline;
+    gap: 24px;
+    gap: var(--spacing-md);
+
+    & .alert-main-container {
+      display: flex;
+      gap: var(--default-size);
+      max-width: 100%;
+      overflow: hidden;
+      flex: 1;
+      word-break: break-word;
+      hyphens: auto;
+  }
+
+  & .alert-text {
+    width: 100%;
+    min-width: min-content;
+  }
+
+  &.info {
+    background: var(--functional-blue-base);
+    color: var(--functional-blue-80);
+    border-color: var(--functional-blue-50);
+  }
+
+  @media screen and (max-width: 350px) {
+
+    .alert-main-container {
+        display: inline-block;
+    }
+
+    .alert-icon {
+        float: left;
+        padding-right: var(--half-size);
+    }
+
+    .alert-box {
+        position: relative;
+    }
+  } 
+}
+
